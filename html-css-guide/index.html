@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A complete HTML & CSS guide for students — covering every tag, attribute, and concept." />
+  <meta name="author" content="Web Learning" />
+  <meta name="keywords" content="HTML, CSS, tags, web development, tutorial, students" />
+
+  <title>HTML — The Complete Student Handbook</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- External CSS file -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       SITE HEADER / HERO
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">HTML — Student Handbook</div>
+    <h1 class="hero-title">
+      <span class="title-html">&lt;HTML&gt;</span>
+    </h1>
+    <p class="hero-subtitle">Every tag. Every attribute. Every concept — explained with live examples.</p>
+    <div class="header-tags">
+      <span class="pill">Beginner</span>
+      <span class="pill">Intermediate</span>
+      <span class="pill">Reference</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <h2 class="toc-title">Contents</h2>
+    <ul class="toc-list">
+      <li><a href="#doc-structure">01 — Document Structure</a></li>
+      <li><a href="#headings">02 — Headings</a></li>
+      <li><a href="#text-tags">03 — Text &amp; Formatting</a></li>
+      <li><a href="#lists">04 — Lists</a></li>
+      <li><a href="#links">05 — Links &amp; Anchors</a></li>
+      <li><a href="#images">06 — Images</a></li>
+      <li><a href="#tables">07 — Tables</a></li>
+      <li><a href="#forms">08 — Forms</a></li>
+      <li><a href="#semantic">09 — Semantic HTML5</a></li>
+      <li><a href="#block-inline">10 — Block vs Inline</a></li>
+      <li><a href="#media">11 — Media Embedding</a></li>
+      <li><a href="#misc-tags">12 — Misc Useful Tags</a></li>
+      <li><a href="#meta-tags">13 — Meta &amp; Head Tags</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main class="main-content">
+
+    <!-- ──────────────────────────────
+         01 · DOCUMENT STRUCTURE
+    ────────────────────────────── -->
+    <section id="doc-structure" class="chapter">
+      <div class="chapter-number">01</div>
+      <h2 class="chapter-title">Document Structure</h2>
+      <p class="chapter-intro">Every HTML file starts with the same skeleton. These are the bones that hold everything together.</p>
+
+      <div class="tag-card">
+        <div class="tag-label"><code>&lt;!DOCTYPE html&gt;</code></div>
+        <p>Tells the browser "this is an HTML5 document." Always the very first line. Not really a tag — it's a declaration.</p>
+      </div>
+
+      <div class="tag-card">
+        <div class="tag-label"><code>&lt;html lang="en"&gt;</code></div>
+        <p>The root element. Everything lives inside it. The <code>lang</code> attribute tells browsers and screen readers what language the page is in.</p>
+      </div>
+
+      <div class="tag-card">
+        <div class="tag-label"><code>&lt;head&gt;</code></div>
+        <p>Invisible to users. Contains metadata, title, links to CSS, scripts, fonts. The brain of the document.</p>
+      </div>
+
+      <div class="tag-card">
+        <div class="tag-label"><code>&lt;body&gt;</code></div>
+        <p>Everything visible on the page goes here — text, images, videos, forms, everything.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">The Full Skeleton</div>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;My Page Title&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css" /&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+    &lt;!-- Your content goes here --&gt;
+  &lt;/body&gt;
+
+&lt;/html&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         02 · HEADINGS
+    ────────────────────────────── -->
+    <section id="headings" class="chapter">
+      <div class="chapter-number">02</div>
+      <h2 class="chapter-title">Headings</h2>
+      <p class="chapter-intro">HTML has 6 heading levels, from biggest to smallest. Use them to create hierarchy — like a newspaper.</p>
+
+      <div class="demo-box">
+        <h1 class="demo-h1">h1 — Main Title (use once per page)</h1>
+        <h2 class="demo-h2">h2 — Section Title</h2>
+        <h3 class="demo-h3">h3 — Sub-section</h3>
+        <h4 class="demo-h4">h4 — Sub-sub-section</h4>
+        <h5 class="demo-h5">h5 — Small heading</h5>
+        <h6 class="demo-h6">h6 — Smallest heading</h6>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Heading Tags</div>
+        <pre><code>&lt;h1&gt;Main Title — only one per page&lt;/h1&gt;
+&lt;h2&gt;Section Title&lt;/h2&gt;
+&lt;h3&gt;Sub-section&lt;/h3&gt;
+&lt;h4&gt;Sub-sub-section&lt;/h4&gt;
+&lt;h5&gt;Smaller heading&lt;/h5&gt;
+&lt;h6&gt;Smallest heading&lt;/h6&gt;</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>Tip:</strong> Headings affect SEO (search engines) and accessibility (screen readers). Always keep them in logical order — don't skip from h1 to h4!
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         03 · TEXT & FORMATTING
+    ────────────────────────────── -->
+    <section id="text-tags" class="chapter">
+      <div class="chapter-number">03</div>
+      <h2 class="chapter-title">Text &amp; Formatting</h2>
+      <p class="chapter-intro">Tags that work inside paragraphs to style or give meaning to text.</p>
+
+      <div class="tag-grid">
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;p&gt;</code></div>
+          <p>A paragraph. Browsers add spacing above and below automatically.</p>
+          <div class="demo-box"><p>This is a paragraph of text.</p></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;strong&gt;</code></div>
+          <p>Important text. Renders <strong>bold</strong> and tells screen readers "this matters."</p>
+          <div class="demo-box"><strong>This text is important!</strong></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;em&gt;</code></div>
+          <p>Emphasized text. Renders in <em>italics</em> and conveys stress in meaning.</p>
+          <div class="demo-box"><em>This text is emphasized.</em></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;b&gt;</code></div>
+          <p>Bold text for styling only — no special meaning (use &lt;strong&gt; for importance).</p>
+          <div class="demo-box"><b>Bold but not important</b></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;i&gt;</code></div>
+          <p>Italic for styling — terms, titles, names. No semantic stress.</p>
+          <div class="demo-box"><i>Italic styling only</i></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;u&gt;</code></div>
+          <p>Underlined text. Avoid unless required — users mistake it for links.</p>
+          <div class="demo-box"><u>Underlined text</u></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;s&gt; / &lt;del&gt;</code></div>
+          <p><code>&lt;s&gt;</code> = strikethrough styling. <code>&lt;del&gt;</code> = deleted/removed content semantically.</p>
+          <div class="demo-box"><s>Old price: ₹500</s> &nbsp; <del>Deleted content</del></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;mark&gt;</code></div>
+          <p>Highlighted text — like a yellow marker pen.</p>
+          <div class="demo-box">Find the <mark>highlighted word</mark> here.</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;sup&gt; &amp; &lt;sub&gt;</code></div>
+          <p>Superscript (above line) and Subscript (below line).</p>
+          <div class="demo-box">H<sub>2</sub>O &nbsp;&nbsp; x<sup>2</sup> + y<sup>2</sup></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;small&gt;</code></div>
+          <p>Smaller fine-print text — copyright, disclaimers, footnotes.</p>
+          <div class="demo-box">Regular text <small>small fine print here</small></div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;abbr&gt;</code></div>
+          <p>Abbreviation with a tooltip on hover showing the full form.</p>
+          <div class="demo-box">Learn <abbr title="HyperText Markup Language">HTML</abbr> today!</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;cite&gt;</code></div>
+          <p>Marks the title of a creative work — book, article, movie.</p>
+          <div class="demo-box">I read <cite>Clean Code</cite> by Robert Martin.</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;blockquote&gt;</code></div>
+          <p>A long quote from another source. The <code>cite</code> attribute holds the URL.</p>
+          <div class="demo-box">
+            <blockquote cite="https://example.com">"The best way to predict the future is to invent it." — Alan Kay</blockquote>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;q&gt;</code></div>
+          <p>Short inline quotation. Browsers add quotation marks automatically.</p>
+          <div class="demo-box">She said <q>Hello, world!</q> to everyone.</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;code&gt;</code></div>
+          <p>Inline code snippet — single variable or short expression.</p>
+          <div class="demo-box">Use <code>console.log()</code> to print output.</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;kbd&gt;</code></div>
+          <p>Keyboard input — shows keys the user should press.</p>
+          <div class="demo-box">Press <kbd>Ctrl</kbd> + <kbd>S</kbd> to save.</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;span&gt;</code></div>
+          <p>Inline container — no visual effect by itself. Used for CSS/JS targeting.</p>
+          <div class="demo-box">Text with a <span style="color:#e94560;">colored span</span> inside.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         04 · LISTS
+    ────────────────────────────── -->
+    <section id="lists" class="chapter">
+      <div class="chapter-number">04</div>
+      <h2 class="chapter-title">Lists</h2>
+      <p class="chapter-intro">Three types of lists in HTML — unordered, ordered, and definition lists.</p>
+
+      <div class="tag-grid two-col">
+
+        <div>
+          <div class="tag-card">
+            <div class="tag-label"><code>&lt;ul&gt;</code> — Unordered List</div>
+            <p>Bullet points — order doesn't matter.</p>
+            <div class="demo-box">
+              <ul>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-block small-code">
+            <pre><code>&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+        </div>
+
+        <div>
+          <div class="tag-card">
+            <div class="tag-label"><code>&lt;ol&gt;</code> — Ordered List</div>
+            <p>Numbered list — order matters. Use <code>type</code> for 1/A/a/I/i.</p>
+            <div class="demo-box">
+              <ol>
+                <li>Write HTML</li>
+                <li>Add CSS</li>
+                <li>Add JavaScript</li>
+              </ol>
+            </div>
+          </div>
+          <div class="code-block small-code">
+            <pre><code>&lt;ol type="1" start="1"&gt;
+  &lt;li&gt;Write HTML&lt;/li&gt;
+  &lt;li&gt;Add CSS&lt;/li&gt;
+  &lt;li&gt;Add JavaScript&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+          </div>
+        </div>
+
+        <div>
+          <div class="tag-card">
+            <div class="tag-label"><code>&lt;dl&gt;</code> — Definition List</div>
+            <p>Term + Definition pairs. Great for glossaries, FAQs.</p>
+            <div class="demo-box">
+              <dl>
+                <dt>HTML</dt>
+                <dd>HyperText Markup Language — structure of web pages.</dd>
+                <dt>CSS</dt>
+                <dd>Cascading Style Sheets — visual styling of web pages.</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="tag-card">
+            <div class="tag-label">Nested Lists</div>
+            <p>Lists can be placed inside other lists — just nest <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> inside a <code>&lt;li&gt;</code>.</p>
+            <div class="demo-box">
+              <ul>
+                <li>Frontend
+                  <ul>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                  </ul>
+                </li>
+                <li>Backend
+                  <ul>
+                    <li>Node.js</li>
+                    <li>Python</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         05 · LINKS
+    ────────────────────────────── -->
+    <section id="links" class="chapter">
+      <div class="chapter-number">05</div>
+      <h2 class="chapter-title">Links &amp; Anchors</h2>
+      <p class="chapter-intro">The <code>&lt;a&gt;</code> (anchor) tag is what makes the web a <em>web</em> — it connects pages together.</p>
+
+      <div class="tag-grid">
+        <div class="tag-card">
+          <div class="tag-label">External Link</div>
+          <div class="code-block small-code">
+            <pre><code>&lt;a href="https://google.com" target="_blank" rel="noopener"&gt;
+  Visit Google
+&lt;/a&gt;</code></pre>
+          </div>
+          <p><code>target="_blank"</code> opens in new tab. <code>rel="noopener"</code> is a security best practice.</p>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label">Internal Page Link</div>
+          <div class="code-block small-code">
+            <pre><code>&lt;a href="about.html"&gt;About Page&lt;/a&gt;
+
+&lt;a href="./contact.html"&gt;Contact&lt;/a&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label">Jump to Section (Anchor)</div>
+          <div class="code-block small-code">
+            <pre><code>&lt;!-- The link --&gt;
+&lt;a href="#section-id"&gt;Go to Section&lt;/a&gt;
+
+&lt;!-- The target --&gt;
+&lt;section id="section-id"&gt;
+  ...
+&lt;/section&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label">Email &amp; Phone Links</div>
+          <div class="code-block small-code">
+            <pre><code>&lt;a href="mailto:you@email.com"&gt;
+  Email me
+&lt;/a&gt;
+
+&lt;a href="tel:+911234567890"&gt;
+  Call us
+&lt;/a&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label">Download Link</div>
+          <div class="code-block small-code">
+            <pre><code>&lt;a href="file.pdf" download="my-file.pdf"&gt;
+  Download PDF
+&lt;/a&gt;</code></pre>
+          </div>
+          <p>The <code>download</code> attribute forces file download instead of opening.</p>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label">Image as Link</div>
+          <div class="code-block small-code">
+            <pre><code>&lt;a href="https://example.com"&gt;
+  &lt;img src="logo.png" alt="Logo" /&gt;
+&lt;/a&gt;</code></pre>
+          </div>
+          <p>Wrap any element in <code>&lt;a&gt;</code> to make it clickable.</p>
+        </div>
+      </div>
+
+      <div class="attributes-table">
+        <h3>Key <code>&lt;a&gt;</code> Attributes</h3>
+        <table>
+          <thead>
+            <tr><th>Attribute</th><th>Values</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>href</code></td><td>URL, #id, mailto:, tel:</td><td>Where to go</td></tr>
+            <tr><td><code>target</code></td><td>_self, _blank, _parent, _top</td><td>Where to open</td></tr>
+            <tr><td><code>rel</code></td><td>noopener, noreferrer, nofollow</td><td>Relationship to target</td></tr>
+            <tr><td><code>download</code></td><td>filename</td><td>Download instead of navigate</td></tr>
+            <tr><td><code>title</code></td><td>text</td><td>Tooltip on hover</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         06 · IMAGES
+    ────────────────────────────── -->
+    <section id="images" class="chapter">
+      <div class="chapter-number">06</div>
+      <h2 class="chapter-title">Images</h2>
+      <p class="chapter-intro">The <code>&lt;img&gt;</code> tag is self-closing. The <code>alt</code> attribute is mandatory — it describes the image for screen readers and when images fail to load.</p>
+
+      <div class="code-block">
+        <div class="code-header">Image Examples</div>
+        <pre><code>&lt;!-- Basic image --&gt;
+&lt;img src="photo.jpg" alt="A description of the image" /&gt;
+
+&lt;!-- With width and height (prevents layout shift) --&gt;
+&lt;img src="photo.jpg" alt="Profile photo" width="300" height="200" /&gt;
+
+&lt;!-- Responsive image --&gt;
+&lt;img src="photo.jpg" alt="Banner" style="width: 100%; height: auto;" /&gt;
+
+&lt;!-- Image from the web --&gt;
+&lt;img src="https://example.com/photo.jpg" alt="Remote image" /&gt;
+
+&lt;!-- Lazy loading (loads only when scrolled into view) --&gt;
+&lt;img src="photo.jpg" alt="Lazy loaded" loading="lazy" /&gt;
+
+&lt;!-- Figure with caption --&gt;
+&lt;figure&gt;
+  &lt;img src="chart.png" alt="Sales chart Q1 2024" /&gt;
+  &lt;figcaption&gt;Figure 1: Sales growth in Q1 2024&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+      </div>
+
+      <div class="attributes-table">
+        <h3>Image Attributes</h3>
+        <table>
+          <thead>
+            <tr><th>Attribute</th><th>Example</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>src</code></td><td>"photo.jpg"</td><td>Source — path to image file (required)</td></tr>
+            <tr><td><code>alt</code></td><td>"A red apple"</td><td>Alternative text (required, accessibility)</td></tr>
+            <tr><td><code>width</code></td><td>"300"</td><td>Width in pixels</td></tr>
+            <tr><td><code>height</code></td><td>"200"</td><td>Height in pixels</td></tr>
+            <tr><td><code>loading</code></td><td>"lazy" / "eager"</td><td>When to load the image</td></tr>
+            <tr><td><code>title</code></td><td>"Hover tooltip"</td><td>Tooltip text</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         07 · TABLES
+    ────────────────────────────── -->
+    <section id="tables" class="chapter">
+      <div class="chapter-number">07</div>
+      <h2 class="chapter-title">Tables</h2>
+      <p class="chapter-intro">Tables are for displaying data in rows and columns — NOT for page layout (use CSS for that).</p>
+
+      <div class="demo-box">
+        <table class="demo-table">
+          <caption>Student Marks — HTML Class</caption>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Assignment</th>
+              <th scope="col">Quiz</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Arjun</td>
+              <td>45</td>
+              <td>18</td>
+              <td>63</td>
+            </tr>
+            <tr>
+              <td>Priya</td>
+              <td>50</td>
+              <td>20</td>
+              <td>70</td>
+            </tr>
+            <tr>
+              <td>Rahul</td>
+              <td>40</td>
+              <td>15</td>
+              <td>55</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td><strong>Average</strong></td>
+              <td>45</td>
+              <td>17.7</td>
+              <td>62.7</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Full Table Structure</div>
+        <pre><code>&lt;table&gt;
+  &lt;caption&gt;Table Title (optional)&lt;/caption&gt;
+
+  &lt;thead&gt;                          &lt;!-- Table header section --&gt;
+    &lt;tr&gt;                           &lt;!-- Table row --&gt;
+      &lt;th scope="col"&gt;Name&lt;/th&gt;  &lt;!-- Header cell --&gt;
+      &lt;th scope="col"&gt;Age&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+
+  &lt;tbody&gt;                          &lt;!-- Table body section --&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Arjun&lt;/td&gt;             &lt;!-- Data cell --&gt;
+      &lt;td&gt;20&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+
+  &lt;tfoot&gt;                          &lt;!-- Table footer section --&gt;
+    &lt;tr&gt;
+      &lt;td colspan="2"&gt;Total: 1 student&lt;/td&gt;  &lt;!-- Spans 2 columns --&gt;
+    &lt;/tr&gt;
+  &lt;/tfoot&gt;
+
+&lt;/table&gt;</code></pre>
+      </div>
+
+      <div class="tag-grid two-col">
+        <div class="tag-card">
+          <div class="tag-label"><code>colspan</code> — Merge Columns</div>
+          <div class="demo-box">
+            <table class="demo-table">
+              <tr><th colspan="3">Full Name (spans 3 columns)</th></tr>
+              <tr><td>First</td><td>Middle</td><td>Last</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>rowspan</code> — Merge Rows</div>
+          <div class="demo-box">
+            <table class="demo-table">
+              <thead><tr><th scope="col">Group</th><th scope="col">Row</th></tr></thead>
+              <tbody>
+                <tr><td rowspan="2">Merged</td><td>Row 1</td></tr>
+                <tr><td>Row 2</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         08 · FORMS
+    ────────────────────────────── -->
+    <section id="forms" class="chapter">
+      <div class="chapter-number">08</div>
+      <h2 class="chapter-title">Forms</h2>
+      <p class="chapter-intro">Forms collect input from the user — login, signup, search, feedback. Every interactive website uses forms.</p>
+
+      <div class="demo-box">
+        <form class="demo-form" onsubmit="return false;">
+          <fieldset>
+            <legend>Student Registration</legend>
+
+            <div class="form-group">
+              <label for="fname">Full Name <span class="required">*</span></label>
+              <input type="text" id="fname" name="fullname" placeholder="Enter your name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="Min 8 characters" minlength="8" />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" />
+            </div>
+
+            <div class="form-group">
+              <label for="age">Age</label>
+              <input type="number" id="age" name="age" min="10" max="100" placeholder="18" />
+            </div>
+
+            <div class="form-group">
+              <label for="dob">Date of Birth</label>
+              <input type="date" id="dob" name="dob" />
+            </div>
+
+            <div class="form-group">
+              <label for="course">Course</label>
+              <select id="course" name="course">
+                <option value="">-- Select --</option>
+                <optgroup label="Frontend">
+                  <option value="html-css">HTML &amp; CSS</option>
+                  <option value="js">JavaScript</option>
+                  <option value="react">React</option>
+                </optgroup>
+                <optgroup label="Backend">
+                  <option value="node">Node.js</option>
+                  <option value="python">Python</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="bio">Short Bio</label>
+              <textarea id="bio" name="bio" rows="4" cols="50" placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label id="label-time">Preferred Time</label>
+              <div class="radio-group" role="group" aria-labelledby="label-time">
+                <label><input type="radio" name="time" value="morning" /> Morning</label>
+                <label><input type="radio" name="time" value="evening" /> Evening</label>
+                <label><input type="radio" name="time" value="weekend" /> Weekend</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label id="label-skills">Skills (check all that apply)</label>
+              <div class="checkbox-group" role="group" aria-labelledby="label-skills">
+                <label><input type="checkbox" name="skills" value="html" /> HTML</label>
+                <label><input type="checkbox" name="skills" value="css" /> CSS</label>
+                <label><input type="checkbox" name="skills" value="js" /> JavaScript</label>
+                <label><input type="checkbox" name="skills" value="git" /> Git</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="rating">Rate Your HTML Knowledge (1-10)</label>
+              <input type="range" id="rating" name="rating" min="1" max="10" value="5" />
+            </div>
+
+            <div class="form-group">
+              <label for="profile-pic">Profile Picture</label>
+              <input type="file" id="profile-pic" name="profile" accept="image/*" />
+            </div>
+
+            <div class="form-group">
+              <label for="website">Website URL</label>
+              <input type="url" id="website" name="website" placeholder="https://yoursite.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="search-demo">Search Field</label>
+              <input type="search" id="search-demo" name="q" placeholder="Search courses..." />
+            </div>
+
+            <div class="form-group">
+              <label for="fav-color">Favorite Color</label>
+              <input type="color" id="fav-color" name="color" value="#e94560" />
+            </div>
+
+            <div class="form-group">
+              <label for="hidden-demo">Hidden Input (invisible, still submitted)</label>
+              <input type="hidden" id="hidden-demo" name="source" value="handbook" />
+              <span class="note">This field is invisible but still sends data: source=handbook</span>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit">Submit Form</button>
+              <button type="reset">Reset</button>
+              <input type="button" value="Custom Button" onclick="alert('Button clicked!')" />
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">All Input Types</div>
+        <pre><code>&lt;input type="text"     /&gt;   &lt;!-- Plain text --&gt;
+&lt;input type="email"    /&gt;   &lt;!-- Email with validation --&gt;
+&lt;input type="password" /&gt;   &lt;!-- Hidden characters --&gt;
+&lt;input type="number"   min="1" max="100" /&gt;
+&lt;input type="date"     /&gt;   &lt;!-- Date picker --&gt;
+&lt;input type="time"     /&gt;   &lt;!-- Time picker --&gt;
+&lt;input type="datetime-local" /&gt;
+&lt;input type="month"    /&gt;
+&lt;input type="week"     /&gt;
+&lt;input type="range"    min="0" max="100" step="5" /&gt;
+&lt;input type="color"    /&gt;   &lt;!-- Color picker --&gt;
+&lt;input type="file"     accept=".pdf,.doc" /&gt;
+&lt;input type="url"      /&gt;   &lt;!-- URL validation --&gt;
+&lt;input type="tel"      /&gt;   &lt;!-- Phone number --&gt;
+&lt;input type="search"   /&gt;   &lt;!-- Search field --&gt;
+&lt;input type="checkbox" /&gt;
+&lt;input type="radio"    name="group" /&gt;
+&lt;input type="hidden"   value="data" /&gt;
+&lt;input type="submit"   value="Send" /&gt;
+&lt;input type="reset"    value="Clear" /&gt;
+&lt;input type="button"   value="Click" /&gt;
+&lt;input type="image"    src="btn.png" alt="Submit" /&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         09 · SEMANTIC HTML5
+    ────────────────────────────── -->
+    <section id="semantic" class="chapter">
+      <div class="chapter-number">09</div>
+      <h2 class="chapter-title">Semantic HTML5</h2>
+      <p class="chapter-intro">Semantic tags describe the <em>meaning</em> of content, not just its appearance. They help search engines, screen readers, and developers understand your page.</p>
+
+      <div class="semantic-diagram">
+        <div class="sem-header">
+          <code>&lt;header&gt;</code><br/>
+          <small>Logo, nav, hero</small>
+        </div>
+        <div class="sem-nav">
+          <code>&lt;nav&gt;</code><br/>
+          <small>Navigation links</small>
+        </div>
+        <div class="sem-body">
+          <div class="sem-main">
+            <code>&lt;main&gt;</code>
+            <div class="sem-article">
+              <code>&lt;article&gt;</code><br/>
+              <small>Blog post, news story</small>
+              <div class="sem-section">
+                <code>&lt;section&gt;</code><br/>
+                <small>Chapters, tabs</small>
+              </div>
+            </div>
+          </div>
+          <div class="sem-aside">
+            <code>&lt;aside&gt;</code><br/>
+            <small>Sidebar, ads, related</small>
+          </div>
+        </div>
+        <div class="sem-footer">
+          <code>&lt;footer&gt;</code><br/>
+          <small>Copyright, links, contact</small>
+        </div>
+      </div>
+
+      <div class="tag-grid">
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;header&gt;</code></div>
+          <p>Introductory content — logo, site title, main navigation. Used in <code>&lt;body&gt;</code> or inside <code>&lt;article&gt;</code>.</p>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;nav&gt;</code></div>
+          <p>Navigation links. Use for main navigation, breadcrumbs, pagination. Not every link group needs this tag.</p>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;main&gt;</code></div>
+          <p>The primary unique content of the page. Only ONE <code>&lt;main&gt;</code> per page. Skip repeated content like nav/footer.</p>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;article&gt;</code></div>
+          <p>Self-contained content that can stand alone — blog post, news article, comment, product card. Could be syndicated elsewhere.</p>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;section&gt;</code></div>
+          <p>Groups related content together. Should have a heading. Think of it as a chapter — use <code>&lt;div&gt;</code> if just styling.</p>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;aside&gt;</code></div>
+          <p>Content tangentially related to the main content — sidebars, pull quotes, advertising, related links.</p>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;footer&gt;</code></div>
+          <p>Footer section — author info, copyright, links. Can be inside <code>&lt;article&gt;</code> too for per-article footers.</p>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;figure&gt; &amp; &lt;figcaption&gt;</code></div>
+          <p>Self-contained media (image, chart, code) with its caption. The caption explains or references the figure.</p>
+          <div class="code-block small-code">
+            <pre><code>&lt;figure&gt;
+  &lt;img src="chart.png" alt="Data chart" /&gt;
+  &lt;figcaption&gt;Fig 1: Sales Q1&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+          </div>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;time&gt;</code></div>
+          <p>Machine-readable date/time. The <code>datetime</code> attribute holds the standard format.</p>
+          <div class="demo-box">
+            Published: <time datetime="2024-06-17">June 17, 2024</time>
+          </div>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;address&gt;</code></div>
+          <p>Contact information for the nearest ancestor <code>&lt;article&gt;</code> or <code>&lt;body&gt;</code>.</p>
+          <div class="demo-box">
+            <address>
+              Written by <a href="mailto:teacher@example.com">Your Teacher</a><br/>
+              Mumbai, India
+            </address>
+          </div>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;details&gt; &amp; &lt;summary&gt;</code></div>
+          <p>Native accordion — no JavaScript needed! Click to expand/collapse.</p>
+          <div class="demo-box">
+            <details>
+              <summary>What is HTML?</summary>
+              <p>HTML stands for HyperText Markup Language. It is the standard language for creating web pages.</p>
+            </details>
+          </div>
+        </div>
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;dialog&gt;</code></div>
+          <p>Native modal/popup dialog — can be opened programmatically with <code>.showModal()</code>.</p>
+          <div class="demo-box">
+            <button onclick="document.getElementById('demo-dialog').showModal()">Open Dialog</button>
+            <dialog id="demo-dialog">
+              <p>This is a native HTML dialog!</p>
+              <button onclick="document.getElementById('demo-dialog').close()">Close</button>
+            </dialog>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         10 · BLOCK VS INLINE
+    ────────────────────────────── -->
+    <section id="block-inline" class="chapter">
+      <div class="chapter-number">10</div>
+      <h2 class="chapter-title">Block vs Inline Elements</h2>
+      <p class="chapter-intro">The most important layout concept in HTML. Every element is either block-level or inline.</p>
+
+      <div class="tag-grid two-col">
+        <div class="tag-card highlight-blue">
+          <div class="tag-label">Block Elements</div>
+          <ul>
+            <li>Start on a <strong>new line</strong></li>
+            <li>Take up the <strong>full width</strong> available</li>
+            <li>Can contain block and inline elements</li>
+          </ul>
+          <div class="demo-box">
+            <div style="background:#3b82f620; border:2px solid #3b82f6; padding:8px; margin-bottom:8px;">div block</div>
+            <div style="background:#3b82f620; border:2px solid #3b82f6; padding:8px;">Another div block</div>
+          </div>
+          <div class="tag-list">
+            <code>div</code> <code>p</code> <code>h1–h6</code> <code>ul</code> <code>ol</code>
+            <code>li</code> <code>table</code> <code>form</code> <code>header</code>
+            <code>footer</code> <code>section</code> <code>article</code> <code>main</code>
+            <code>nav</code> <code>aside</code> <code>blockquote</code> <code>pre</code> <code>hr</code>
+          </div>
+        </div>
+
+        <div class="tag-card highlight-orange">
+          <div class="tag-label">Inline Elements</div>
+          <ul>
+            <li>Stay on the <strong>same line</strong></li>
+            <li>Take only the <strong>space they need</strong></li>
+            <li>Cannot contain block elements</li>
+          </ul>
+          <div class="demo-box">
+            <p>This is <span style="background:#f9731620; border:1px solid #f97316; padding:2px 4px;">span</span> and <strong style="background:#f9731620; border:1px solid #f97316; padding:2px 4px;">strong</strong> inline.</p>
+          </div>
+          <div class="tag-list">
+            <code>span</code> <code>a</code> <code>strong</code> <code>em</code> <code>b</code>
+            <code>i</code> <code>u</code> <code>s</code> <code>img</code> <code>code</code>
+            <code>kbd</code> <code>mark</code> <code>small</code> <code>sup</code> <code>sub</code>
+            <code>abbr</code> <code>cite</code> <code>q</code> <code>label</code> <code>button</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>CSS override:</strong> You can change any element's display with CSS — <code>display: block</code>, <code>display: inline</code>, or <code>display: inline-block</code>.
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         11 · MEDIA EMBEDDING
+    ────────────────────────────── -->
+    <section id="media" class="chapter">
+      <div class="chapter-number">11</div>
+      <h2 class="chapter-title">Media Embedding</h2>
+
+      <div class="tag-card">
+        <div class="tag-label"><code>&lt;video&gt;</code></div>
+        <div class="code-block small-code">
+          <pre><code>&lt;video width="640" height="360" controls autoplay muted loop poster="thumbnail.jpg"&gt;
+  &lt;source src="video.mp4" type="video/mp4" /&gt;
+  &lt;source src="video.webm" type="video/webm" /&gt;
+  Your browser does not support video. &lt;!-- Fallback text --&gt;
+&lt;/video&gt;</code></pre>
+        </div>
+        <div class="attributes-table" style="margin-top: 1rem;">
+          <table>
+            <thead><tr><th>Attribute</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td><code>controls</code></td><td>Show play/pause/volume controls</td></tr>
+              <tr><td><code>autoplay</code></td><td>Start playing automatically</td></tr>
+              <tr><td><code>muted</code></td><td>Start muted (needed for autoplay in browsers)</td></tr>
+              <tr><td><code>loop</code></td><td>Repeat infinitely</td></tr>
+              <tr><td><code>poster</code></td><td>Thumbnail before play</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tag-card">
+        <div class="tag-label"><code>&lt;audio&gt;</code></div>
+        <div class="code-block small-code">
+          <pre><code>&lt;audio controls&gt;
+  &lt;source src="song.mp3" type="audio/mpeg" /&gt;
+  &lt;source src="song.ogg" type="audio/ogg" /&gt;
+  Your browser doesn't support audio.
+&lt;/audio&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="tag-card">
+        <div class="tag-label"><code>&lt;iframe&gt;</code> — Embed External Content</div>
+        <div class="code-block small-code">
+          <pre><code>&lt;!-- YouTube video --&gt;
+&lt;iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="YouTube video"
+  frameborder="0"
+  allowfullscreen
+&gt;&lt;/iframe&gt;
+
+&lt;!-- Google Maps --&gt;
+&lt;iframe
+  src="https://maps.google.com/maps?q=Mumbai&output=embed"
+  width="600" height="400"
+&gt;&lt;/iframe&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         12 · MISC TAGS
+    ────────────────────────────── -->
+    <section id="misc-tags" class="chapter">
+      <div class="chapter-number">12</div>
+      <h2 class="chapter-title">Miscellaneous Useful Tags</h2>
+
+      <div class="tag-grid">
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;br /&gt;</code> — Line Break</div>
+          <p>Inserts a line break <em>within</em> a paragraph. Use sparingly.</p>
+          <div class="demo-box">Line one<br/>Line two on same paragraph.</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;hr /&gt;</code> — Horizontal Rule</div>
+          <p>A thematic break — a visual divider between sections.</p>
+          <div class="demo-box">Above <hr style="margin: 8px 0;"/> Below</div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;pre&gt;</code> — Preformatted Text</div>
+          <p>Preserves whitespace and line breaks. Usually paired with <code>&lt;code&gt;</code>.</p>
+          <div class="demo-box">
+            <pre style="margin:0; font-size:0.85em;">  name: Arjun
+  age:  20
+  city: Mumbai</pre>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;div&gt;</code> — Division</div>
+          <p>Generic block container — no semantic meaning. Used purely for layout and styling with CSS.</p>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;canvas&gt;</code></div>
+          <p>A blank drawing surface — programmed with JavaScript (2D graphics, charts, games).</p>
+          <div class="demo-box">
+            <canvas id="demo-canvas" width="200" height="80" style="border:1px solid #ccc;"></canvas>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;progress&gt;</code></div>
+          <p>Shows task completion progress.</p>
+          <div class="demo-box">
+            <progress value="70" max="100">70%</progress>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;meter&gt;</code></div>
+          <p>Scalar measurement within a known range (battery level, score, etc.).</p>
+          <div class="demo-box">
+            Score: <meter value="0.8" min="0" max="1" low="0.3" high="0.7" optimum="0.9">80%</meter>
+          </div>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;template&gt;</code></div>
+          <p>HTML that is not rendered but can be cloned and inserted via JavaScript.</p>
+        </div>
+
+        <div class="tag-card">
+          <div class="tag-label"><code>&lt;wbr /&gt;</code> — Word Break Opportunity</div>
+          <p>Hints where a long word <em>may</em> be broken across lines.</p>
+          <div class="demo-box">Super<wbr/>Long<wbr/>Word<wbr/>ThatMightBreak</div>
+        </div>
+      </div>
+
+      <!-- HTML Entities -->
+      <h3 style="margin-top: 2.5rem; font-family: 'Syne', sans-serif;">HTML Entities (Special Characters)</h3>
+      <div class="attributes-table">
+        <table>
+          <thead><tr><th>Character</th><th>Entity Name</th><th>Entity Number</th></tr></thead>
+          <tbody>
+            <tr><td>&amp;</td><td><code>&amp;amp;</code></td><td><code>&amp;#38;</code></td></tr>
+            <tr><td>&lt;</td><td><code>&amp;lt;</code></td><td><code>&amp;#60;</code></td></tr>
+            <tr><td>&gt;</td><td><code>&amp;gt;</code></td><td><code>&amp;#62;</code></td></tr>
+            <tr><td>&quot;</td><td><code>&amp;quot;</code></td><td><code>&amp;#34;</code></td></tr>
+            <tr><td>&apos;</td><td><code>&amp;apos;</code></td><td><code>&amp;#39;</code></td></tr>
+            <tr><td>&copy;</td><td><code>&amp;copy;</code></td><td><code>&amp;#169;</code></td></tr>
+            <tr><td>&reg;</td><td><code>&amp;reg;</code></td><td><code>&amp;#174;</code></td></tr>
+            <tr><td>&trade;</td><td><code>&amp;trade;</code></td><td><code>&amp;#8482;</code></td></tr>
+            <tr><td>&nbsp;</td><td><code>&amp;nbsp;</code></td><td><code>&amp;#160;</code></td></tr>
+            <tr><td>&euro;</td><td><code>&amp;euro;</code></td><td><code>&amp;#8364;</code></td></tr>
+            <tr><td>&#8377;</td><td><code>&amp;#8377;</code></td><td>Indian Rupee ₹</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────
+         13 · META & HEAD TAGS
+    ────────────────────────────── -->
+    <section id="meta-tags" class="chapter">
+      <div class="chapter-number">13</div>
+      <h2 class="chapter-title">Meta &amp; Head Tags</h2>
+      <p class="chapter-intro">Everything inside <code>&lt;head&gt;</code> — invisible to users but critical for SEO, sharing, and browser behavior.</p>
+
+      <div class="code-block">
+        <div class="code-header">Complete &lt;head&gt; Reference</div>
+        <pre><code>&lt;head&gt;
+  &lt;!-- Character encoding (always first) --&gt;
+  &lt;meta charset="UTF-8" /&gt;
+
+  &lt;!-- Responsive design viewport --&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+
+  &lt;!-- Page title — shown in browser tab and Google results --&gt;
+  &lt;title&gt;My Awesome Page | Brand Name&lt;/title&gt;
+
+  &lt;!-- SEO meta tags --&gt;
+  &lt;meta name="description" content="A short summary (150–160 chars) for Google." /&gt;
+  &lt;meta name="keywords" content="html, css, web, tutorial" /&gt;
+  &lt;meta name="author" content="Your Name" /&gt;
+  &lt;meta name="robots" content="index, follow" /&gt;
+
+  &lt;!-- Open Graph — how links look on Facebook, WhatsApp --&gt;
+  &lt;meta property="og:title" content="My Awesome Page" /&gt;
+  &lt;meta property="og:description" content="Page description for social sharing." /&gt;
+  &lt;meta property="og:image" content="https://example.com/thumbnail.jpg" /&gt;
+  &lt;meta property="og:url" content="https://example.com/page" /&gt;
+  &lt;meta property="og:type" content="website" /&gt;
+
+  &lt;!-- Twitter Card --&gt;
+  &lt;meta name="twitter:card" content="summary_large_image" /&gt;
+  &lt;meta name="twitter:title" content="My Awesome Page" /&gt;
+  &lt;meta name="twitter:image" content="https://example.com/thumbnail.jpg" /&gt;
+
+  &lt;!-- Favicon (browser tab icon) --&gt;
+  &lt;link rel="icon" href="favicon.ico" type="image/x-icon" /&gt;
+  &lt;link rel="icon" href="icon.png" type="image/png" /&gt;
+  &lt;link rel="apple-touch-icon" href="apple-icon.png" /&gt;
+
+  &lt;!-- External CSS --&gt;
+  &lt;link rel="stylesheet" href="styles.css" /&gt;
+
+  &lt;!-- Preload important resources --&gt;
+  &lt;link rel="preload" href="hero-image.jpg" as="image" /&gt;
+  &lt;link rel="preconnect" href="https://fonts.googleapis.com" /&gt;
+
+  &lt;!-- Theme color for mobile browsers --&gt;
+  &lt;meta name="theme-color" content="#e94560" /&gt;
+
+  &lt;!-- Redirect after 5 seconds --&gt;
+  &lt;!-- &lt;meta http-equiv="refresh" content="5; url=https://example.com" /&gt; --&gt;
+
+  &lt;!-- Internal CSS --&gt;
+  &lt;style&gt;
+    body { margin: 0; }
+  &lt;/style&gt;
+
+  &lt;!-- JavaScript (defer = load after HTML parses) --&gt;
+  &lt;script src="app.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;</code></pre>
+      </div>
+    </section>
+
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-logo">&lt;/HTML&gt;</div>
+      <p class="footer-text">HTML Student Handbook &mdash; 13 Topics, All Tags, Live Examples</p>
+      <p class="footer-credit"><small>&copy; 2024 &mdash; Keep building. Keep learning.</small></p>
+    </div>
+  </footer>
+
+  <!-- Canvas animation script -->
+  <script>
+    const canvas = document.getElementById('demo-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#e94560';
+      ctx.font = 'bold 14px JetBrains Mono, monospace';
+      ctx.fillText('Canvas element!', 20, 30);
+      ctx.strokeStyle = '#1a1a2e';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(160, 45, 25, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = '#16213e';
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.fillText('JS', 148, 51);
+    }
+  </script>
+</body>
+
+</html>

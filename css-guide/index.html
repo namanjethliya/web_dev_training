@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Complete CSS reference guide for students — selectors, box model, flexbox, grid, animations and more." />
+  <title>CSS — The Complete Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">CSS</h1>
+    <p class="hero-sub">Cascading Style Sheets</p>
+    <p class="hero-desc">Every selector. Every property. Every layout system — with live visual demos.</p>
+    <div class="hero-pills">
+      <span class="pill">20 Topics</span>
+      <span class="pill">All Properties</span>
+      <span class="pill">Live Demos</span>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#intro">01 Intro</a></li>
+      <li><a href="#selectors">02 Selectors</a></li>
+      <li><a href="#colors-units">03 Colors &amp; Units</a></li>
+      <li><a href="#box-model">04 Box Model</a></li>
+      <li><a href="#backgrounds">05 Backgrounds</a></li>
+      <li><a href="#typography">06 Typography</a></li>
+      <li><a href="#display">07 Display</a></li>
+      <li><a href="#flexbox">08 Flexbox</a></li>
+      <li><a href="#grid">09 Grid</a></li>
+      <li><a href="#positioning">10 Positioning</a></li>
+      <li><a href="#transforms">11 Transforms</a></li>
+      <li><a href="#transitions">12 Transitions</a></li>
+      <li><a href="#animations">13 Animations</a></li>
+      <li><a href="#pseudo-classes">14 Pseudo-classes</a></li>
+      <li><a href="#pseudo-elements">15 Pseudo-elements</a></li>
+      <li><a href="#variables">16 Variables</a></li>
+      <li><a href="#functions">17 Functions</a></li>
+      <li><a href="#filters">18 Filters &amp; Effects</a></li>
+      <li><a href="#responsive">19 Responsive</a></li>
+      <li><a href="#modern">20 Modern CSS</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · INTRODUCTION
+    ══════════════════════════════ -->
+    <section id="intro" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">CSS Introduction</h2>
+      <p class="ch-intro">CSS (Cascading Style Sheets) controls how HTML looks. Without CSS, every page looks like a plain text document.</p>
+
+      <h3 class="sub-heading">3 Ways to Add CSS</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">External (Best)</div>
+          <div class="code-block"><pre><code>&lt;!-- In &lt;head&gt; --&gt;
+&lt;link rel="stylesheet"
+      href="styles.css" /&gt;</code></pre></div>
+          <p>Separate .css file. Reusable across all pages. Always use this method.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Internal</div>
+          <div class="code-block"><pre><code>&lt;style&gt;
+  p { color: red; }
+&lt;/style&gt;</code></pre></div>
+          <p>Inside &lt;style&gt; in &lt;head&gt;. Only for that page.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Inline (Avoid)</div>
+          <div class="code-block"><pre><code>&lt;p style="color:red;"&gt;
+  Text
+&lt;/p&gt;</code></pre></div>
+          <p>Hard to maintain. Only for emails or quick tests.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Anatomy of a CSS Rule</h3>
+      <div class="code-block full-code"><pre><code>selector {          /* → WHO to style */
+  property: value;  /* → WHAT to change: HOW to change it */
+}
+
+/* Example */
+h1 {
+  color: #c0392b;       /* text color */
+  font-size: 2.5rem;    /* text size */
+  text-align: center;   /* alignment */
+  margin-bottom: 24px;  /* space below */
+}</code></pre></div>
+
+      <h3 class="sub-heading">The Cascade — How CSS Decides Which Rule Wins</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">1. Origin</div>
+          <p>Browser default styles → User styles → Author styles (your CSS)</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">2. Specificity</div>
+          <p>Inline &gt; ID (#) &gt; Class/Attribute/Pseudo-class &gt; Element &gt; Universal</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">3. Order</div>
+          <p>When specificity is equal, the LAST rule in the file wins.</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">!important</div>
+          <p>Overrides everything. Use very sparingly — it breaks the natural cascade.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · SELECTORS
+    ══════════════════════════════ -->
+    <section id="selectors" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Selectors</h2>
+      <p class="ch-intro">Selectors choose which HTML elements to style. Specificity determines which selector wins when rules conflict.</p>
+
+      <div class="code-block full-code"><pre><code>/* ─── BASIC ─── */
+*           { }   /* Universal — every element */
+p           { }   /* Element — all &lt;p&gt; tags */
+.card       { }   /* Class — class="card" */
+#hero       { }   /* ID — id="hero" (unique per page) */
+
+/* ─── COMBINATORS ─── */
+div p       { }   /* Descendant — &lt;p&gt; anywhere inside &lt;div&gt; */
+div > p     { }   /* Direct child — only immediate &lt;p&gt; children */
+h1 + p      { }   /* Adjacent sibling — &lt;p&gt; immediately after &lt;h1&gt; */
+h1 ~ p      { }   /* General sibling — all &lt;p&gt; after &lt;h1&gt; */
+
+/* ─── ATTRIBUTE ─── */
+[href]               { }  /* Has the attribute */
+[type="text"]        { }  /* Attribute equals value */
+[href^="https"]      { }  /* Starts with */
+[href$=".pdf"]       { }  /* Ends with */
+[class*="btn"]       { }  /* Contains */
+
+/* ─── PSEUDO-CLASSES ─── */
+a:hover         { }  /* Mouse over */
+a:focus         { }  /* Keyboard focused */
+a:active        { }  /* Being clicked */
+a:visited       { }  /* Already visited */
+:checked        { }  /* Checked checkbox/radio */
+:disabled       { }  /* Disabled input */
+:required       { }  /* Required input */
+:valid          { }  /* Passes HTML validation */
+:invalid        { }  /* Fails HTML validation */
+:placeholder-shown { } /* Input showing placeholder */
+:first-child    { }  /* First child of parent */
+:last-child     { }  /* Last child of parent */
+:only-child     { }  /* Only child */
+:nth-child(2)   { }  /* 2nd child */
+:nth-child(odd) { }  /* 1st, 3rd, 5th... */
+:nth-child(even){ }  /* 2nd, 4th, 6th... */
+:nth-child(3n)  { }  /* Every 3rd: 3, 6, 9... */
+:nth-child(3n+1){ }  /* 1, 4, 7, 10... */
+:not(.active)   { }  /* NOT matching selector */
+:is(h1,h2,h3)   { }  /* Matches any in list */
+:where(h1,h2)   { }  /* Same as :is but 0 specificity */
+:has(img)       { }  /* Contains an image (parent selector!) */
+:empty          { }  /* No children */
+:root           { }  /* &lt;html&gt; element (highest specificity) */
+:target         { }  /* Element matching URL #hash */
+
+/* ─── PSEUDO-ELEMENTS ─── */
+p::before       { content: "→ "; }  /* Insert before content */
+p::after        { content: " ←"; }  /* Insert after content */
+p::first-line   { }  /* First rendered line */
+p::first-letter { }  /* First letter (drop caps!) */
+::selection     { }  /* User-selected text */
+::placeholder   { }  /* Input placeholder */
+::marker        { }  /* List bullet/number */
+
+/* ─── GROUPING ─── */
+h1, h2, h3, h4 { font-family: serif; } /* Apply same styles to multiple */</code></pre></div>
+
+      <div class="specificity-box">
+        <h3 class="sub-heading">Specificity Score</h3>
+        <div class="spec-row">
+          <div class="spec-item" style="--spec-color: #ef4444;">
+            <div class="spec-score">1,0,0,0</div>
+            <div class="spec-label">Inline style</div>
+            <code>style="..."</code>
+          </div>
+          <div class="spec-item" style="--spec-color: #f59e0b;">
+            <div class="spec-score">0,1,0,0</div>
+            <div class="spec-label">ID</div>
+            <code>#hero</code>
+          </div>
+          <div class="spec-item" style="--spec-color: #10b981;">
+            <div class="spec-score">0,0,1,0</div>
+            <div class="spec-label">Class / Attr / Pseudo-class</div>
+            <code>.card &nbsp; [type] &nbsp; :hover</code>
+          </div>
+          <div class="spec-item" style="--spec-color: #6366f1;">
+            <div class="spec-score">0,0,0,1</div>
+            <div class="spec-label">Element / Pseudo-element</div>
+            <code>p &nbsp; h1 &nbsp; ::before</code>
+          </div>
+          <div class="spec-item" style="--spec-color: #94a3b8;">
+            <div class="spec-score">0,0,0,0</div>
+            <div class="spec-label">Universal</div>
+            <code>*</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · COLORS & UNITS
+    ══════════════════════════════ -->
+    <section id="colors-units" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Colors &amp; Units</h2>
+
+      <h3 class="sub-heading">Color Formats</h3>
+      <div class="color-demos">
+        <div class="color-swatch" style="background:#c0392b;"><span>Hex<br/><code>#c0392b</code></span></div>
+        <div class="color-swatch" style="background:rgb(192,57,43);"><span>RGB<br/><code>rgb(192,57,43)</code></span></div>
+        <div class="color-swatch" style="background:rgba(192,57,43,0.6);"><span>RGBA<br/><code>rgba(192,57,43,0.6)</code></span></div>
+        <div class="color-swatch" style="background:hsl(5,63%,46%);"><span>HSL<br/><code>hsl(5,63%,46%)</code></span></div>
+        <div class="color-swatch" style="background:hsla(5,63%,46%,0.7);"><span>HSLA<br/><code>hsla(5,63%,46%,0.7)</code></span></div>
+        <div class="color-swatch" style="background:tomato;"><span>Named<br/><code>tomato</code></span></div>
+        <div class="color-swatch" style="background:transparent; border: 2px dashed #999;"><span style="color:#555;">Transparent<br/><code>transparent</code></span></div>
+        <div class="color-swatch" style="background:currentColor; color:#6366f1;"><span style="color:white;">currentColor<br/><code>currentColor</code></span></div>
+      </div>
+
+      <div class="code-block full-code"><pre><code>/* All CSS color formats */
+color: red;                        /* Named color */
+color: #ff0000;                    /* Hex 6-digit */
+color: #f00;                       /* Hex 3-digit shorthand */
+color: #ff000080;                  /* Hex 8-digit (with alpha) */
+color: rgb(255, 0, 0);             /* RGB: 0–255 per channel */
+color: rgba(255, 0, 0, 0.5);      /* RGBA: + alpha 0–1 */
+color: hsl(0, 100%, 50%);         /* HSL: hue 0–360, sat %, light % */
+color: hsla(0, 100%, 50%, 0.5);   /* HSLA: + alpha */
+color: oklch(0.63 0.26 29);       /* Modern — perceptually uniform */
+color: transparent;                /* Fully transparent */
+color: currentColor;               /* Inherits text color */
+color: inherit;                    /* Inherits from parent */</code></pre></div>
+
+      <h3 class="sub-heading">CSS Units</h3>
+      <div class="units-table">
+        <table>
+          <thead><tr><th>Unit</th><th>Type</th><th>Relative To</th><th>Example Use</th></tr></thead>
+          <tbody>
+            <tr><td><code>px</code></td><td>Absolute</td><td>Device pixels</td><td>Borders, shadows</td></tr>
+            <tr><td><code>rem</code></td><td>Relative</td><td>Root (&lt;html&gt;) font-size (usually 16px)</td><td>Font sizes, spacing</td></tr>
+            <tr><td><code>em</code></td><td>Relative</td><td>Current element's font-size</td><td>Padding inside components</td></tr>
+            <tr><td><code>%</code></td><td>Relative</td><td>Parent element's size</td><td>Widths, heights</td></tr>
+            <tr><td><code>vw</code></td><td>Viewport</td><td>1% of viewport width</td><td>Full-width sections</td></tr>
+            <tr><td><code>vh</code></td><td>Viewport</td><td>1% of viewport height</td><td>Full-screen hero</td></tr>
+            <tr><td><code>vmin</code></td><td>Viewport</td><td>Smaller of vw/vh</td><td>Square elements</td></tr>
+            <tr><td><code>vmax</code></td><td>Viewport</td><td>Larger of vw/vh</td><td>—</td></tr>
+            <tr><td><code>dvh</code></td><td>Viewport</td><td>Dynamic viewport height (mobile-safe)</td><td>Mobile full-screen</td></tr>
+            <tr><td><code>ch</code></td><td>Relative</td><td>Width of "0" in current font</td><td>Text input widths</td></tr>
+            <tr><td><code>ex</code></td><td>Relative</td><td>x-height of current font</td><td>Rare</td></tr>
+            <tr><td><code>fr</code></td><td>Grid</td><td>Fraction of available space</td><td>Grid columns</td></tr>
+            <tr><td><code>deg</code></td><td>Angle</td><td>Degrees 0–360</td><td>Gradients, transforms</td></tr>
+            <tr><td><code>turn</code></td><td>Angle</td><td>1 turn = 360deg</td><td>Spin animations</td></tr>
+            <tr><td><code>s / ms</code></td><td>Time</td><td>Seconds / milliseconds</td><td>Transitions, animations</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · BOX MODEL
+    ══════════════════════════════ -->
+    <section id="box-model" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">The Box Model</h2>
+      <p class="ch-intro">Every HTML element is a rectangular box. The box model defines the layers of space around content.</p>
+
+      <div class="box-model-visual">
+        <div class="bm-margin-layer">
+          <span class="bm-label margin-label">MARGIN</span>
+          <div class="bm-border-layer">
+            <span class="bm-label border-label">BORDER</span>
+            <div class="bm-padding-layer">
+              <span class="bm-label padding-label">PADDING</span>
+              <div class="bm-content-layer">CONTENT<br/><small>width × height</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block full-code"><pre><code>.box {
+  /* ── CONTENT SIZE ── */
+  width: 300px;
+  height: 200px;
+  min-width: 100px;   max-width: 600px;
+  min-height: 50px;   max-height: 400px;
+
+  /* ── PADDING — space inside, between content and border ── */
+  padding: 20px;                           /* All 4 sides */
+  padding: 10px 20px;                      /* top/bottom  left/right */
+  padding: 10px 20px 30px 40px;           /* top  right  bottom  left (clockwise) */
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 30px;
+  padding-left: 40px;
+
+  /* ── BORDER ── */
+  border: 2px solid #333;                  /* shorthand: width style color */
+  border-width: 2px;
+  border-style: solid;    /* solid | dashed | dotted | double | groove | ridge | inset | outset | none */
+  border-color: #333;
+  border-top: 4px dashed red;             /* Individual sides */
+  border-radius: 8px;                     /* Rounded corners */
+  border-radius: 50%;                     /* Circle (on square element) */
+  border-radius: 12px 0 12px 0;          /* TL TR BR BL */
+
+  /* ── MARGIN — space outside, between this and other elements ── */
+  margin: 20px;
+  margin: 10px auto;                       /* auto = center horizontally */
+  margin-top: 0;
+  margin-right: auto;
+  margin-bottom: 32px;
+  margin-left: auto;
+
+  /* ── OUTLINE — like border but outside the border, doesn't affect layout ── */
+  outline: 2px solid blue;
+  outline-offset: 4px;                    /* Gap between border and outline */
+
+  /* ── BOX SIZING — critical! ── */
+  box-sizing: content-box;   /* Default: padding + border ADDED to width */
+  box-sizing: border-box;    /* Recommended: padding + border INCLUDED in width */
+}
+
+/* Apply border-box globally — highly recommended */
+*, *::before, *::after {
+  box-sizing: border-box;
+}</code></pre></div>
+
+      <div class="tip-box">
+        <strong>Border-box vs content-box:</strong> With <code>content-box</code>, a 300px wide box with 20px padding becomes 340px wide. With <code>border-box</code>, it stays 300px. Always use <code>box-sizing: border-box</code> globally.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · BACKGROUNDS
+    ══════════════════════════════ -->
+    <section id="backgrounds" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Backgrounds</h2>
+
+      <div class="bg-demos">
+        <div class="bg-demo" style="background-color:#c0392b;">Solid Color</div>
+        <div class="bg-demo" style="background:linear-gradient(135deg,#c0392b,#f39c12);">Linear Gradient</div>
+        <div class="bg-demo" style="background:radial-gradient(circle at 30% 40%,#6366f1,#1a1a2e);">Radial Gradient</div>
+        <div class="bg-demo" style="background:conic-gradient(#c0392b,#f39c12,#27ae60,#6366f1,#c0392b);">Conic Gradient</div>
+        <div class="bg-demo" style="background:repeating-linear-gradient(45deg,#1a1a2e 0px,#1a1a2e 10px,#c0392b 10px,#c0392b 20px);">Repeating Gradient</div>
+        <div class="bg-demo" style="background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url('https://picsum.photos/300/120?random=5') center/cover;">Image + Overlay</div>
+      </div>
+
+      <div class="code-block full-code"><pre><code>.box {
+  /* ── COLOR ── */
+  background-color: #f0f0f0;
+  background-color: transparent;
+
+  /* ── IMAGE ── */
+  background-image: url("bg.jpg");
+  background-repeat: no-repeat;       /* repeat | repeat-x | repeat-y | no-repeat | space | round */
+  background-position: center center; /* x y — or: top left, 50% 50%, 20px 40px */
+  background-size: cover;             /* cover | contain | auto | 300px 200px | 100% auto */
+  background-attachment: scroll;      /* scroll | fixed | local */
+  background-origin: border-box;      /* border-box | padding-box | content-box */
+  background-clip: border-box;        /* border-box | padding-box | content-box | text */
+
+  /* ── GRADIENTS ── */
+  background: linear-gradient(to right, red, blue);
+  background: linear-gradient(135deg, #c0392b 0%, #f39c12 100%);
+  background: radial-gradient(circle at center, #6366f1, #1a1a2e);
+  background: radial-gradient(ellipse 80% 60% at 20% 30%, #c0392b, transparent);
+  background: conic-gradient(from 0deg, red, orange, yellow, green, blue, red);
+  background: repeating-linear-gradient(45deg, #fff 0px, #fff 10px, #eee 10px, #eee 20px);
+
+  /* ── SHORTHAND ── */
+  background: url("bg.jpg") no-repeat center / cover;
+
+  /* ── MULTIPLE BACKGROUNDS (layered, first is on top) ── */
+  background:
+    url("overlay.png") center / cover,
+    linear-gradient(135deg, #c0392b, #f39c12);
+
+  /* ── TEXT FILL WITH GRADIENT (cool effect!) ── */
+  background: linear-gradient(135deg, #c0392b, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}</code></pre></div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · TYPOGRAPHY
+    ══════════════════════════════ -->
+    <section id="typography" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Typography</h2>
+
+      <div class="code-block full-code"><pre><code>.text {
+  /* ── FONT FAMILY ── */
+  font-family: 'Playfair Display', Georgia, serif;  /* Serif */
+  font-family: 'IBM Plex Mono', Courier, monospace; /* Monospace */
+  font-family: 'DM Sans', Helvetica, sans-serif;    /* Sans-serif */
+
+  /* ── FONT SIZE ── */
+  font-size: 16px;       /* Absolute */
+  font-size: 1rem;       /* Relative to root (html) font-size */
+  font-size: 1.25em;     /* Relative to parent font-size */
+  font-size: 2.5vw;      /* Viewport-relative */
+  font-size: clamp(1rem, 3vw, 2rem); /* Fluid — min, preferred, max */
+
+  /* ── FONT WEIGHT ── */
+  font-weight: normal;  /* 400 */
+  font-weight: bold;    /* 700 */
+  font-weight: 100;     /* Thin */
+  font-weight: 300;     /* Light */
+  font-weight: 500;     /* Medium */
+  font-weight: 600;     /* SemiBold */
+  font-weight: 800;     /* ExtraBold */
+  font-weight: 900;     /* Black */
+
+  /* ── FONT STYLE ── */
+  font-style: normal;
+  font-style: italic;
+  font-style: oblique;
+
+  /* ── FONT VARIANT ── */
+  font-variant: small-caps;
+
+  /* ── FONT SHORTHAND: style variant weight size/line-height family ── */
+  font: italic bold 1.2rem/1.6 'Playfair Display', serif;
+
+  /* ── LINE HEIGHT ── */
+  line-height: 1.6;      /* Unitless — recommended (1.6× font-size) */
+  line-height: 24px;
+  line-height: 150%;
+
+  /* ── LETTER SPACING ── */
+  letter-spacing: 0.05em;
+  letter-spacing: 2px;
+  letter-spacing: -0.02em; /* Tighten for big headings */
+
+  /* ── WORD SPACING ── */
+  word-spacing: 4px;
+
+  /* ── TEXT ALIGN ── */
+  text-align: left;
+  text-align: center;
+  text-align: right;
+  text-align: justify;
+  text-align: start;     /* RTL-aware left */
+  text-align: end;       /* RTL-aware right */
+
+  /* ── TEXT TRANSFORM ── */
+  text-transform: none;
+  text-transform: uppercase;
+  text-transform: lowercase;
+  text-transform: capitalize; /* First letter of each word */
+
+  /* ── TEXT DECORATION ── */
+  text-decoration: none;
+  text-decoration: underline;
+  text-decoration: overline;
+  text-decoration: line-through;
+  text-decoration: underline wavy red; /* style + type + color */
+  text-underline-offset: 4px;         /* Space between text and underline */
+
+  /* ── TEXT SHADOW: x  y  blur  color ── */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 0 0 10px #c0392b;       /* Glow */
+  text-shadow: 1px 1px 0 red, 2px 2px 0 orange; /* Stacked */
+
+  /* ── TEXT OVERFLOW ── */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;   /* "..." when text overflows */
+
+  /* ── OTHER ── */
+  text-indent: 2em;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  direction: ltr;            /* ltr | rtl */
+  writing-mode: horizontal-tb; /* vertical-rl | vertical-lr */
+}
+
+/* ── @font-face — Load a custom font ── */
+@font-face {
+  font-family: 'MyFont';
+  src: url('font.woff2') format('woff2'),
+       url('font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Show fallback until font loads */
+}
+
+/* ── Variable fonts ── */
+h1 {
+  font-variation-settings: 'wght' 750, 'wdth' 85;
+}</code></pre></div>
+
+      <div class="typo-demo">
+        <p style="font-size:2rem; font-family:'Playfair Display',serif; font-weight:900; letter-spacing:-0.03em;">Headline Display</p>
+        <p style="font-size:1rem; font-family:'Fraunces',serif; letter-spacing:0.08em; text-transform:uppercase; color:#888;">SUBHEADING TEXT</p>
+        <p style="font-size:1.1rem; font-family:'Fraunces',serif; line-height:1.8;">Body text looks best at 1.6–1.8 line-height with a comfortable font-size of 16–18px. Good typography is invisible — readers focus on the words, not the formatting.</p>
+        <p style="font-size:0.875rem; letter-spacing:0.12em; text-transform:uppercase; color:#aaa; margin-top:8px;">fine print · small caps · caption text</p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · DISPLAY & VISIBILITY
+    ══════════════════════════════ -->
+    <section id="display" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Display &amp; Visibility</h2>
+
+      <div class="code-block full-code"><pre><code>/* ── DISPLAY ── */
+display: block;          /* Full width, new line, accepts width/height/margin */
+display: inline;         /* Shrink-wraps content, NO width/height/top-bottom margin */
+display: inline-block;   /* Inline flow BUT accepts width/height/margin */
+display: none;           /* Removed from layout + invisible (element gone) */
+display: flex;           /* Flexbox container */
+display: inline-flex;    /* Inline flex container */
+display: grid;           /* Grid container */
+display: inline-grid;    /* Inline grid container */
+display: table;          /* Behaves like &lt;table&gt; */
+display: table-cell;     /* Behaves like &lt;td&gt; */
+display: list-item;      /* Behaves like &lt;li&gt; */
+display: contents;       /* Element disappears but children remain */
+
+/* ── VISIBILITY vs DISPLAY ── */
+visibility: visible;     /* Default — element shown */
+visibility: hidden;      /* Element INVISIBLE but still takes up space */
+display: none;           /* Element invisible AND takes up NO space */
+opacity: 0;              /* Invisible but takes up space + can still receive events */
+
+/* ── OVERFLOW ── */
+overflow: visible;       /* Default — content spills outside box */
+overflow: hidden;        /* Clips overflowing content */
+overflow: scroll;        /* Always shows scrollbars */
+overflow: auto;          /* Shows scrollbars only when needed */
+overflow-x: scroll;      /* Horizontal only */
+overflow-y: hidden;      /* Vertical only */
+
+/* ── CURSOR ── */
+cursor: default;
+cursor: pointer;    /* Hand — use on clickable elements */
+cursor: text;
+cursor: move;
+cursor: not-allowed;
+cursor: grab;
+cursor: crosshair;
+cursor: zoom-in;
+cursor: none;       /* Hide cursor */
+
+/* ── POINTER EVENTS ── */
+pointer-events: auto;    /* Normal */
+pointer-events: none;    /* Clicks pass through (useful for overlays) */
+
+/* ── USER SELECT ── */
+user-select: auto;
+user-select: none;       /* Can't select/copy text */
+user-select: all;        /* Selects all on single click */</code></pre></div>
+
+      <div class="display-demos">
+        <div class="display-demo-row">
+          <span class="demo-inline">inline</span>
+          <span class="demo-inline">inline</span>
+          <span class="demo-inline">inline</span>
+        </div>
+        <div class="display-demo-row">
+          <div class="demo-block">block (full width)</div>
+          <div class="demo-block">block (full width)</div>
+        </div>
+        <div class="display-demo-row">
+          <span class="demo-iblock">inline-block</span>
+          <span class="demo-iblock">inline-block</span>
+          <span class="demo-iblock">inline-block</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · FLEXBOX
+    ══════════════════════════════ -->
+    <section id="flexbox" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Flexbox</h2>
+      <p class="ch-intro">Flexbox lays out items in ONE direction — row or column. Perfect for nav bars, card rows, centering content.</p>
+
+      <div class="code-block full-code"><pre><code>/* ════ CONTAINER PROPERTIES ════ */
+.container {
+  display: flex;
+  display: inline-flex;
+
+  /* Direction — main axis */
+  flex-direction: row;            /* → (default) */
+  flex-direction: row-reverse;    /* ← */
+  flex-direction: column;         /* ↓ */
+  flex-direction: column-reverse; /* ↑ */
+
+  /* Wrapping */
+  flex-wrap: nowrap;              /* Single line (default) */
+  flex-wrap: wrap;                /* Wrap to next line */
+  flex-wrap: wrap-reverse;        /* Wrap upward */
+
+  /* Shorthand: direction + wrap */
+  flex-flow: row wrap;
+
+  /* Alignment — main axis (justify = same direction as flex-direction) */
+  justify-content: flex-start;    /* Pack to start (default) */
+  justify-content: flex-end;      /* Pack to end */
+  justify-content: center;        /* Center */
+  justify-content: space-between; /* Gaps between items, none at edges */
+  justify-content: space-around;  /* Equal gaps around each item */
+  justify-content: space-evenly;  /* Perfectly equal gaps everywhere */
+
+  /* Alignment — cross axis (align = perpendicular to flex-direction) */
+  align-items: stretch;           /* Fill cross-axis size (default) */
+  align-items: flex-start;        /* Align to cross-start */
+  align-items: flex-end;          /* Align to cross-end */
+  align-items: center;            /* Center on cross axis */
+  align-items: baseline;          /* Align text baselines */
+
+  /* Multi-line cross-axis alignment (only when flex-wrap: wrap) */
+  align-content: flex-start;
+  align-content: center;
+  align-content: space-between;
+  align-content: stretch;         /* (default) */
+
+  /* Gaps */
+  gap: 16px;                      /* Both row and column */
+  row-gap: 12px;
+  column-gap: 24px;
+}
+
+/* ════ ITEM PROPERTIES ════ */
+.item {
+  /* Grow — how much extra space to take */
+  flex-grow: 0;    /* Don't grow (default) */
+  flex-grow: 1;    /* Grow equally */
+  flex-grow: 2;    /* Take twice as much as flex-grow:1 */
+
+  /* Shrink — allow item to shrink when container is too small */
+  flex-shrink: 1;  /* Can shrink (default) */
+  flex-shrink: 0;  /* Never shrink */
+
+  /* Base size — before growing/shrinking */
+  flex-basis: auto;     /* Default: use width/height */
+  flex-basis: 200px;
+  flex-basis: 30%;
+  flex-basis: 0;        /* Ignore content size, start from 0 */
+
+  /* Shorthand: grow shrink basis */
+  flex: 1;              /* = flex: 1 1 0 (grow and shrink equally) */
+  flex: 0 0 200px;      /* Fixed 200px, never grow or shrink */
+  flex: 1 0 auto;       /* Grow, don't shrink, auto base */
+  flex: none;           /* = flex: 0 0 auto (rigid) */
+
+  /* Override container's align-items for this item only */
+  align-self: auto;
+  align-self: flex-start;
+  align-self: flex-end;
+  align-self: center;
+  align-self: stretch;
+  align-self: baseline;
+
+  /* Reorder items visually (default 0) */
+  order: -1;   /* Move to front */
+  order: 0;    /* Default */
+  order: 1;    /* Move to back */
+}</code></pre></div>
+
+      <h3 class="sub-heading">Live Flexbox Demos</h3>
+      <div class="flex-demo-grid">
+        <div class="flex-demo-wrap">
+          <div class="flex-demo-label"><code>justify-content: space-between</code></div>
+          <div class="flex-demo" style="justify-content:space-between;">
+            <div class="fi">A</div><div class="fi">B</div><div class="fi">C</div>
+          </div>
+        </div>
+        <div class="flex-demo-wrap">
+          <div class="flex-demo-label"><code>justify-content: center; gap: 12px</code></div>
+          <div class="flex-demo" style="justify-content:center; gap:12px;">
+            <div class="fi">A</div><div class="fi">B</div><div class="fi">C</div>
+          </div>
+        </div>
+        <div class="flex-demo-wrap">
+          <div class="flex-demo-label"><code>align-items: flex-end</code></div>
+          <div class="flex-demo" style="align-items:flex-end; height:100px;">
+            <div class="fi">A</div><div class="fi tall">B</div><div class="fi">C</div>
+          </div>
+        </div>
+        <div class="flex-demo-wrap">
+          <div class="flex-demo-label"><code>flex-direction: column</code></div>
+          <div class="flex-demo" style="flex-direction:column; gap:6px; height:160px;">
+            <div class="fi" style="flex:1;">grow:1</div><div class="fi" style="flex:2;">grow:2</div><div class="fi" style="flex:1;">grow:1</div>
+          </div>
+        </div>
+        <div class="flex-demo-wrap">
+          <div class="flex-demo-label"><code>flex-wrap: wrap; gap: 8px</code></div>
+          <div class="flex-demo" style="flex-wrap:wrap; gap:8px;">
+            <div class="fi" style="flex:0 0 120px;">120px</div>
+            <div class="fi" style="flex:0 0 120px;">120px</div>
+            <div class="fi" style="flex:0 0 120px;">120px</div>
+            <div class="fi" style="flex:0 0 120px;">120px</div>
+          </div>
+        </div>
+        <div class="flex-demo-wrap">
+          <div class="flex-demo-label">Perfect centering: <code>justify + align: center</code></div>
+          <div class="flex-demo" style="justify-content:center; align-items:center; height:100px;">
+            <div class="fi">Centered!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · CSS GRID
+    ══════════════════════════════ -->
+    <section id="grid" class="chapter">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">CSS Grid</h2>
+      <p class="ch-intro">Grid arranges items in TWO dimensions simultaneously — rows AND columns. Best for page layouts, dashboards, galleries.</p>
+
+      <div class="code-block full-code"><pre><code>/* ════ CONTAINER ════ */
+.grid {
+  display: grid;
+  display: inline-grid;
+
+  /* Define columns */
+  grid-template-columns: 200px 200px 200px;          /* 3 fixed columns */
+  grid-template-columns: 1fr 2fr 1fr;               /* Fractional */
+  grid-template-columns: repeat(3, 1fr);            /* 3 equal columns */
+  grid-template-columns: repeat(4, minmax(100px, 1fr)); /* Min 100px, stretch */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));  /* Responsive! */
+  grid-template-columns: repeat(auto-fit,  minmax(200px, 1fr));  /* Responsive! */
+  grid-template-columns: 200px auto 200px;          /* Sidebar-main-sidebar */
+
+  /* Define rows */
+  grid-template-rows: 80px auto 60px;               /* Header, main, footer */
+  grid-template-rows: repeat(3, minmax(100px, auto));
+  grid-auto-rows: minmax(100px, auto);              /* Implicit rows */
+  grid-auto-columns: 200px;                         /* Implicit columns */
+
+  /* Named template areas */
+  grid-template-areas:
+    "header  header  header"
+    "sidebar main    main"
+    "footer  footer  footer";
+
+  /* Gaps */
+  gap: 16px;
+  row-gap: 12px;
+  column-gap: 24px;
+
+  /* Alignment of ALL items within their cells */
+  justify-items: start | end | center | stretch;    /* Horizontal */
+  align-items:   start | end | center | stretch;    /* Vertical */
+
+  /* Alignment of grid within container */
+  justify-content: start | end | center | space-between | space-around | space-evenly;
+  align-content:   start | end | center | space-between;
+}
+
+/* ════ ITEM PLACEMENT ════ */
+.item {
+  /* Column placement */
+  grid-column: 1 / 3;          /* From line 1 to line 3 */
+  grid-column: 1 / -1;         /* From first to last line (full width) */
+  grid-column: span 2;         /* Span 2 columns from current position */
+  grid-column-start: 2;
+  grid-column-end: 4;
+
+  /* Row placement */
+  grid-row: 1 / 3;
+  grid-row: span 2;
+  grid-row-start: 1;
+  grid-row-end: 3;
+
+  /* Named area */
+  grid-area: header;
+  grid-area: sidebar;
+  grid-area: main;
+  grid-area: footer;
+
+  /* Shorthand: row-start / col-start / row-end / col-end */
+  grid-area: 1 / 1 / 2 / 4;
+
+  /* Override container alignment for this item */
+  justify-self: start | end | center | stretch;
+  align-self:   start | end | center | stretch;
+
+  /* z-axis (for overlapping) */
+  z-index: 1;
+}</code></pre></div>
+
+      <h3 class="sub-heading">Live Grid Demos</h3>
+      <div class="grid-demos">
+        <div class="grid-demo-wrap">
+          <div class="grid-demo-label"><code>grid-template-columns: repeat(3, 1fr)</code></div>
+          <div class="grid-demo-3col">
+            <div class="gi span2">Header (span 2)</div><div class="gi">3</div>
+            <div class="gi">4</div><div class="gi row2">5 (row 2)</div><div class="gi">6</div>
+            <div class="gi">7</div><div class="gi">8</div>
+          </div>
+        </div>
+        <div class="grid-demo-wrap">
+          <div class="grid-demo-label">Named Areas Layout</div>
+          <div class="grid-demo-areas">
+            <div class="ga-header">header</div>
+            <div class="ga-sidebar">sidebar</div>
+            <div class="ga-main">main</div>
+            <div class="ga-footer">footer</div>
+          </div>
+        </div>
+        <div class="grid-demo-wrap" style="grid-column: 1/-1;">
+          <div class="grid-demo-label"><code>repeat(auto-fill, minmax(120px, 1fr))</code> — resize window!</div>
+          <div class="grid-demo-autofill">
+            <div class="gi">1</div><div class="gi">2</div><div class="gi">3</div>
+            <div class="gi">4</div><div class="gi">5</div><div class="gi">6</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         10 · POSITIONING
+    ══════════════════════════════ -->
+    <section id="positioning" class="chapter">
+      <div class="ch-num">10</div>
+      <h2 class="ch-title">Positioning</h2>
+
+      <div class="code-block full-code"><pre><code>.box {
+  /* ── STATIC (default) ── */
+  position: static;
+  /* Normal flow. top/right/bottom/left have NO effect. */
+
+  /* ── RELATIVE ── */
+  position: relative;
+  top: 10px;     /* Move 10px DOWN from its NORMAL position */
+  left: 20px;    /* Move 20px RIGHT from its normal position */
+  /* Still occupies original space in the flow */
+  /* Creates a positioning context for absolute children */
+
+  /* ── ABSOLUTE ── */
+  position: absolute;
+  top: 0;
+  right: 0;
+  /* Removed from normal flow (no space reserved) */
+  /* Positioned relative to nearest POSITIONED ancestor */
+  /* (ancestor must be position: relative/absolute/fixed/sticky) */
+  /* Falls back to &lt;body&gt; if no positioned ancestor found */
+
+  /* ── FIXED ── */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Removed from flow. Positioned relative to VIEWPORT. */
+  /* Stays fixed when page scrolls (sticky nav bars, modals) */
+
+  /* ── STICKY ── */
+  position: sticky;
+  top: 20px;  /* Sticks when 20px from viewport top during scroll */
+  /* Hybrid: relative UNTIL it hits the threshold, then fixed */
+  /* Must have a scroll container ancestor */
+
+  /* ── Z-INDEX (stacking order) ── */
+  z-index: auto;   /* Default — stacking order from source order */
+  z-index: 1;      /* Higher = on top */
+  z-index: 100;
+  z-index: -1;     /* Behind normal content */
+  /* Only works on positioned elements (not static) */
+}
+
+/* ── Classic patterns ── */
+
+/* Badge pinned to top-right corner */
+.parent { position: relative; }
+.badge  { position: absolute; top: -8px; right: -8px; }
+
+/* Full overlay */
+.overlay {
+  position: absolute;
+  inset: 0;  /* shorthand for top:0; right:0; bottom:0; left:0; */
+}
+
+/* Sticky header */
+header { position: sticky; top: 0; z-index: 100; }
+
+/* Vertically centering with absolute */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}</code></pre></div>
+
+      <div class="positioning-demo">
+        <div class="pos-parent">
+          <span class="pos-label">position: relative (parent)</span>
+          <div class="pos-static">static</div>
+          <div class="pos-relative">relative<br/><small>top:10px left:10px</small></div>
+          <div class="pos-absolute">absolute<br/><small>top:0 right:0</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         11 · TRANSFORMS
+    ══════════════════════════════ -->
+    <section id="transforms" class="chapter">
+      <div class="ch-num">11</div>
+      <h2 class="ch-title">Transforms</h2>
+      <p class="ch-intro">Transforms move, scale, rotate, or skew elements without affecting document flow.</p>
+
+      <div class="code-block full-code"><pre><code>.box {
+  /* ── 2D TRANSFORMS ── */
+  transform: translateX(50px);              /* Move right */
+  transform: translateY(-20px);             /* Move up */
+  transform: translate(50px, -20px);        /* Move X and Y */
+  transform: translate(50%, 50%);           /* Relative to self */
+
+  transform: scale(1.5);                    /* Scale up 1.5× uniformly */
+  transform: scaleX(2);                     /* Stretch horizontally */
+  transform: scaleY(0.5);                   /* Squish vertically */
+  transform: scale(1.2, 0.8);              /* X and Y separately */
+  transform: scale(-1);                     /* Mirror (flip) */
+
+  transform: rotate(45deg);                 /* Clockwise 45° */
+  transform: rotate(-90deg);               /* Counter-clockwise */
+  transform: rotate(0.5turn);              /* Half rotation */
+
+  transform: skew(10deg, 5deg);            /* Skew X and Y */
+  transform: skewX(15deg);
+  transform: skewY(10deg);
+
+  /* ── CHAINING (applied right to left) ── */
+  transform: rotate(45deg) scale(1.2) translateX(50px);
+
+  /* ── TRANSFORM ORIGIN (pivot point) ── */
+  transform-origin: center center;          /* Default */
+  transform-origin: top left;
+  transform-origin: 50% 50%;
+  transform-origin: 0 0;                   /* Top-left corner */
+
+  /* ── 3D TRANSFORMS ── */
+  transform: perspective(500px) rotateY(45deg);
+  transform: rotateX(30deg);               /* Tilt toward/away */
+  transform: rotateY(60deg);               /* Left/right rotation */
+  transform: rotateZ(45deg);               /* Same as rotate() */
+  transform: translateZ(100px);            /* Move toward viewer */
+  transform: scale3d(1.2, 1.2, 1);
+  transform: matrix3d(...);               /* Full 4×4 matrix */
+
+  /* ── 3D SPACE ── */
+  perspective: 500px;                       /* On PARENT element */
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;            /* Children in 3D space */
+  backface-visibility: hidden;             /* Hide back of element */
+}</code></pre></div>
+
+      <div class="transform-demos">
+        <div class="transform-box" style="transform:rotate(15deg);">rotate(15deg)</div>
+        <div class="transform-box" style="transform:scale(1.2);">scale(1.2)</div>
+        <div class="transform-box" style="transform:skew(10deg,5deg);">skew(10,5)</div>
+        <div class="transform-box" style="transform:translate(10px,-10px);">translate</div>
+        <div class="transform-box" style="transform:scaleX(-1);">scaleX(-1) flip</div>
+        <div class="transform-box transform-3d">rotateY (3D)</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         12 · TRANSITIONS
+    ══════════════════════════════ -->
+    <section id="transitions" class="chapter">
+      <div class="ch-num">12</div>
+      <h2 class="ch-title">Transitions</h2>
+      <p class="ch-intro">Transitions smoothly animate changes between CSS states (like :hover). No JavaScript needed.</p>
+
+      <div class="code-block full-code"><pre><code>.button {
+  background: #c0392b;
+  color: white;
+  padding: 12px 24px;
+
+  /* transition: property  duration  timing-function  delay */
+  transition: background 0.3s ease;
+  transition: all 0.3s ease;                           /* ALL changeable properties */
+  transition: background 0.3s ease, transform 0.2s ease-in-out;  /* Multiple */
+
+  /* Individual properties */
+  transition-property: background, transform, opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-delay: 0s;
+
+  /* ── TIMING FUNCTIONS ── */
+  transition-timing-function: ease;          /* Slow → fast → slow (default) */
+  transition-timing-function: linear;        /* Constant speed */
+  transition-timing-function: ease-in;       /* Starts slow */
+  transition-timing-function: ease-out;      /* Ends slow */
+  transition-timing-function: ease-in-out;   /* Both ends slow */
+  transition-timing-function: step-start;    /* Jump at start */
+  transition-timing-function: step-end;      /* Jump at end */
+  transition-timing-function: steps(4, end);               /* 4 discrete steps */
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); /* Spring! */
+}
+
+.button:hover {
+  background: #a93226;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(192,57,43,0.4);
+}
+
+/* ── WHAT CAN BE TRANSITIONED ── */
+/* ✅ color, background-color, opacity, transform, */
+/*    width, height, margin, padding, border,      */
+/*    box-shadow, text-shadow, font-size           */
+/* ❌ display (use visibility + opacity instead)   */
+/* ❌ content (pseudo-elements)                    */</code></pre></div>
+
+      <div class="transition-demos">
+        <div class="trans-demo t-bg">Hover me<br/><small>background</small></div>
+        <div class="trans-demo t-transform">Hover me<br/><small>transform</small></div>
+        <div class="trans-demo t-shadow">Hover me<br/><small>shadow</small></div>
+        <div class="trans-demo t-all">Hover me<br/><small>all</small></div>
+        <div class="trans-demo t-spring">Hover me<br/><small>spring</small></div>
+        <div class="trans-demo t-opacity">Hover me<br/><small>opacity</small></div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         13 · ANIMATIONS
+    ══════════════════════════════ -->
+    <section id="animations" class="chapter">
+      <div class="ch-num">13</div>
+      <h2 class="ch-title">Animations</h2>
+      <p class="ch-intro">Animations run automatically — no hover needed. Define a keyframe sequence, then apply it to an element.</p>
+
+      <div class="code-block full-code"><pre><code>/* ── STEP 1: Define with @keyframes ── */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+@keyframes colorShift {
+  0%   { background: #c0392b; }
+  33%  { background: #f39c12; }
+  66%  { background: #27ae60; }
+  100% { background: #c0392b; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0);     animation-timing-function: ease-in; }
+  50%       { transform: translateY(-30px); animation-timing-function: ease-out; }
+}
+
+@keyframes draw {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ── STEP 2: Apply ── */
+.element {
+  /* Individual properties */
+  animation-name:             slideIn;
+  animation-duration:         0.6s;
+  animation-timing-function:  ease-out;
+  animation-delay:            0.2s;
+  animation-iteration-count:  1;         /* Or: infinite, 3 */
+  animation-direction:        normal;    /* normal | reverse | alternate | alternate-reverse */
+  animation-fill-mode:        forwards;  /* none | forwards | backwards | both */
+  animation-play-state:       running;   /* running | paused */
+
+  /* Shorthand: name  duration  timing  delay  iterations  direction  fill-mode */
+  animation: slideIn 0.6s ease-out 0.2s 1 normal forwards;
+
+  /* Multiple animations */
+  animation: slideIn 0.6s ease, pulse 2s ease infinite;
+}
+
+/* ── Staggered entrance (using animation-delay) ── */
+.card:nth-child(1) { animation-delay: 0.0s; }
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.2s; }
+.card:nth-child(4) { animation-delay: 0.3s; }
+
+/* ── Pause on hover ── */
+.animated:hover { animation-play-state: paused; }</code></pre></div>
+
+      <div class="anim-demos">
+        <div class="anim-box anim-pulse">Pulse</div>
+        <div class="anim-box anim-spin">Spin</div>
+        <div class="anim-box anim-bounce">Bounce</div>
+        <div class="anim-box anim-color">Color</div>
+        <div class="anim-box anim-shake">Shake</div>
+        <div class="anim-box anim-float">Float</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         14 · PSEUDO-CLASSES
+    ══════════════════════════════ -->
+    <section id="pseudo-classes" class="chapter">
+      <div class="ch-num">14</div>
+      <h2 class="ch-title">Pseudo-classes</h2>
+      <p class="ch-intro">Pseudo-classes select elements based on their STATE or POSITION — no extra HTML classes needed.</p>
+
+      <div class="code-block full-code"><pre><code>/* ── INTERACTION STATE ── */
+a:link          { color: blue; }          /* Unvisited link */
+a:visited       { color: purple; }        /* Visited link */
+a:hover         { color: red; }           /* Mouse over */
+a:active        { color: orange; }        /* Being clicked */
+/* Order matters! LVHA: Link → Visited → Hover → Active */
+
+:focus          { outline: 2px solid blue; }   /* Keyboard focus */
+:focus-visible  { outline: 2px solid blue; }   /* Focus from keyboard only */
+:focus-within   { }                            /* Contains a focused element */
+
+/* ── FORM STATE ── */
+:checked         { }   /* Checked checkbox or radio */
+:unchecked       { }
+:disabled        { opacity: 0.5; }
+:enabled         { }
+:required        { border-color: red; }
+:optional        { }
+:valid           { border-color: green; }
+:invalid         { border-color: red; }
+:in-range        { }
+:out-of-range    { }
+:placeholder-shown { }  /* Input is showing placeholder */
+:read-only       { }
+:read-write      { }
+
+/* ── STRUCTURAL ── */
+:root                { }  /* The &lt;html&gt; element */
+:empty               { }  /* No children (not even whitespace) */
+:first-child         { }  /* First sibling */
+:last-child          { }  /* Last sibling */
+:only-child          { }  /* Only child */
+:nth-child(n)        { }  /* nth child (1-based) */
+:nth-child(2n)       { }  /* Even children */
+:nth-child(2n+1)     { }  /* Odd children */
+:nth-child(3n)       { }  /* Every 3rd */
+:nth-last-child(1)   { }  /* Last child */
+:nth-last-child(2)   { }  /* 2nd from last */
+:first-of-type       { }  /* First p, first h2, etc. */
+:last-of-type        { }  /* Last of its element type */
+:only-of-type        { }
+:nth-of-type(2)      { }
+
+/* ── LOGICAL ── */
+:not(.active)           { }  /* Elements NOT matching selector */
+:is(h1, h2, h3, h4)    { }  /* Any of these (inherits highest specificity) */
+:where(h1, h2, h3)     { }  /* Any of these (specificity = 0) */
+:has(img)               { }  /* Element CONTAINING an image — parent selector! */
+:has(+ p)               { }  /* Element followed by a p */
+
+/* ── LOCATION ── */
+:target                 { }  /* Element matching current URL #hash */
+:local-link             { }  /* Link to same page */
+:any-link               { }  /* All links (a[href]) */</code></pre></div>
+
+      <div class="pseudo-demo">
+        <h4 style="margin-bottom:12px; font-family: 'IBM Plex Mono', monospace; font-size:0.8rem; opacity:0.6;">:nth-child — stripe rows</h4>
+        <table class="stripe-table">
+          <thead><tr><th>Name</th><th>Score</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td>Arjun</td><td>92</td><td>A</td></tr>
+            <tr><td>Priya</td><td>85</td><td>B</td></tr>
+            <tr><td>Rahul</td><td>78</td><td>B</td></tr>
+            <tr><td>Sneha</td><td>95</td><td>A</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         15 · PSEUDO-ELEMENTS
+    ══════════════════════════════ -->
+    <section id="pseudo-elements" class="chapter">
+      <div class="ch-num">15</div>
+      <h2 class="ch-title">Pseudo-elements</h2>
+      <p class="ch-intro">Pseudo-elements create virtual sub-parts of an element — great for decorative effects without extra HTML.</p>
+
+      <div class="code-block full-code"><pre><code>/* ── ::before and ::after ── */
+/* Creates a virtual element INSIDE the real element */
+/* content property is REQUIRED (even if empty: content: "") */
+.card::before {
+  content: "";                   /* Required — empty for decorative */
+  content: "→ ";                 /* Text */
+  content: url("icon.svg");      /* Image */
+  content: attr(data-label);     /* Value of HTML attribute */
+  content: counter(section);     /* CSS counter value */
+  display: block;                /* Can be any display value */
+  position: absolute;            /* Positioned relative to element */
+  /* Full styling available: width, height, background, etc. */
+}
+
+/* ── ::first-line ── */
+p::first-line {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #c0392b;
+  /* Only accepts: font, color, background, text-decoration, word-spacing, letter-spacing */
+}
+
+/* ── ::first-letter ── */
+p::first-letter {
+  font-size: 3em;
+  font-family: 'Playfair Display', serif;
+  float: left;
+  line-height: 0.8;
+  margin-right: 8px;
+  color: #c0392b;
+  /* Drop cap effect! */
+}
+
+/* ── ::selection ── */
+::selection {
+  background: #c0392b;
+  color: white;
+}
+
+/* ── ::placeholder ── */
+input::placeholder {
+  color: rgba(0,0,0,0.3);
+  font-style: italic;
+}
+
+/* ── ::marker ── */
+li::marker {
+  color: #c0392b;
+  font-size: 1.2em;
+  content: "▶ ";
+}
+
+/* ── ::backdrop ── */
+dialog::backdrop {
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+}
+
+/* ── Common ::before/::after tricks ── */
+
+/* Decorative underline */
+h2 { position: relative; padding-bottom: 12px; }
+h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 60px; height: 3px;
+  background: #c0392b;
+}
+
+/* Tooltip */
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  background: black;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+[data-tooltip]:hover::after { opacity: 1; }
+
+/* Clearfix (older technique) */
+.clearfix::after { content: ""; display: table; clear: both; }</code></pre></div>
+
+      <div class="pseudo-element-demos">
+        <p class="drop-cap-demo">This paragraph uses <code>::first-letter</code> to create a drop cap effect — a classic typography technique from printed books, now achievable with pure CSS in just a few lines.</p>
+        <div class="before-after-demo" data-tooltip="::after tooltip!">Hover for tooltip <code>[data-tooltip]</code></div>
+        <div class="marker-demo">
+          <ul class="custom-marker-list">
+            <li>Custom bullet via <code>::marker</code></li>
+            <li>No extra HTML needed</li>
+            <li>Color, size, or custom symbol</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         16 · CSS VARIABLES
+    ══════════════════════════════ -->
+    <section id="variables" class="chapter">
+      <div class="ch-num">16</div>
+      <h2 class="ch-title">CSS Variables (Custom Properties)</h2>
+      <p class="ch-intro">Store reusable values in variables. Change one variable and update the whole site instantly.</p>
+
+      <div class="code-block full-code"><pre><code>/* ── DEFINE in :root (global scope) ── */
+:root {
+  /* Colors */
+  --color-primary:    #c0392b;
+  --color-secondary:  #f39c12;
+  --color-bg:         #fefce8;
+  --color-text:       #1a1208;
+  --color-muted:      #6b7280;
+
+  /* Typography */
+  --font-display:     'Playfair Display', Georgia, serif;
+  --font-body:        'Fraunces', serif;
+  --font-mono:        'IBM Plex Mono', monospace;
+  --text-base:        1rem;
+  --text-lg:          1.125rem;
+  --text-xl:          1.25rem;
+
+  /* Spacing scale */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.12);
+  --shadow-lg:  0 16px 48px rgba(0,0,0,0.16);
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* Transitions */
+  --transition-fast:   0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow:   0.5s ease;
+}
+
+/* ── USE with var() ── */
+.button {
+  background: var(--color-primary);
+  font-family: var(--font-body);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+}
+
+/* ── FALLBACK VALUE ── */
+color: var(--color-primary, red);   /* Uses red if --color-primary undefined */
+
+/* ── LOCAL SCOPE ── */
+.card {
+  --card-bg: white;        /* Only available inside .card */
+  background: var(--card-bg);
+}
+
+/* ── DYNAMIC DARK MODE ── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:   #1a1208;
+    --color-text: #fefce8;
+  }
+}
+
+/* ── UPDATE via JavaScript ── */
+/* document.documentElement.style.setProperty('--color-primary', '#6366f1'); */
+
+/* ── CALC with variables ── */
+.container {
+  --sidebar-width: 280px;
+  --gap: 24px;
+  width: calc(100% - var(--sidebar-width) - var(--gap));
+}
+
+/* ── @property (typed variables — very modern) ── */
+@property --rotation {
+  syntax: '&lt;angle&gt;';
+  initial-value: 0deg;
+  inherits: false;
+}
+/* Now --rotation can be animated! */</code></pre></div>
+    </section>
+
+    <!-- ══════════════════════════════
+         17 · CSS FUNCTIONS
+    ══════════════════════════════ -->
+    <section id="functions" class="chapter">
+      <div class="ch-num">17</div>
+      <h2 class="ch-title">CSS Functions</h2>
+
+      <div class="code-block full-code"><pre><code>/* ── MATH FUNCTIONS ── */
+width: calc(100% - 48px);                  /* Arithmetic: + - * / */
+width: calc(50% - var(--gap) / 2);         /* Mix units + variables */
+width: calc(100px * 2 + 10%);
+
+font-size: min(5vw, 48px);                 /* Smaller of the two */
+font-size: max(14px, 1.5vw);              /* Larger of the two */
+font-size: clamp(1rem, 3vw, 2rem);        /* min, preferred, max — fluid! */
+
+padding: clamp(16px, 4vw, 48px);          /* Responsive padding */
+width: min(600px, 90vw);                   /* Don't exceed 600px */
+
+/* ── COLOR FUNCTIONS ── */
+color: rgb(192, 57, 43);
+color: rgba(192, 57, 43, 0.5);
+color: hsl(5, 63%, 46%);
+color: hsla(5, 63%, 46%, 0.5);
+color: oklch(0.5 0.2 30);                  /* Perceptually uniform (modern) */
+color: color-mix(in srgb, red 30%, blue); /* Mix two colors */
+color: color(display-p3 0.9 0.2 0.1);     /* Wide-gamut colors */
+
+/* ── GRADIENT FUNCTIONS ── */
+background: linear-gradient(to right, red, blue);
+background: radial-gradient(circle, red, blue);
+background: conic-gradient(red, blue, red);
+background: repeating-linear-gradient(45deg, black 0 10px, white 10px 20px);
+
+/* ── TRANSFORM FUNCTIONS ── */
+transform: translate(20px, -10px);
+transform: rotate(45deg);
+transform: scale(1.2);
+transform: skew(10deg);
+transform: matrix(a, b, c, d, tx, ty);    /* 2D matrix */
+transform: perspective(500px) rotateY(30deg);
+
+/* ── FILTER FUNCTIONS ── */
+filter: blur(4px);
+filter: brightness(1.5);
+filter: contrast(120%);
+filter: grayscale(100%);
+filter: hue-rotate(90deg);
+filter: invert(100%);
+filter: opacity(0.5);
+filter: saturate(200%);
+filter: sepia(100%);
+filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3));
+filter: blur(2px) brightness(0.8) contrast(1.2); /* Chained */
+
+/* ── SHAPE FUNCTIONS ── */
+clip-path: circle(50%);
+clip-path: ellipse(100px 50px at 50% 50%);
+clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+clip-path: inset(10px 20px round 8px);
+offset-path: path("M 0 0 L 100 100");
+
+/* ── LAYOUT FUNCTIONS ── */
+grid-template-columns: repeat(3, 1fr);
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+width: fit-content;
+width: fit-content(300px);
+width: max-content;
+width: min-content;
+
+/* ── SELECTOR FUNCTIONS ── */
+:is(h1, h2, h3)         { }
+:not(.disabled)          { }
+:where(section, article) { }
+:has(> img)              { }
+
+/* ── COUNTER FUNCTIONS ── */
+content: counter(section);
+content: counters(list-item, ".");
+
+/* ── ENVIRONMENT FUNCTIONS ── */
+padding-top: env(safe-area-inset-top);    /* iPhone notch */
+padding-bottom: env(safe-area-inset-bottom);
+
+/* ── CUSTOM ── */
+color: var(--primary, fallback);
+font-size: attr(data-size px);            /* Read HTML attribute */</code></pre></div>
+    </section>
+
+    <!-- ══════════════════════════════
+         18 · FILTERS & EFFECTS
+    ══════════════════════════════ -->
+    <section id="filters" class="chapter">
+      <div class="ch-num">18</div>
+      <h2 class="ch-title">Filters &amp; Effects</h2>
+
+      <div class="filter-demos">
+        <div class="filter-demo" style="filter:none;">None</div>
+        <div class="filter-demo" style="filter:blur(3px);">blur(3px)</div>
+        <div class="filter-demo" style="filter:brightness(1.6);">brightness</div>
+        <div class="filter-demo" style="filter:contrast(150%);">contrast</div>
+        <div class="filter-demo" style="filter:grayscale(100%);">grayscale</div>
+        <div class="filter-demo" style="filter:hue-rotate(120deg);">hue-rotate</div>
+        <div class="filter-demo" style="filter:invert(100%);">invert</div>
+        <div class="filter-demo" style="filter:sepia(100%);">sepia</div>
+        <div class="filter-demo" style="filter:saturate(300%);">saturate</div>
+      </div>
+
+      <div class="code-block full-code"><pre><code>/* ── FILTER ── */
+img { filter: grayscale(100%); }             /* Desaturate */
+img:hover { filter: none; transition: filter 0.3s; }  /* Color on hover */
+
+/* ── BACKDROP-FILTER (blurs what's BEHIND the element) ── */
+.glass-card {
+  backdrop-filter: blur(12px) brightness(0.9);
+  -webkit-backdrop-filter: blur(12px);   /* Safari */
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ── BOX SHADOW: x  y  blur  spread  color ── */
+box-shadow: 2px 4px 8px 0px rgba(0,0,0,0.2);
+box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.08);  /* Multiple */
+box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);   /* Inside the element */
+box-shadow: 0 0 20px 5px #c0392b;              /* Glow */
+box-shadow: none;
+
+/* ── CLIP-PATH ── */
+clip-path: circle(50%);                        /* Circle */
+clip-path: ellipse(60% 40% at 50% 50%);
+clip-path: polygon(50% 0%, 100% 100%, 0% 100%);  /* Triangle */
+clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%); /* Parallelogram */
+clip-path: inset(0 0 30% 0);                  /* Bottom 30% cut off */
+clip-path: path("M0,0 Q100,100 200,0");       /* SVG path */
+
+/* ── MIX-BLEND-MODE ── */
+.overlay {
+  mix-blend-mode: multiply;   /* multiply | screen | overlay | darken */
+                               /* lighten | color-dodge | color-burn */
+                               /* hard-light | soft-light | difference */
+                               /* exclusion | hue | saturation | color | luminosity */
+}
+
+/* ── ISOLATION ── */
+.container { isolation: isolate; }   /* Create new stacking context for blend modes */
+
+/* ── MASK ── */
+mask-image: linear-gradient(to bottom, black, transparent);
+mask-image: url("mask.svg");
+mask-size: cover;</code></pre></div>
+
+      <div class="effects-demos">
+        <div class="glass-demo">
+          <div class="glass-bg"></div>
+          <div class="glass-card-demo">backdrop-filter: blur — Glassmorphism</div>
+        </div>
+        <div class="shadow-demos">
+          <div class="shadow-demo s1">Soft shadow</div>
+          <div class="shadow-demo s2">Layered</div>
+          <div class="shadow-demo s3">Glow</div>
+          <div class="shadow-demo s4">Inner</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         19 · RESPONSIVE DESIGN
+    ══════════════════════════════ -->
+    <section id="responsive" class="chapter">
+      <div class="ch-num">19</div>
+      <h2 class="ch-title">Responsive Design</h2>
+      <p class="ch-intro">Make layouts adapt to any screen size — phones, tablets, desktops. Mobile-first approach is the standard.</p>
+
+      <div class="code-block full-code"><pre><code>/* ══ MOBILE-FIRST APPROACH ══ */
+/* Write base styles for mobile, then use min-width to add desktop styles */
+
+/* Base — mobile (no query needed) */
+.container { padding: 16px; }
+.grid { grid-template-columns: 1fr; }
+nav { display: none; }
+
+/* Tablet (≥ 768px) */
+@media (min-width: 768px) {
+  .container { padding: 24px; }
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Desktop (≥ 1024px) */
+@media (min-width: 1024px) {
+  .container { max-width: 1200px; margin: 0 auto; }
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  nav { display: flex; }
+}
+
+/* Large desktop (≥ 1440px) */
+@media (min-width: 1440px) {
+  .container { max-width: 1400px; }
+}
+
+/* ── MEDIA QUERY OPERATORS ── */
+@media (min-width: 768px) { }                   /* At least 768px wide */
+@media (max-width: 767px) { }                   /* Less than 768px wide */
+@media (min-width: 768px) and (max-width: 1023px) { }  /* Between 768–1023px */
+@media not (min-width: 768px) { }              /* NOT tablet/desktop */
+@media (orientation: landscape) { }
+@media (orientation: portrait) { }
+@media print { }                               /* Printing */
+@media screen { }                              /* Screen only */
+@media (prefers-color-scheme: dark) { }        /* Dark mode */
+@media (prefers-reduced-motion: reduce) { }    /* Accessibility: reduce motion */
+@media (prefers-contrast: high) { }            /* High contrast */
+@media (hover: hover) { }                      /* Device supports hover */
+@media (pointer: coarse) { }                   /* Touch device */
+@media (pointer: fine) { }                     /* Mouse device */
+@media (-webkit-min-device-pixel-ratio: 2) { } /* Retina display */
+@media (min-resolution: 192dpi) { }            /* High DPI */
+
+/* ── RESPONSIVE UNITS ── */
+.hero { height: 100svh; }      /* Small viewport height (mobile-safe) */
+font-size: clamp(1rem, 4vw, 2.5rem);          /* Fluid type */
+padding: clamp(16px, 5vw, 64px);             /* Fluid spacing */
+width: min(600px, 90%);                        /* Don't overflow container */
+
+/* ── RESPONSIVE IMAGES ── */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── CONTAINER QUERIES (very modern) ── */
+.sidebar { container-type: inline-size; container-name: sidebar; }
+@container sidebar (min-width: 400px) {
+  .card { flex-direction: row; }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}</code></pre></div>
+
+      <div class="breakpoints-visual">
+        <div class="bp bp-mobile">📱 Mobile<br/>&lt; 768px</div>
+        <div class="bp bp-tablet">📟 Tablet<br/>768–1023px</div>
+        <div class="bp bp-desktop">🖥️ Desktop<br/>1024–1439px</div>
+        <div class="bp bp-large">🖥️ Large<br/>1440px+</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         20 · MODERN CSS
+    ══════════════════════════════ -->
+    <section id="modern" class="chapter">
+      <div class="ch-num">20</div>
+      <h2 class="ch-title">Modern CSS</h2>
+      <p class="ch-intro">Powerful new features available in modern browsers — 2023 and beyond.</p>
+
+      <div class="code-block full-code"><pre><code>/* ── :has() — THE PARENT SELECTOR ── */
+/* Style a parent based on what it contains */
+.card:has(img)          { border: 2px solid blue; }   /* Card with an image */
+.form:has(:invalid)     { border-color: red; }        /* Form with invalid fields */
+li:has(+ li)            { border-bottom: 1px solid; } /* li not last */
+.grid:has(:nth-child(3)){ grid-template-columns: repeat(3, 1fr); } /* Auto-layout! */
+
+/* ── CSS NESTING ── */
+/* Write nested rules like Sass — no preprocessor needed! */
+.card {
+  padding: 24px;
+  background: white;
+
+  &:hover {           /* Equivalent to .card:hover */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  & h2 {              /* .card h2 */
+    font-size: 1.5rem;
+  }
+
+  &.featured {        /* .card.featured */
+    border: 2px solid gold;
+  }
+}
+
+/* ── CONTAINER QUERIES ── */
+/* Style based on PARENT size, not viewport */
+.widget { container-type: inline-size; }
+
+@container (min-width: 400px) {
+  .widget-content { display: grid; grid-template-columns: 1fr 1fr; }
+}
+
+/* ── LAYER (Cascade Layers) ── */
+/* Control specificity order explicitly */
+@layer reset, base, components, utilities;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; }
+}
+@layer base {
+  body { font-family: system-ui; }
+}
+@layer components {
+  .button { padding: 8px 16px; border-radius: 4px; }
+}
+@layer utilities {
+  .text-center { text-align: center; }
+}
+
+/* ── SCROLL SNAP ── */
+.carousel {
+  scroll-snap-type: x mandatory;   /* x | y | both, mandatory | proximity */
+  overflow-x: scroll;
+  display: flex;
+}
+.slide {
+  scroll-snap-align: start;        /* start | center | end */
+  flex: 0 0 100%;
+}
+
+/* ── SCROLL-DRIVEN ANIMATIONS ── */
+@keyframes grow { from { scale: 0; } to { scale: 1; } }
+.element {
+  animation: grow linear;
+  animation-timeline: scroll();    /* Tied to page scroll! */
+  animation-range: entry 0% exit 100%;
+}
+
+/* ── LOGICAL PROPERTIES ── */
+/* Writing-mode and RTL aware */
+margin-inline: auto;         /* margin-left + margin-right */
+padding-inline: 24px;        /* padding-left + padding-right */
+margin-block: 32px;          /* margin-top + margin-bottom */
+padding-block: 16px;         /* padding-top + padding-bottom */
+inset-inline-start: 0;       /* left (in LTR), right (in RTL) */
+border-inline-end: 1px solid; /* right border in LTR */
+
+/* ── COLOR-MIX ── */
+color: color-mix(in oklch, var(--primary) 70%, white);
+background: color-mix(in srgb, blue, transparent 50%);
+
+/* ── :is() and :where() ── */
+:is(h1, h2, h3, h4, h5, h6) { font-family: 'Playfair Display', serif; }
+:where(section, article) p { line-height: 1.7; }  /* 0 specificity */
+
+/* ── subgrid ── */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.item { display: grid; grid-column: span 3; grid-template-columns: subgrid; }
+
+/* ── text-wrap: balance / pretty ── */
+h1 { text-wrap: balance; }    /* Even line lengths */
+p  { text-wrap: pretty; }     /* Avoid orphans */</code></pre></div>
+
+      <div class="tip-box">
+        <strong>Browser support:</strong> Always check <a href="https://caniuse.com" target="_blank" rel="noopener">caniuse.com</a> before using cutting-edge CSS features in production. Most features above work in Chrome, Firefox, and Safari 16+.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">CSS</div>
+      <p>CSS Student Handbook — 20 Topics, All Properties, Live Demos</p>
+      <p><small>&copy; 2024 — Keep styling. Keep learning.</small></p>
+    </div>
+  </footer>
+
+</body>
+</html>
