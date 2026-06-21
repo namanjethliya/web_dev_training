@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Read a Design &amp; Build a Web Page — Student Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       SITE HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Guide — Web Design Process</div>
+    <h1 class="hero-title">How to <span class="accent">Read a Design</span><br>&amp; Build a Web Page</h1>
+    <p class="hero-subtitle">See a design → Understand it → Break it into sections → Write the HTML</p>
+    <div class="header-tags">
+      <span class="pill">For Beginners</span>
+      <span class="pill">Step by Step</span>
+      <span class="pill">Try It Yourself</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <h2 class="toc-title">Contents</h2>
+    <ul class="toc-list">
+      <li><a href="#the-design">01 — The Design</a></li>
+      <li><a href="#read-it">02 — Read the Design</a></li>
+      <li><a href="#decide-sections">03 — Decide Your Sections</a></li>
+      <li><a href="#write-html">04 — Write the HTML</a></li>
+      <li><a href="#your-turn">05 — Your Turn</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main class="main-content">
+
+    <!-- ══════════════════════════════════════════════════════════
+         01 · THE DESIGN
+    ══════════════════════════════════════════════════════════ -->
+    <section id="the-design" class="chapter">
+      <div class="chapter-number">01</div>
+      <h2 class="chapter-title">The Design</h2>
+      <p class="chapter-intro">
+        Before writing a single line of HTML, you <strong>look at the design</strong>. Here is a complete website design
+        for a coffee shop called <strong>BrewCo</strong>. Study it first — just look at it the way a visitor would.
+        Don't think about code yet.
+      </p>
+
+      <!-- Browser window mockup -->
+      <div class="browser-window">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="browser-url">www.brewco.com</div>
+        </div>
+
+        <div class="browser-body">
+          <!-- ── The BrewCo website ── -->
+          <div class="mock-site">
+
+            <!-- Header -->
+            <div class="mock-header">
+              <div class="mock-logo">☕ BrewCo</div>
+              <div class="mock-nav">
+                <span>Menu</span>
+                <span>About</span>
+                <span>Visit</span>
+                <span>Order</span>
+              </div>
+            </div>
+
+            <!-- Hero -->
+            <div class="mock-hero">
+              <div class="mock-hero-content">
+                <p class="mock-eyebrow">EST. 2018 · MUMBAI</p>
+                <h1 class="mock-h1">The Best Coffee<br>in Town</h1>
+                <p class="mock-hero-sub">Fresh beans. Warm vibes. Every single day.</p>
+                <button class="mock-btn">See Our Menu →</button>
+              </div>
+            </div>
+
+            <!-- Menu cards -->
+            <div class="mock-section mock-menu">
+              <p class="mock-section-eyebrow">Our Favourites</p>
+              <div class="mock-cards">
+                <div class="mock-card">
+                  <div class="mock-card-img mock-espresso"></div>
+                  <div class="mock-card-info">
+                    <span class="mock-card-name">Espresso</span>
+                    <span class="mock-card-price">₹120</span>
+                  </div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-img mock-latte"></div>
+                  <div class="mock-card-info">
+                    <span class="mock-card-name">Latte</span>
+                    <span class="mock-card-price">₹150</span>
+                  </div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-img mock-coldbrew"></div>
+                  <div class="mock-card-info">
+                    <span class="mock-card-name">Cold Brew</span>
+                    <span class="mock-card-price">₹180</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- About -->
+            <div class="mock-section mock-about">
+              <div class="mock-about-text">
+                <p class="mock-section-eyebrow">Our Story</p>
+                <h2 class="mock-h2">We started with one cup, one dream.</h2>
+                <p class="mock-body-text">BrewCo was born in a small Mumbai apartment. We source beans directly from farms in Coorg and Chikmagalur.</p>
+                <span class="mock-link">Read More →</span>
+              </div>
+              <div class="mock-about-img">
+                <div class="mock-img-placeholder">📷<br><small>Coffee farm photo</small></div>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mock-footer">
+              <div class="mock-footer-logo">☕ BrewCo</div>
+              <div class="mock-footer-links">
+                <span>Instagram</span>
+                <span>Twitter</span>
+                <span>Email</span>
+              </div>
+              <div class="mock-footer-copy">© 2024 BrewCo. All rights reserved.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Before you code anything:</strong> Spend 60 seconds just <em>looking</em> at this page like a visitor.
+        What catches your eye first? What are the big blocks of content you can see from top to bottom?
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         02 · READ THE DESIGN
+    ══════════════════════════════════════════════════════════ -->
+    <section id="read-it" class="chapter">
+      <div class="chapter-number">02</div>
+      <h2 class="chapter-title">Read the Design</h2>
+      <p class="chapter-intro">
+        Now put on your <strong>developer glasses</strong>. Stop looking at colors and fonts — start looking for
+        <strong>big rectangular blocks</strong>. Every web page is just sections stacked on top of each other, like
+        layers in a sandwich.
+      </p>
+
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <strong>The key idea:</strong> A web page is <em>boxes inside boxes</em>. Big boxes contain smaller boxes.
+          Your first job is always to find the biggest boxes.
+        </div>
+      </div>
+
+      <!-- Annotated mockup -->
+      <div class="browser-window annotated-browser">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="browser-url">www.brewco.com — annotated</div>
+        </div>
+
+        <div class="browser-body">
+          <div class="mock-site">
+
+            <!-- Annotated Header -->
+            <div class="mock-header annotated-section" style="--ann-color: #e94560;">
+              <div class="ann-badge" style="--ann-color: #e94560;">1</div>
+              <div class="ann-label" style="--ann-color: #e94560;">&lt;header&gt; — logo + navigation</div>
+              <div class="mock-logo">☕ BrewCo</div>
+              <div class="mock-nav">
+                <span>Menu</span><span>About</span><span>Visit</span><span>Order</span>
+              </div>
+            </div>
+
+            <!-- Annotated Hero -->
+            <div class="mock-hero annotated-section" style="--ann-color: #f97316;">
+              <div class="ann-badge" style="--ann-color: #f97316;">2</div>
+              <div class="ann-label" style="--ann-color: #f97316;">&lt;section id="hero"&gt; — big headline + call to action button</div>
+              <div class="mock-hero-content">
+                <p class="mock-eyebrow">EST. 2018 · MUMBAI</p>
+                <h1 class="mock-h1">The Best Coffee<br>in Town</h1>
+                <p class="mock-hero-sub">Fresh beans. Warm vibes. Every single day.</p>
+                <button class="mock-btn">See Our Menu →</button>
+              </div>
+            </div>
+
+            <!-- Annotated Menu -->
+            <div class="mock-section mock-menu annotated-section" style="--ann-color: #10b981;">
+              <div class="ann-badge" style="--ann-color: #10b981;">3</div>
+              <div class="ann-label" style="--ann-color: #10b981;">&lt;section id="menu"&gt; — 3 product cards in a row</div>
+              <p class="mock-section-eyebrow">Our Favourites</p>
+              <div class="mock-cards">
+                <div class="mock-card"><div class="mock-card-img mock-espresso"></div><div class="mock-card-info"><span class="mock-card-name">Espresso</span><span class="mock-card-price">₹120</span></div></div>
+                <div class="mock-card"><div class="mock-card-img mock-latte"></div><div class="mock-card-info"><span class="mock-card-name">Latte</span><span class="mock-card-price">₹150</span></div></div>
+                <div class="mock-card"><div class="mock-card-img mock-coldbrew"></div><div class="mock-card-info"><span class="mock-card-name">Cold Brew</span><span class="mock-card-price">₹180</span></div></div>
+              </div>
+            </div>
+
+            <!-- Annotated About -->
+            <div class="mock-section mock-about annotated-section" style="--ann-color: #6366f1;">
+              <div class="ann-badge" style="--ann-color: #6366f1;">4</div>
+              <div class="ann-label" style="--ann-color: #6366f1;">&lt;section id="about"&gt; — text on left, image on right (2 columns)</div>
+              <div class="mock-about-text">
+                <p class="mock-section-eyebrow">Our Story</p>
+                <h2 class="mock-h2">We started with one cup, one dream.</h2>
+                <p class="mock-body-text">BrewCo was born in a small Mumbai apartment...</p>
+                <span class="mock-link">Read More →</span>
+              </div>
+              <div class="mock-about-img">
+                <div class="mock-img-placeholder">📷<br><small>Coffee farm photo</small></div>
+              </div>
+            </div>
+
+            <!-- Annotated Footer -->
+            <div class="mock-footer annotated-section" style="--ann-color: #ec4899;">
+              <div class="ann-badge" style="--ann-color: #ec4899;">5</div>
+              <div class="ann-label" style="--ann-color: #ec4899;">&lt;footer&gt; — logo, social links, copyright</div>
+              <div class="mock-footer-logo">☕ BrewCo</div>
+              <div class="mock-footer-links"><span>Instagram</span><span>Twitter</span><span>Email</span></div>
+              <div class="mock-footer-copy">© 2024 BrewCo. All rights reserved.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Section breakdown -->
+      <h3 class="sub-heading">What Each Section Contains</h3>
+      <div class="breakdown-grid">
+
+        <div class="breakdown-card" style="--c: #e94560;">
+          <div class="bc-num">1</div>
+          <div class="bc-body">
+            <div class="bc-tag">&lt;header&gt;</div>
+            <p class="bc-desc">The top bar. It appears on every single page of the website — logo on the left, navigation links on the right.</p>
+            <div class="bc-contains">Contains: logo, <code>&lt;nav&gt;</code> with links</div>
+          </div>
+        </div>
+
+        <div class="breakdown-card" style="--c: #f97316;">
+          <div class="bc-num">2</div>
+          <div class="bc-body">
+            <div class="bc-tag">&lt;section id="hero"&gt;</div>
+            <p class="bc-desc">The first big impression. A full-width section with a large headline, a short description, and a button. Always the first section inside <code>&lt;main&gt;</code>.</p>
+            <div class="bc-contains">Contains: <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;button&gt;</code></div>
+          </div>
+        </div>
+
+        <div class="breakdown-card" style="--c: #10b981;">
+          <div class="bc-num">3</div>
+          <div class="bc-body">
+            <div class="bc-tag">&lt;section id="menu"&gt;</div>
+            <p class="bc-desc">Three repeated cards in a row — same layout, different content. Whenever you see repeated items like this, you wrap them in a container and repeat the card structure.</p>
+            <div class="bc-contains">Contains: <code>&lt;h2&gt;</code>, 3× <code>&lt;div class="card"&gt;</code></div>
+          </div>
+        </div>
+
+        <div class="breakdown-card" style="--c: #6366f1;">
+          <div class="bc-num">4</div>
+          <div class="bc-body">
+            <div class="bc-tag">&lt;section id="about"&gt;</div>
+            <p class="bc-desc">Two columns side by side — text on the left, photo on the right. This is a classic two-column layout. You use a wrapper div with two children inside it.</p>
+            <div class="bc-contains">Contains: text <code>&lt;div&gt;</code> + <code>&lt;img&gt;</code></div>
+          </div>
+        </div>
+
+        <div class="breakdown-card" style="--c: #ec4899;">
+          <div class="bc-num">5</div>
+          <div class="bc-body">
+            <div class="bc-tag">&lt;footer&gt;</div>
+            <p class="bc-desc">The bottom of every page. Copyright notice, social links, extra navigation. Always use a semantic <code>&lt;footer&gt;</code> tag — never a plain <code>&lt;div&gt;</code>.</p>
+            <div class="bc-contains">Contains: logo, links, <code>&lt;small&gt;</code> copyright</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         03 · DECIDE YOUR SECTIONS
+    ══════════════════════════════════════════════════════════ -->
+    <section id="decide-sections" class="chapter">
+      <div class="chapter-number">03</div>
+      <h2 class="chapter-title">How to Decide Your Sections</h2>
+      <p class="chapter-intro">
+        Here is the exact mental process that developers use every time they look at a new design. Follow these
+        5 steps in order — every single time.
+      </p>
+
+      <div class="steps-container">
+
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-num">Step 1</div>
+            <div class="step-title">Look at the whole page — find the big horizontal bands</div>
+          </div>
+          <div class="step-body">
+            <p>Don't zoom into the details yet. Squint your eyes. What are the big bands of content stacked from top to bottom?</p>
+            <div class="step-rule">
+              <span class="rule-chip">Rule</span>
+              Each distinct horizontal band = one section of your HTML
+            </div>
+          </div>
+        </div>
+
+        <div class="step-arrow">↓</div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-num">Step 2</div>
+            <div class="step-title">Find the 3 outer parts that every page has</div>
+          </div>
+          <div class="step-body">
+            <p>Almost every website in the world is built with the same 3 outer containers. Identify them first.</p>
+            <div class="three-parts">
+              <div class="part-box" style="--pb-color: #e94560;">
+                <code>&lt;header&gt;</code>
+                <small>top bar — logo, nav</small>
+              </div>
+              <div class="part-box" style="--pb-color: #10b981;">
+                <code>&lt;main&gt;</code>
+                <small>all unique page content</small>
+              </div>
+              <div class="part-box" style="--pb-color: #ec4899;">
+                <code>&lt;footer&gt;</code>
+                <small>bottom bar — links, copyright</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-arrow">↓</div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-num">Step 3</div>
+            <div class="step-title">Look inside &lt;main&gt; — count the sections</div>
+          </div>
+          <div class="step-body">
+            <p>Everything between the header and footer lives in <code>&lt;main&gt;</code>. Count how many distinct groups of content there are.</p>
+            <div class="step-rule">
+              <span class="rule-chip">Question to ask</span>
+              "Does this group have a <em>different topic or purpose</em> from the group above it?"
+              If yes → it's a new <code>&lt;section&gt;</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-arrow">↓</div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-num">Step 4</div>
+            <div class="step-title">Give each section a clear, meaningful name (id)</div>
+          </div>
+          <div class="step-body">
+            <p>The id describes what the section <em>is about</em> — not what it looks like, not its position on the page.</p>
+            <div class="naming-compare">
+              <div class="naming-col naming-good">
+                <div class="naming-badge good">✓ Good names</div>
+                <div class="naming-tags">
+                  <code>#hero</code>
+                  <code>#about</code>
+                  <code>#menu</code>
+                  <code>#contact</code>
+                  <code>#services</code>
+                  <code>#gallery</code>
+                </div>
+              </div>
+              <div class="naming-col naming-bad">
+                <div class="naming-badge bad">✗ Bad names</div>
+                <div class="naming-tags">
+                  <code>#section1</code>
+                  <code>#div-top</code>
+                  <code>#big-blue</code>
+                  <code>#box2</code>
+                  <code>#top-part</code>
+                  <code>#middle</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-arrow">↓</div>
+
+        <!-- Step 5 -->
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-num">Step 5</div>
+            <div class="step-title">Look inside each section — match the content to HTML tags</div>
+          </div>
+          <div class="step-body">
+            <p>Now zoom in. Look at what type of content is inside each section and ask: "Which HTML tag is made for this?"</p>
+            <div class="tag-match-table">
+              <div class="tm-row tm-header-row">
+                <div class="tm-col">What you see in the design</div>
+                <div class="tm-arrow"></div>
+                <div class="tm-col">HTML tag to use</div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">The biggest, most important headline</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col"><code>&lt;h1&gt;</code> (only one per page)</div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">Section headings</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col"><code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code></div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">A paragraph of text</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col"><code>&lt;p&gt;</code></div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">A clickable button</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col"><code>&lt;button&gt;</code> or <code>&lt;a&gt;</code></div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">A photo or image</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col"><code>&lt;img src="..." alt="..."&gt;</code></div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">Navigation links (top bar)</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col"><code>&lt;nav&gt;</code> with <code>&lt;a&gt;</code> inside</div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">Repeated cards (3 in a row)</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col">wrapper <code>&lt;div&gt;</code> + 3× <code>&lt;div class="card"&gt;</code></div>
+              </div>
+              <div class="tm-row">
+                <div class="tm-col">Two columns side by side</div>
+                <div class="tm-arrow">→</div>
+                <div class="tm-col">wrapper <code>&lt;div&gt;</code> with 2 children</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         04 · WRITE THE HTML
+    ══════════════════════════════════════════════════════════ -->
+    <section id="write-html" class="chapter">
+      <div class="chapter-number">04</div>
+      <h2 class="chapter-title">Write the HTML</h2>
+      <p class="chapter-intro">
+        Now we turn the BrewCo design into code. The rule is simple: <strong>always write the outer structure first,
+        then fill in the details inside each section.</strong> Big boxes first, small boxes second.
+      </p>
+
+      <!-- Step 1 -->
+      <div class="code-step-label">Step 1 — Start with the outer skeleton (same for every page)</div>
+      <div class="code-block">
+        <div class="code-header">brewco.html</div>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;BrewCo — The Best Coffee in Town&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;header&gt; ... &lt;/header&gt;   &lt;!-- Section 1: top bar --&gt;
+
+  &lt;main&gt;                    &lt;!-- Sections 2, 3, 4: all content --&gt;
+    ...
+  &lt;/main&gt;
+
+  &lt;footer&gt; ... &lt;/footer&gt;   &lt;!-- Section 5: bottom bar --&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="code-step-label">Step 2 — Fill in the &lt;header&gt;</div>
+      <div class="code-block">
+        <div class="code-header">Section 1 — header</div>
+        <pre><code>&lt;header&gt;
+
+  &lt;!-- Logo: clicking it takes you back to the home page --&gt;
+  &lt;a href="index.html" class="logo"&gt;☕ BrewCo&lt;/a&gt;
+
+  &lt;!-- Nav: links to sections on this same page using #id --&gt;
+  &lt;nav&gt;
+    &lt;a href="#menu"&gt;Menu&lt;/a&gt;
+    &lt;a href="#about"&gt;About&lt;/a&gt;
+    &lt;a href="#visit"&gt;Visit&lt;/a&gt;
+    &lt;a href="#order"&gt;Order&lt;/a&gt;
+  &lt;/nav&gt;
+
+&lt;/header&gt;</code></pre>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="code-step-label">Step 3 — Fill in &lt;main&gt; with all sections</div>
+      <div class="code-block">
+        <div class="code-header">Sections 2, 3 and 4 — inside &lt;main&gt;</div>
+        <pre><code>&lt;main&gt;
+
+  &lt;!-- ──────────────────────────────────────────────
+       SECTION 2 · HERO
+       First thing the visitor sees. Big headline + button.
+  ────────────────────────────────────────────── --&gt;
+  &lt;section id="hero"&gt;
+    &lt;p&gt;EST. 2018 · MUMBAI&lt;/p&gt;
+    &lt;h1&gt;The Best Coffee in Town&lt;/h1&gt;
+    &lt;p&gt;Fresh beans. Warm vibes. Every single day.&lt;/p&gt;
+    &lt;a href="#menu"&gt;See Our Menu →&lt;/a&gt;
+  &lt;/section&gt;
+
+  &lt;!-- ──────────────────────────────────────────────
+       SECTION 3 · MENU
+       3 repeated cards — same structure, different content.
+       Pattern: wrapper div + repeat the card inside it.
+  ────────────────────────────────────────────── --&gt;
+  &lt;section id="menu"&gt;
+    &lt;h2&gt;Our Favourites&lt;/h2&gt;
+
+    &lt;div class="cards-container"&gt;  &lt;!-- wrapper holds all 3 cards --&gt;
+
+      &lt;div class="card"&gt;           &lt;!-- card 1 --&gt;
+        &lt;img src="espresso.jpg" alt="A shot of espresso" /&gt;
+        &lt;h3&gt;Espresso&lt;/h3&gt;
+        &lt;p&gt;₹120&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class="card"&gt;           &lt;!-- card 2 --&gt;
+        &lt;img src="latte.jpg" alt="A creamy latte" /&gt;
+        &lt;h3&gt;Latte&lt;/h3&gt;
+        &lt;p&gt;₹150&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class="card"&gt;           &lt;!-- card 3 --&gt;
+        &lt;img src="coldbrew.jpg" alt="Cold brew coffee" /&gt;
+        &lt;h3&gt;Cold Brew&lt;/h3&gt;
+        &lt;p&gt;₹180&lt;/p&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;!-- ──────────────────────────────────────────────
+       SECTION 4 · ABOUT
+       Two columns: text left, image right.
+       Pattern: wrapper div with 2 children inside.
+  ────────────────────────────────────────────── --&gt;
+  &lt;section id="about"&gt;
+
+    &lt;div class="about-text"&gt;       &lt;!-- left column --&gt;
+      &lt;p&gt;Our Story&lt;/p&gt;
+      &lt;h2&gt;We started with one cup, one dream.&lt;/h2&gt;
+      &lt;p&gt;BrewCo was born in a small Mumbai apartment. We source
+         our beans directly from farms in Coorg and Chikmagalur.&lt;/p&gt;
+      &lt;a href="about.html"&gt;Read More →&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;div class="about-image"&gt;      &lt;!-- right column --&gt;
+      &lt;img src="farm.jpg" alt="Coffee farm in Coorg" /&gt;
+    &lt;/div&gt;
+
+  &lt;/section&gt;
+
+&lt;/main&gt;</code></pre>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="code-step-label">Step 4 — Fill in the &lt;footer&gt;</div>
+      <div class="code-block">
+        <div class="code-header">Section 5 — footer</div>
+        <pre><code>&lt;footer&gt;
+  &lt;a href="index.html" class="logo"&gt;☕ BrewCo&lt;/a&gt;
+
+  &lt;nav&gt;
+    &lt;a href="https://instagram.com/brewco" target="_blank"&gt;Instagram&lt;/a&gt;
+    &lt;a href="https://twitter.com/brewco"   target="_blank"&gt;Twitter&lt;/a&gt;
+    &lt;a href="mailto:hello@brewco.com"&gt;Email&lt;/a&gt;
+  &lt;/nav&gt;
+
+  &lt;small&gt;&amp;copy; 2024 BrewCo. All rights reserved.&lt;/small&gt;
+&lt;/footer&gt;</code></pre>
+      </div>
+
+      <!-- Structure tree -->
+      <div class="structure-tree-box">
+        <div class="tree-label">The Complete Structure at a Glance</div>
+        <div class="structure-tree">
+          <div class="tree-row depth-0">&lt;body&gt;</div>
+          <div class="tree-row depth-1 color-header">&lt;header&gt; — logo + &lt;nav&gt;</div>
+          <div class="tree-row depth-1 color-main">&lt;main&gt;</div>
+          <div class="tree-row depth-2 color-hero">&lt;section id="hero"&gt; — &lt;h1&gt;, &lt;p&gt;, &lt;a&gt;</div>
+          <div class="tree-row depth-2 color-menu">&lt;section id="menu"&gt; — &lt;h2&gt;, 3× .card</div>
+          <div class="tree-row depth-2 color-about">&lt;section id="about"&gt; — text col + img col</div>
+          <div class="tree-row depth-1 color-main">&lt;/main&gt;</div>
+          <div class="tree-row depth-1 color-footer">&lt;footer&gt; — logo + links + &lt;small&gt;</div>
+          <div class="tree-row depth-0">&lt;/body&gt;</div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Remember:</strong> CSS is what makes it look like the design. Right now you are only building the
+        <em>structure</em>. An unstyled HTML file is completely normal and expected at this stage.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         05 · YOUR TURN
+    ══════════════════════════════════════════════════════════ -->
+    <section id="your-turn" class="chapter">
+      <div class="chapter-number">05</div>
+      <h2 class="chapter-title">Your Turn</h2>
+      <p class="chapter-intro">
+        Here is a new design — a photography portfolio called <strong>Pixel Studio</strong>. Use everything you just
+        learned. Follow the same 5 steps: find the big bands → name them → match the tags → write the skeleton.
+      </p>
+
+      <!-- Wireframe browser -->
+      <div class="browser-window wireframe-browser">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="browser-url">www.pixelstudio.com — your turn!</div>
+        </div>
+
+        <div class="browser-body">
+          <div class="wireframe-site">
+
+            <div class="wf-header">
+              <div class="wf-logo-box">Logo</div>
+              <div class="wf-nav-links">
+                <div class="wf-link-box">Portfolio</div>
+                <div class="wf-link-box">About</div>
+                <div class="wf-link-box">Contact</div>
+              </div>
+            </div>
+
+            <div class="wf-hero">
+              <div class="wf-h1-box">Capturing Moments<br>That Last Forever</div>
+              <div class="wf-p-box">Professional photography — portraits, events, landscapes.</div>
+              <div class="wf-btn-box">See My Work</div>
+            </div>
+
+            <div class="wf-section wf-gallery-section">
+              <div class="wf-section-h-box">My Portfolio</div>
+              <div class="wf-gallery-grid">
+                <div class="wf-photo-box">📷</div>
+                <div class="wf-photo-box">📷</div>
+                <div class="wf-photo-box">📷</div>
+                <div class="wf-photo-box">📷</div>
+                <div class="wf-photo-box">📷</div>
+                <div class="wf-photo-box">📷</div>
+              </div>
+            </div>
+
+            <div class="wf-section wf-about-section">
+              <div class="wf-about-photo">📷</div>
+              <div class="wf-about-text-col">
+                <div class="wf-h2-box">Hi, I'm Priya.</div>
+                <div class="wf-p-box">Photographer based in Bangalore. 8 years of experience capturing people, places, and moments.</div>
+                <div class="wf-btn-outline-box">Let's Talk</div>
+              </div>
+            </div>
+
+            <div class="wf-section wf-contact-section">
+              <div class="wf-h2-center-box">Get in Touch</div>
+              <div class="wf-form-row">
+                <div class="wf-field-box">Name</div>
+                <div class="wf-field-box">Email</div>
+              </div>
+              <div class="wf-textarea-box">Message...</div>
+              <div class="wf-btn-center-box">Send Message</div>
+            </div>
+
+            <div class="wf-footer">
+              <div class="wf-footer-logo-box">Pixel Studio</div>
+              <div class="wf-footer-links">
+                <div class="wf-link-box">Instagram</div>
+                <div class="wf-link-box">Behance</div>
+                <div class="wf-link-box">Email</div>
+              </div>
+              <div class="wf-copyright-box">© 2024 Priya Sharma</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Guiding questions -->
+      <h3 class="sub-heading">Ask Yourself These Questions First</h3>
+      <div class="questions-grid">
+
+        <div class="q-card">
+          <div class="q-num">Q1</div>
+          <div class="q-body">
+            <div class="q-text">How many big horizontal sections can you count on this page?</div>
+            <div class="q-hint">Hint: Look from top to bottom. Count the distinct bands of content.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q2</div>
+          <div class="q-body">
+            <div class="q-text">What are the 3 outer elements every page must have?</div>
+            <div class="q-hint">Hint: You learned these in Step 2 of the process.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q3</div>
+          <div class="q-body">
+            <div class="q-text">What <code>id</code> would you give the gallery section? What about the contact section?</div>
+            <div class="q-hint">Hint: Name it after what it <em>contains</em>, not how it looks.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q4</div>
+          <div class="q-body">
+            <div class="q-text">The about section has a photo on the LEFT and text on the RIGHT — the opposite of BrewCo. Does this change the HTML or only the CSS?</div>
+            <div class="q-hint">Hint: HTML is structure. CSS controls left/right positioning.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q5</div>
+          <div class="q-body">
+            <div class="q-text">What HTML tags would you use for the Name, Email, and Message fields in the contact form?</div>
+            <div class="q-hint">Hint: Think about <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, and <code>&lt;form&gt;</code>.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Fill-in skeleton -->
+      <h3 class="sub-heading" style="margin-top: 3rem;">Now Write the HTML Skeleton</h3>
+      <p class="skeleton-intro">Replace every <code>???</code> with the correct tag name or id. Use the BrewCo code above as a guide.</p>
+
+      <div class="code-block">
+        <div class="code-header">pixel-studio.html — complete this skeleton</div>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;title&gt;??? — Pixel Studio&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;???&gt;                            &lt;!-- top bar: logo + nav --&gt;
+    &lt;a href="index.html"&gt;Pixel Studio&lt;/a&gt;
+    &lt;???&gt;
+      &lt;a href="#???"&gt;Portfolio&lt;/a&gt;
+      &lt;a href="#???"&gt;About&lt;/a&gt;
+      &lt;a href="#???"&gt;Contact&lt;/a&gt;
+    &lt;/???&gt;
+  &lt;/???&gt;
+
+  &lt;???&gt;                            &lt;!-- all the main content --&gt;
+
+    &lt;section id="???"&gt;             &lt;!-- big headline + button --&gt;
+      &lt;???&gt;Capturing Moments That Last Forever&lt;/???&gt;
+      &lt;p&gt;Professional photography — portraits, events, landscapes.&lt;/p&gt;
+      &lt;a href="#???"&gt;See My Work&lt;/a&gt;
+    &lt;/section&gt;
+
+    &lt;section id="???"&gt;             &lt;!-- 6 photo cards in a grid --&gt;
+      &lt;h2&gt;My Portfolio&lt;/h2&gt;
+      &lt;div class="???"&gt;            &lt;!-- wrapper for all 6 images --&gt;
+        &lt;img src="photo1.jpg" alt="???" /&gt;
+        &lt;img src="photo2.jpg" alt="???" /&gt;
+        &lt;img src="photo3.jpg" alt="???" /&gt;
+        &lt;img src="photo4.jpg" alt="???" /&gt;
+        &lt;img src="photo5.jpg" alt="???" /&gt;
+        &lt;img src="photo6.jpg" alt="???" /&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id="???"&gt;             &lt;!-- photo left, text right --&gt;
+      &lt;img src="priya.jpg" alt="???" /&gt;
+      &lt;div&gt;                        &lt;!-- text column --&gt;
+        &lt;h2&gt;Hi, I'm Priya.&lt;/h2&gt;
+        &lt;p&gt;Photographer based in Bangalore...&lt;/p&gt;
+        &lt;a href="#???"&gt;Let's Talk&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id="???"&gt;             &lt;!-- contact form --&gt;
+      &lt;h2&gt;Get in Touch&lt;/h2&gt;
+      &lt;???&gt;                        &lt;!-- the form wrapper --&gt;
+        &lt;input type="???" placeholder="Your Name" /&gt;
+        &lt;input type="???" placeholder="Your Email" /&gt;
+        &lt;???&gt;&lt;/???&gt;               &lt;!-- multi-line message box --&gt;
+        &lt;button type="???"&gt;Send Message&lt;/button&gt;
+      &lt;/???&gt;
+    &lt;/section&gt;
+
+  &lt;/???&gt;
+
+  &lt;???&gt;                            &lt;!-- bottom bar --&gt;
+    &lt;a href="index.html"&gt;Pixel Studio&lt;/a&gt;
+    &lt;nav&gt;
+      &lt;a href="#"&gt;Instagram&lt;/a&gt;
+      &lt;a href="#"&gt;Behance&lt;/a&gt;
+      &lt;a href="mailto:hello@pixelstudio.com"&gt;Email&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;small&gt;&amp;copy; 2024 Priya Sharma&lt;/small&gt;
+  &lt;/???&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>When you're done:</strong> Open your file in a browser. It will look completely unstyled — that's
+        totally fine! The <em>structure</em> is what matters right now. You add CSS to make it look like the design
+        next. That's always the order: HTML structure first, CSS styling second.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">{ } Design</div>
+      <p class="footer-text">How to Read a Design &amp; Build a Web Page — Student Guide</p>
+      <p class="footer-credit"><small>&copy; 2024 — See it. Understand it. Build it.</small></p>
+    </div>
+  </footer>
+
+</body>
+</html>
