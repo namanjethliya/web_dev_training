@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn responsive web design from scratch — viewport, media queries, fluid units, flexbox, grid, and more." />
+  <title>Responsive Web Design — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">Responsive<br><span class="hero-accent">Web Design</span></h1>
+    <p class="hero-sub">One website. Every screen. Zero compromise.</p>
+    <p class="hero-desc">Learn to make layouts that look perfect on a 375px phone and a 1440px monitor — using the same HTML file.</p>
+    <div class="hero-pills">
+      <span class="pill">10 Chapters</span>
+      <span class="pill">Live Demos</span>
+      <span class="pill">Build from Scratch</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#why-layouts-break">01 Why Layouts Break</a></li>
+      <li><a href="#viewport-meta">02 Viewport Meta Tag</a></li>
+      <li><a href="#fluid-units">03 Fluid Units</a></li>
+      <li><a href="#media-queries">04 Media Queries</a></li>
+      <li><a href="#responsive-flexbox">05 Responsive Flexbox</a></li>
+      <li><a href="#responsive-grid">06 Responsive Grid</a></li>
+      <li><a href="#responsive-images">07 Responsive Images</a></li>
+      <li><a href="#fluid-typography">08 Fluid Typography</a></li>
+      <li><a href="#nav-patterns">09 Navigation Patterns</a></li>
+      <li><a href="#feastfest">10 Build It: FeastFest</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · WHY LAYOUTS BREAK
+    ══════════════════════════════ -->
+    <section id="why-layouts-break" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">Why Layouts Break on Mobile</h2>
+      <p class="ch-intro">Before we fix anything, we need to understand exactly what goes wrong. Most "broken" mobile pages are not a CSS mistake — they're a thinking mistake.</p>
+
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <strong>The core problem:</strong> A desktop design is ~1200px wide. A phone screen is ~375px wide. If you don't give the browser instructions, it shows the desktop version crammed into the phone — everything shrinks to 31% of its intended size.
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The Mental Model: Viewport vs. Document</h3>
+      <div class="concept-grid">
+        <div class="concept-card" style="--cc: #ef4444;">
+          <div class="concept-label">Viewport</div>
+          <p>The actual window you're looking through — the browser screen. On a phone it might be 375px wide. On a monitor it might be 1440px wide. <strong>This is what the user sees.</strong></p>
+        </div>
+        <div class="concept-card" style="--cc: #6366f1;">
+          <div class="concept-label">Document</div>
+          <p>Your HTML page — it has its own width based on what's inside it. If you write <code>width: 1200px</code> on a container, the document is 1200px wide, regardless of the screen. <strong>This is what you build.</strong></p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">What Actually Happens Without Responsive Design</h3>
+      <div class="phone-compare">
+
+        <div class="phone-scenario">
+          <div class="scenario-label bad-label">Without responsiveness</div>
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="mock-desktop-page">
+                <div class="mdp-header">
+                  <span class="mdp-logo">ShopNow</span>
+                  <div class="mdp-nav">
+                    <span>Home</span><span>Products</span><span>About</span><span>Contact</span>
+                  </div>
+                </div>
+                <div class="mdp-hero">
+                  <p class="mdp-h1">Summer Sale — Up to 70% Off!</p>
+                  <p class="mdp-p">Shop the biggest sale of the year. New arrivals daily.</p>
+                  <div class="mdp-btn">Shop Now</div>
+                </div>
+                <div class="mdp-cards">
+                  <div class="mdp-card"><div class="mdp-img"></div><p>Product A — ₹499</p></div>
+                  <div class="mdp-card"><div class="mdp-img"></div><p>Product B — ₹799</p></div>
+                  <div class="mdp-card"><div class="mdp-img"></div><p>Product C — ₹299</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="scenario-note">Browser zooms out to fit 1200px into 375px. Text is unreadable. Users pinch-zoom to read anything.</p>
+        </div>
+
+        <div class="phone-scenario">
+          <div class="scenario-label good-label">With responsiveness</div>
+          <div class="phone-frame">
+            <div class="phone-screen phone-screen-responsive">
+              <div class="mrp-page">
+                <div class="mrp-header">
+                  <span class="mrp-logo">ShopNow</span>
+                  <span class="mrp-menu">☰</span>
+                </div>
+                <div class="mrp-hero">
+                  <p class="mrp-h1">Summer Sale</p>
+                  <p class="mrp-sub">Up to 70% Off!</p>
+                  <div class="mrp-btn">Shop Now</div>
+                </div>
+                <div class="mrp-cards">
+                  <div class="mrp-card"><div class="mrp-img mrp-img-a"></div><p>Product A — ₹499</p></div>
+                  <div class="mrp-card"><div class="mrp-img mrp-img-b"></div><p>Product B — ₹799</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="scenario-note">Layout adapts to 375px. Nav collapses to a hamburger. Cards stack vertically. Text is perfectly readable.</p>
+        </div>
+
+      </div>
+
+      <h3 class="sub-heading">The 3 Things That Make a Layout Responsive</h3>
+      <div class="three-pillars">
+        <div class="pillar">
+          <div class="pillar-num">1</div>
+          <div class="pillar-title">The Viewport Meta Tag</div>
+          <p>Tells the browser to stop zooming out and use the real screen width. Without it, nothing works.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">2</div>
+          <div class="pillar-title">Fluid Layouts</div>
+          <p>Use widths that stretch and shrink (%, fr, auto) instead of fixed pixel widths that stay rigid.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">3</div>
+          <div class="pillar-title">Media Queries</div>
+          <p>CSS rules that only activate at specific screen sizes — apply different layouts for mobile vs desktop.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Mobile-first thinking:</strong> Instead of building for desktop and shrinking down, build for the smallest screen first and add complexity as the screen grows. This is the industry standard approach — and it's much easier to work with.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · VIEWPORT META TAG
+    ══════════════════════════════ -->
+    <section id="viewport-meta" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">The Viewport Meta Tag</h2>
+      <p class="ch-intro">One line of HTML in your <code>&lt;head&gt;</code> unlocks everything. Without it, media queries don't work and the page always looks zoomed out on phones.</p>
+
+      <div class="code-block full-code"><pre><code>&lt;!-- Put this inside &lt;head&gt; — every single page, every single project --&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</code></pre></div>
+
+      <h3 class="sub-heading">What Each Part Means</h3>
+      <div class="attr-breakdown">
+        <div class="attr-row">
+          <div class="attr-piece"><code>name="viewport"</code></div>
+          <div class="attr-arrow">→</div>
+          <div class="attr-meaning">This meta tag is about the viewport (the browser window), not for search engines.</div>
+        </div>
+        <div class="attr-row">
+          <div class="attr-piece"><code>width=device-width</code></div>
+          <div class="attr-arrow">→</div>
+          <div class="attr-meaning">Set the viewport width to match the device's actual screen width. On a 375px iPhone, the viewport becomes 375px — not the default 980px that browsers use without this tag.</div>
+        </div>
+        <div class="attr-row">
+          <div class="attr-piece"><code>initial-scale=1.0</code></div>
+          <div class="attr-arrow">→</div>
+          <div class="attr-meaning">Don't zoom in or out when the page first loads. Start at 1:1 scale so 1px in CSS = 1px on screen.</div>
+        </div>
+      </div>
+
+      <div class="code-block full-code"><pre><code>&lt;!-- The COMPLETE skeleton every HTML file should start with --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;  &lt;!-- ← this one --&gt;
+  &lt;title&gt;Page Title&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  ...
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+
+      <div class="before-after-demo">
+        <div class="ba-col">
+          <div class="ba-label ba-label-bad">Without viewport meta</div>
+          <div class="ba-phone">
+            <div class="ba-screen">
+              <div class="ba-content ba-content-zoomed">
+                <div class="bac-header">My Website</div>
+                <div class="bac-hero">
+                  <div class="bac-h1">Welcome!</div>
+                  <div class="bac-p">This is a very important paragraph of text that needs to be read clearly.</div>
+                  <div class="bac-btn">Click Me</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul class="ba-issues">
+            <li>Browser sets viewport to 980px</li>
+            <li>Page zooms out to ~38%</li>
+            <li>Text is unreadable at normal size</li>
+            <li>Media queries trigger at wrong sizes</li>
+          </ul>
+        </div>
+        <div class="ba-col">
+          <div class="ba-label ba-label-good">With viewport meta</div>
+          <div class="ba-phone">
+            <div class="ba-screen">
+              <div class="ba-content ba-content-normal">
+                <div class="bac-header">My Website</div>
+                <div class="bac-hero">
+                  <div class="bac-h1">Welcome!</div>
+                  <div class="bac-p">This is a very important paragraph of text that needs to be read clearly.</div>
+                  <div class="bac-btn">Click Me</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul class="ba-issues ba-goods">
+            <li>Viewport = device width (375px)</li>
+            <li>Page renders at 100% — no zoom</li>
+            <li>Text is readable immediately</li>
+            <li>Media queries work correctly</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Never forget it.</strong> This is the single most common mistake beginners make. If your page looks zoomed out on your phone or if your media queries seem to not be working — check that this line is in your <code>&lt;head&gt;</code> first.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · FLUID UNITS
+    ══════════════════════════════ -->
+    <section id="fluid-units" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Fluid Units</h2>
+      <p class="ch-intro">Fixed pixels don't bend. Fluid units do. Choosing the right unit is what separates a rigid desktop layout from one that naturally adapts to any screen.</p>
+
+      <div class="units-visual">
+        <div class="uv-label">Same element. Different units. Resize your browser to see the difference.</div>
+
+        <div class="unit-row">
+          <div class="unit-name"><code>width: 400px</code></div>
+          <div class="unit-bar-wrap"><div class="unit-bar unit-px">400px — fixed always</div></div>
+          <div class="unit-desc">Never changes. Overflows on phones.</div>
+        </div>
+        <div class="unit-row">
+          <div class="unit-name"><code>width: 80%</code></div>
+          <div class="unit-bar-wrap"><div class="unit-bar unit-pct">80% of parent</div></div>
+          <div class="unit-desc">Relative to parent element's width.</div>
+        </div>
+        <div class="unit-row">
+          <div class="unit-name"><code>width: 60vw</code></div>
+          <div class="unit-bar-wrap"><div class="unit-bar unit-vw">60vw of viewport</div></div>
+          <div class="unit-desc">60% of the browser window width. Always.</div>
+        </div>
+        <div class="unit-row">
+          <div class="unit-name"><code>width: min(400px, 90%)</code></div>
+          <div class="unit-bar-wrap"><div class="unit-bar unit-min">min(400px, 90%)</div></div>
+          <div class="unit-desc">Never exceeds 400px, but shrinks to 90% on small screens.</div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The Units You Need to Know</h3>
+      <div class="units-table">
+        <table>
+          <thead>
+            <tr><th>Unit</th><th>Relative To</th><th>Best For</th><th>Avoid For</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>px</code></td>
+              <td>Fixed (device pixels)</td>
+              <td>Borders, shadows, min/max values</td>
+              <td>Font sizes, widths, heights</td>
+            </tr>
+            <tr>
+              <td><code>%</code></td>
+              <td>Parent element's dimension</td>
+              <td>Widths, padding (horizontal)</td>
+              <td>Font sizes (use rem instead)</td>
+            </tr>
+            <tr>
+              <td><code>rem</code></td>
+              <td>Root font-size (usually 16px)</td>
+              <td>Font sizes, spacing, consistent scale</td>
+              <td>Nothing — use rem everywhere</td>
+            </tr>
+            <tr>
+              <td><code>em</code></td>
+              <td>Current element's font-size</td>
+              <td>Padding inside components</td>
+              <td>Nesting (compounds unpredictably)</td>
+            </tr>
+            <tr>
+              <td><code>vw</code></td>
+              <td>1% of viewport width</td>
+              <td>Hero sections, large headings</td>
+              <td>Body text (can get too small)</td>
+            </tr>
+            <tr>
+              <td><code>vh</code></td>
+              <td>1% of viewport height</td>
+              <td>Full-screen sections</td>
+              <td>Mobile (address bar changes it)</td>
+            </tr>
+            <tr>
+              <td><code>svh</code></td>
+              <td>Small viewport height (mobile-safe)</td>
+              <td>Mobile full-screen sections</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><code>clamp()</code></td>
+              <td>Viewport + min/max bounds</td>
+              <td>Fluid font sizes, fluid spacing</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-heading">clamp() — The Most Useful Responsive Tool</h3>
+      <p class="section-body-text"><code>clamp(minimum, preferred, maximum)</code> creates values that scale fluidly between a min and max. It's perfect for font sizes and spacing that should grow with the screen.</p>
+
+      <div class="code-block full-code"><pre><code>/* clamp(minimum, preferred, maximum) */
+
+/* Font size that scales from 1.25rem (20px) to 3rem (48px) */
+h1 { font-size: clamp(1.25rem, 5vw, 3rem); }
+
+/* On a 375px phone:  5vw = 18.75px → min kicks in → 1.25rem (20px) */
+/* On a 800px tablet: 5vw = 40px    → preferred   → 40px */
+/* On a 1440px screen:5vw = 72px    → max kicks in → 3rem (48px) */
+
+/* Padding that scales from 1rem to 4rem */
+section { padding: clamp(1rem, 5vw, 4rem); }
+
+/* Width that is always 90% but never more than 1200px */
+.container { width: min(1200px, 90%); margin: 0 auto; }</code></pre></div>
+
+      <div class="clamp-demo">
+        <div class="clamp-demo-label">Live clamp() demo — resize your browser</div>
+        <div class="clamp-text-demo">This heading uses clamp()</div>
+        <div class="clamp-sub-demo">font-size: clamp(1rem, 4vw, 2.5rem)</div>
+      </div>
+
+      <div class="tip-box">
+        <strong>The golden rules:</strong> Use <code>rem</code> for font sizes. Use <code>%</code> or <code>fr</code> for widths. Use <code>clamp()</code> for anything that should scale smoothly. Avoid fixed <code>px</code> widths on containers.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · MEDIA QUERIES
+    ══════════════════════════════ -->
+    <section id="media-queries" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Media Queries</h2>
+      <p class="ch-intro">Media queries are CSS rules that only activate when a condition is true — usually "when the screen is at least X pixels wide". They're how you apply different styles at different screen sizes.</p>
+
+      <h3 class="sub-heading">Anatomy of a Media Query</h3>
+      <div class="mq-anatomy">
+        <div class="mqa-piece mqa-at"><code>@media</code></div>
+        <div class="mqa-piece mqa-paren"><code>(</code></div>
+        <div class="mqa-piece mqa-feature"><code>min-width: 768px</code></div>
+        <div class="mqa-piece mqa-paren"><code>)</code></div>
+        <div class="mqa-piece mqa-brace"><code>{</code></div>
+        <div class="mqa-piece mqa-rule"><code>CSS rules here</code></div>
+        <div class="mqa-piece mqa-brace"><code>}</code></div>
+      </div>
+      <div class="mqa-labels">
+        <div class="mqa-l mqa-l-at">At-rule keyword</div>
+        <div class="mqa-l mqa-l-feature">Condition: "viewport is at least 768px wide"</div>
+        <div class="mqa-l mqa-l-rule">These styles only apply when the condition is true</div>
+      </div>
+
+      <h3 class="sub-heading">Mobile-First: Always Use min-width</h3>
+      <div class="code-block full-code"><pre><code>/* ══ MOBILE-FIRST PATTERN ══ */
+/* Step 1: Write base styles for mobile — no query needed */
+.hero {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;   /* 1 column on mobile */
+  gap: 1rem;
+}
+
+/* Step 2: Tablet (768px and up) */
+@media (min-width: 768px) {
+  .hero {
+    padding: 4rem 2rem;
+  }
+  .cards-grid {
+    grid-template-columns: 1fr 1fr;  /* 2 columns on tablet */
+  }
+}
+
+/* Step 3: Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 6rem 4rem;
+    text-align: left;
+  }
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);  /* 3 columns on desktop */
+  }
+}
+
+/* Step 4: Large desktop (1440px and up) — optional */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}</code></pre></div>
+
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <strong>Why min-width (not max-width)?</strong> Mobile-first means you write styles for small screens first, then <em>add</em> styles for larger screens. <code>min-width</code> means "this screen or larger". <code>max-width</code> means "this screen or smaller" — that's desktop-first, the harder approach. Stick to <code>min-width</code>.
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Standard Breakpoints</h3>
+      <div class="breakpoints-visual">
+        <div class="bp-track">
+          <div class="bp-item bp-xs">
+            <div class="bp-icon">📱</div>
+            <div class="bp-name">Mobile</div>
+            <div class="bp-range">0 – 767px</div>
+            <div class="bp-note">Base styles<br>(no query)</div>
+          </div>
+          <div class="bp-arrow">→</div>
+          <div class="bp-item bp-sm">
+            <div class="bp-icon">📟</div>
+            <div class="bp-name">Tablet</div>
+            <div class="bp-range">768px+</div>
+            <div class="bp-note"><code>min-width:<br>768px</code></div>
+          </div>
+          <div class="bp-arrow">→</div>
+          <div class="bp-item bp-md">
+            <div class="bp-icon">💻</div>
+            <div class="bp-name">Desktop</div>
+            <div class="bp-range">1024px+</div>
+            <div class="bp-note"><code>min-width:<br>1024px</code></div>
+          </div>
+          <div class="bp-arrow">→</div>
+          <div class="bp-item bp-lg">
+            <div class="bp-icon">🖥️</div>
+            <div class="bp-name">Large</div>
+            <div class="bp-range">1440px+</div>
+            <div class="bp-note"><code>min-width:<br>1440px</code></div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Live Demo — Resize Your Browser</h3>
+      <div class="mq-live-demo">
+        <div class="mq-box">
+          <div class="mq-status">
+            <span class="mq-mobile-label">📱 Mobile — base styles</span>
+            <span class="mq-tablet-label">📟 Tablet — 768px+</span>
+            <span class="mq-desktop-label">💻 Desktop — 1024px+</span>
+          </div>
+          <div class="mq-layout-demo">
+            <div class="mq-demo-item">A</div>
+            <div class="mq-demo-item">B</div>
+            <div class="mq-demo-item">C</div>
+          </div>
+        </div>
+        <p class="mq-resize-note">Resize your browser window to see the box change color and layout at each breakpoint.</p>
+      </div>
+
+      <h3 class="sub-heading">Other Useful Media Features</h3>
+      <div class="code-block full-code"><pre><code>/* ── Screen orientation ── */
+@media (orientation: portrait)  { }   /* Taller than wide */
+@media (orientation: landscape) { }   /* Wider than tall */
+
+/* ── Device capabilities ── */
+@media (hover: hover)    { }   /* Device supports hover (mouse) */
+@media (hover: none)     { }   /* No hover (touchscreen) */
+@media (pointer: fine)   { }   /* Precise pointer (mouse) */
+@media (pointer: coarse) { }   /* Imprecise pointer (finger) */
+
+/* ── User preferences ── */
+@media (prefers-color-scheme: dark)     { }   /* User wants dark mode */
+@media (prefers-color-scheme: light)    { }   /* User wants light mode */
+@media (prefers-reduced-motion: reduce) { }   /* User has motion sensitivity */
+
+/* ── Print ── */
+@media print { }   /* When user prints the page */
+
+/* ── Combine conditions ── */
+@media (min-width: 768px) and (max-width: 1023px) { }  /* Tablet only */
+@media (min-width: 768px) and (orientation: landscape) { }
+
+/* ── Reduced motion — always include this for animations ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}</code></pre></div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · RESPONSIVE FLEXBOX
+    ══════════════════════════════ -->
+    <section id="responsive-flexbox" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Responsive Flexbox</h2>
+      <p class="ch-intro">Flexbox is naturally flexible — but you still need to guide it at different screen sizes. The most common pattern: items stack in a column on mobile, sit side-by-side in a row on desktop.</p>
+
+      <div class="code-block full-code"><pre><code>/* ══ THE MOST COMMON RESPONSIVE FLEXBOX PATTERN ══ */
+
+/* Mobile: stack vertically */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Tablet: side by side, wrap if needed */
+@media (min-width: 768px) {
+  .cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .card {
+    flex: 1 1 calc(50% - 0.5rem);   /* Two per row, accounting for gap */
+    min-width: 200px;                /* Never get too narrow */
+  }
+}
+
+/* Desktop: all in one row */
+@media (min-width: 1024px) {
+  .cards {
+    flex-wrap: nowrap;
+  }
+  .card {
+    flex: 1;   /* Grow equally to fill the row */
+  }
+}
+
+/* ══ COMMON FLEX PATTERNS ══ */
+
+/* Nav bar: logo left, links right */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Center anything (hero content) */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+/* Footer: stack on mobile, row on desktop */
+footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  footer {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}</code></pre></div>
+
+      <h3 class="sub-heading">Live Demo — Column to Row</h3>
+      <div class="flex-demo-container">
+        <div class="flex-demo-note">Showing mobile layout → tablet layout → desktop layout</div>
+        <div class="flex-demo-stages">
+          <div class="flex-stage">
+            <div class="stage-label">Mobile (column)</div>
+            <div class="flex-stage-box flex-col-demo">
+              <div class="fd-item">🍕 Pizza</div>
+              <div class="fd-item">🍜 Noodles</div>
+              <div class="fd-item">🥙 Wrap</div>
+            </div>
+          </div>
+          <div class="flex-stage-arrow">→</div>
+          <div class="flex-stage">
+            <div class="stage-label">Tablet (2 per row)</div>
+            <div class="flex-stage-box flex-wrap-demo">
+              <div class="fd-item fd-item-half">🍕 Pizza</div>
+              <div class="fd-item fd-item-half">🍜 Noodles</div>
+              <div class="fd-item fd-item-half">🥙 Wrap</div>
+            </div>
+          </div>
+          <div class="flex-stage-arrow">→</div>
+          <div class="flex-stage">
+            <div class="stage-label">Desktop (one row)</div>
+            <div class="flex-stage-box flex-row-demo">
+              <div class="fd-item fd-item-grow">🍕 Pizza</div>
+              <div class="fd-item fd-item-grow">🍜 Noodles</div>
+              <div class="fd-item fd-item-grow">🥙 Wrap</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>flex: 1 1 calc(50% - gap/2):</strong> The most important flex shorthand for responsive cards. <code>flex: 1</code> means grow and shrink equally. Setting <code>flex-basis</code> to a percentage controls how many fit per row. Combine with <code>min-width</code> to prevent cards from getting too narrow.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · RESPONSIVE GRID
+    ══════════════════════════════ -->
+    <section id="responsive-grid" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Responsive Grid</h2>
+      <p class="ch-intro">CSS Grid is the most powerful layout tool for responsive design. Used right, a single grid declaration can make a layout that perfectly reflows across all screen sizes — without a single media query.</p>
+
+      <div class="code-block full-code"><pre><code>/* ══ METHOD 1: Manual Breakpoints ══ */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;    /* 1 column on mobile */
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .grid { grid-template-columns: 1fr 1fr; }       /* 2 columns on tablet */
+}
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(3, 1fr); } /* 3 columns on desktop */
+}
+
+/* ══ METHOD 2: auto-fill — add columns as space allows ══ */
+/* This works WITHOUT media queries */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+/* Each column is at least 250px wide. Add as many as fit. */
+/* 375px screen → 1 column. 768px → 2 columns. 1200px → 4 columns. */
+
+/* ══ METHOD 3: Named Template Areas (for page layout) ══ */
+.page {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "nav"
+    "main"
+    "sidebar"
+    "footer";
+}
+
+@media (min-width: 768px) {
+  .page {
+    grid-template-columns: 200px 1fr;
+    grid-template-areas:
+      "header  header"
+      "nav     nav"
+      "sidebar main"
+      "footer  footer";
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    grid-template-columns: 240px 1fr 200px;
+    grid-template-areas:
+      "header  header   header"
+      "nav     nav      nav"
+      "sidebar main     aside"
+      "footer  footer   footer";
+  }
+}
+
+/* Place items in named areas */
+header  { grid-area: header; }
+nav     { grid-area: nav; }
+.sidebar{ grid-area: sidebar; }
+main    { grid-area: main; }
+footer  { grid-area: footer; }</code></pre></div>
+
+      <h3 class="sub-heading">auto-fill vs auto-fit — The Key Difference</h3>
+      <div class="autofill-compare">
+        <div class="af-col">
+          <div class="af-label"><code>auto-fill</code></div>
+          <div class="af-grid af-fill-grid">
+            <div class="af-item">1</div>
+            <div class="af-item">2</div>
+            <div class="af-item">3</div>
+          </div>
+          <p class="af-desc">Fills in <em>empty columns</em> even if there are no items. Keeps existing items from stretching. Use when items have a natural size.</p>
+        </div>
+        <div class="af-col">
+          <div class="af-label"><code>auto-fit</code></div>
+          <div class="af-grid af-fit-grid">
+            <div class="af-item">1</div>
+            <div class="af-item">2</div>
+            <div class="af-item">3</div>
+          </div>
+          <p class="af-desc">Collapses empty columns and lets items <em>stretch</em> to fill the space. Use for cards that should take all available width.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Live Demo — Resize Your Browser</h3>
+      <div class="grid-live-demo">
+        <div class="grid-demo-label"><code>grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))</code></div>
+        <div class="grid-live">
+          <div class="gl-item">🍕 Pizza Stall</div>
+          <div class="gl-item">🍜 Noodle Bar</div>
+          <div class="gl-item">🥙 Wrap Corner</div>
+          <div class="gl-item">🧆 Falafel Hub</div>
+          <div class="gl-item">🌮 Taco Stop</div>
+          <div class="gl-item">🍦 Sweet Spot</div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Start with auto-fill minmax().</strong> It's the fastest way to make a responsive grid with zero media queries. Only switch to manual breakpoints when you need precise column counts at specific sizes.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · RESPONSIVE IMAGES
+    ══════════════════════════════ -->
+    <section id="responsive-images" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Responsive Images</h2>
+      <p class="ch-intro">Images are the most common cause of broken mobile layouts. By default, an image renders at its natural size — if that's 1200px wide, it overflows a 375px screen. Two CSS rules fix 95% of image problems.</p>
+
+      <h3 class="sub-heading">The Two Rules You Always Need</h3>
+      <div class="code-block full-code"><pre><code>/* Rule 1: Never overflow the container */
+img {
+  max-width: 100%;   /* Never wider than parent — shrinks on small screens */
+  height: auto;      /* Keep aspect ratio — don't stretch or squish */
+  display: block;    /* Remove the small gap below images (inline default) */
+}
+
+/* Apply globally — put this in every project */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}</code></pre></div>
+
+      <div class="img-problem-demo">
+        <div class="ipd-col">
+          <div class="ipd-label ipd-bad">Without the rules</div>
+          <div class="ipd-container">
+            <div class="ipd-img-bad">1200px wide image — overflows!</div>
+          </div>
+          <code class="ipd-code">img { /* no rules */ }</code>
+        </div>
+        <div class="ipd-col">
+          <div class="ipd-label ipd-good">With the rules</div>
+          <div class="ipd-container">
+            <div class="ipd-img-good">Image scales to fit container</div>
+          </div>
+          <code class="ipd-code">img { max-width: 100%; height: auto; }</code>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">object-fit and aspect-ratio</h3>
+      <div class="code-block full-code"><pre><code>/* Problem: an image might be portrait, landscape, or square.
+   In a card grid they all need to be the same size.
+   Solution: set a fixed ratio on the container, use object-fit on the image */
+
+.card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;    /* Container is always 16:9, regardless of image size */
+  overflow: hidden;
+}
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* Scale to fill — crop if needed, no distortion */
+  object-position: center;  /* Which part to show if cropped (default: center) */
+}
+
+/* object-fit values */
+object-fit: fill;      /* Stretches to fit — can distort (usually wrong) */
+object-fit: contain;   /* Fits inside — letterboxes (use for logos) */
+object-fit: cover;     /* Fills and crops — use for photos in cards */
+object-fit: none;      /* Natural size */
+object-fit: scale-down;/* Smaller of: contain or none */
+
+/* Common aspect-ratio values */
+aspect-ratio: 16 / 9;   /* Widescreen video */
+aspect-ratio: 4 / 3;    /* Old TV / standard photo */
+aspect-ratio: 1 / 1;    /* Square (profile photos) */
+aspect-ratio: 3 / 2;    /* Standard camera photo */
+aspect-ratio: 9 / 16;   /* Mobile / portrait */</code></pre></div>
+
+      <h3 class="sub-heading">object-fit Live Comparison</h3>
+      <div class="object-fit-demo">
+        <div class="ofd-item">
+          <div class="ofd-frame ofd-fill"><div class="ofd-fake-img"></div></div>
+          <code>object-fit: fill</code>
+          <small>Distorts — avoid</small>
+        </div>
+        <div class="ofd-item">
+          <div class="ofd-frame ofd-contain"><div class="ofd-fake-img"></div></div>
+          <code>object-fit: contain</code>
+          <small>Letterboxed — for logos</small>
+        </div>
+        <div class="ofd-item">
+          <div class="ofd-frame ofd-cover"><div class="ofd-fake-img"></div></div>
+          <code>object-fit: cover</code>
+          <small>Crops — use for photos</small>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Quick checklist for every image in your project:</strong> (1) Does it have <code>max-width: 100%</code>? (2) If it's in a card, does it have a fixed <code>aspect-ratio</code> and <code>object-fit: cover</code>? If both are yes, you're good.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · FLUID TYPOGRAPHY
+    ══════════════════════════════ -->
+    <section id="fluid-typography" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Fluid Typography</h2>
+      <p class="ch-intro">Text that's readable on a 1440px monitor can look huge on a phone. Fluid typography scales smoothly between sizes instead of jumping at breakpoints.</p>
+
+      <h3 class="sub-heading">The Problem with Fixed Font Sizes</h3>
+      <div class="font-size-problem">
+        <div class="fsp-col">
+          <div class="fsp-label fsp-bad">Fixed font-size: 3.5rem</div>
+          <div class="fsp-phone">
+            <div class="fsp-text-big">Summer Festival 2025</div>
+          </div>
+          <p class="fsp-note">Too big on a phone — text wraps awkwardly or overflows.</p>
+        </div>
+        <div class="fsp-col">
+          <div class="fsp-label fsp-good">font-size: clamp(1.5rem, 5vw, 3.5rem)</div>
+          <div class="fsp-phone">
+            <div class="fsp-text-clamp">Summer Festival 2025</div>
+          </div>
+          <p class="fsp-note">Scales with viewport — perfect on every screen.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">A Complete Fluid Type Scale</h3>
+      <div class="code-block full-code"><pre><code>/* ══ FLUID TYPE SCALE ══ */
+/* Scales smoothly from mobile to desktop — no media queries needed */
+
+:root {
+  /* Small labels / captions */
+  --text-xs:   clamp(0.75rem,  1.5vw, 0.875rem);
+
+  /* Body text */
+  --text-sm:   clamp(0.875rem, 2vw,   1rem);
+  --text-base: clamp(1rem,     2.5vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 3vw,   1.25rem);
+
+  /* Headings */
+  --text-xl:   clamp(1.25rem,  3.5vw, 1.5rem);
+  --text-2xl:  clamp(1.5rem,   4vw,   2rem);
+  --text-3xl:  clamp(1.75rem,  4.5vw, 2.5rem);
+  --text-4xl:  clamp(2rem,     5vw,   3.5rem);
+
+  /* Hero display text */
+  --text-hero: clamp(2.5rem,   8vw,   5rem);
+}
+
+/* Usage */
+p    { font-size: var(--text-base); line-height: 1.7; }
+h3   { font-size: var(--text-xl); }
+h2   { font-size: var(--text-2xl); }
+h1   { font-size: var(--text-hero); }
+
+/* ══ FLUID SPACING ══ */
+:root {
+  --space-sm:  clamp(0.75rem, 2vw,  1.5rem);
+  --space-md:  clamp(1.5rem,  4vw,  3rem);
+  --space-lg:  clamp(3rem,    6vw,  6rem);
+  --space-xl:  clamp(4rem,    8vw,  10rem);
+}
+
+section { padding: var(--space-lg) var(--space-md); }</code></pre></div>
+
+      <h3 class="sub-heading">Live Fluid Type Demo — Resize Your Browser</h3>
+      <div class="fluid-type-demo">
+        <div class="ftd-row">
+          <div class="ftd-label">Hero heading</div>
+          <div class="ftd-text ftd-hero">FeastFest 2025</div>
+          <code class="ftd-code">clamp(2rem, 7vw, 5rem)</code>
+        </div>
+        <div class="ftd-row">
+          <div class="ftd-label">Section heading</div>
+          <div class="ftd-text ftd-h2">Featured Stalls</div>
+          <code class="ftd-code">clamp(1.5rem, 4vw, 2.5rem)</code>
+        </div>
+        <div class="ftd-row">
+          <div class="ftd-label">Body text</div>
+          <div class="ftd-text ftd-body">Come hungry. Street food from 40+ stalls, live music, and the best vibes in the city.</div>
+          <code class="ftd-code">clamp(1rem, 2.5vw, 1.125rem)</code>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Line length matters too.</strong> Long lines of text are hard to read. Limit paragraph width with <code>max-width: 65ch</code> — the <code>ch</code> unit equals the width of the "0" character, so <code>65ch</code> is approximately 65 characters per line, which is the ideal reading width.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · NAVIGATION PATTERNS
+    ══════════════════════════════ -->
+    <section id="nav-patterns" class="chapter">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">Navigation Patterns</h2>
+      <p class="ch-intro">Navigation is the hardest UI element to make responsive. On desktop, a horizontal row of links is perfect. On mobile, that same row becomes cramped or invisible. The solution: hide the links and reveal them via a toggle.</p>
+
+      <h3 class="sub-heading">The Two-State Nav</h3>
+      <div class="nav-concept">
+        <div class="nav-concept-col">
+          <div class="nav-concept-label">Mobile — hamburger icon, links hidden</div>
+          <div class="nav-mock nav-mock-mobile">
+            <div class="nm-logo">FeastFest</div>
+            <div class="nm-burger">☰</div>
+          </div>
+          <div class="nav-mock nav-mock-mobile-open">
+            <div class="nm-logo">FeastFest</div>
+            <div class="nm-close">✕</div>
+            <div class="nm-mobile-links">
+              <a>Stalls</a>
+              <a>Schedule</a>
+              <a>About</a>
+              <a>Visit</a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-concept-col">
+          <div class="nav-concept-label">Desktop — all links visible in a row</div>
+          <div class="nav-mock nav-mock-desktop">
+            <div class="nm-logo">FeastFest</div>
+            <div class="nm-desktop-links">
+              <a>Stalls</a>
+              <a>Schedule</a>
+              <a>About</a>
+              <a>Visit</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">CSS-Only Toggle (Checkbox Hack)</h3>
+      <div class="code-block full-code"><pre><code>&lt;!-- HTML structure --&gt;
+&lt;header&gt;
+  &lt;a href="#" class="logo"&gt;FeastFest&lt;/a&gt;
+
+  &lt;!-- Hidden checkbox — this is the toggle state --&gt;
+  &lt;input type="checkbox" id="nav-toggle" class="nav-toggle" /&gt;
+
+  &lt;!-- The hamburger label — clicking it checks/unchecks the checkbox --&gt;
+  &lt;label for="nav-toggle" class="nav-burger" aria-label="Toggle navigation"&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+
+  &lt;nav class="main-nav"&gt;
+    &lt;a href="#stalls"&gt;Stalls&lt;/a&gt;
+    &lt;a href="#schedule"&gt;Schedule&lt;/a&gt;
+    &lt;a href="#about"&gt;About&lt;/a&gt;
+    &lt;a href="#visit"&gt;Visit&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;</code></pre></div>
+
+      <div class="code-block full-code"><pre><code>/* ── CSS ── */
+
+/* Hide the checkbox input itself */
+.nav-toggle { display: none; }
+
+/* Hamburger — show on mobile */
+.nav-burger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+}
+.nav-burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Nav links — hidden on mobile by default */
+.main-nav {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.main-nav a { padding: 0.75rem 0; border-bottom: 1px solid #eee; }
+
+/* When checkbox is checked — show the nav */
+.nav-toggle:checked ~ .main-nav {
+  display: flex;
+}
+
+/* Animate the hamburger to an X when open */
+.nav-toggle:checked ~ .nav-burger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle:checked ~ .nav-burger span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle:checked ~ .nav-burger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Desktop: hide burger, show links horizontally */
+@media (min-width: 768px) {
+  .nav-burger { display: none; }
+  .main-nav {
+    display: flex;
+    flex-direction: row;
+    position: static;
+    background: none;
+    padding: 0;
+    box-shadow: none;
+    gap: 2rem;
+  }
+  .main-nav a { padding: 0; border: none; }
+}</code></pre></div>
+
+      <h3 class="sub-heading">Working Demo</h3>
+      <div class="nav-demo-wrapper">
+        <div class="nav-demo-phone">
+          <div class="demo-header">
+            <div class="demo-logo">FeastFest</div>
+            <input type="checkbox" id="demo-toggle" class="demo-nav-toggle" />
+            <label for="demo-toggle" class="demo-burger" aria-label="Toggle nav">
+              <span></span><span></span><span></span>
+            </label>
+            <nav class="demo-nav">
+              <a href="#feastfest">Stalls</a>
+              <a href="#feastfest">Schedule</a>
+              <a href="#feastfest">About</a>
+              <a href="#feastfest">Visit</a>
+            </nav>
+          </div>
+          <div class="demo-phone-body">
+            <p>Click the ☰ icon above to toggle the nav.</p>
+          </div>
+        </div>
+        <p class="nav-demo-note">This is a live demo — the hamburger actually works using only CSS.</p>
+      </div>
+
+      <div class="tip-box">
+        <strong>For real projects:</strong> The checkbox hack works but has accessibility limitations. In production, use a <code>&lt;button&gt;</code> with JavaScript to toggle a class for better keyboard and screen reader support. For this course, the CSS-only approach is perfect for learning the concept.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         10 · BUILD IT: FEASTFEST
+    ══════════════════════════════ -->
+    <section id="feastfest" class="chapter chapter-exercise">
+      <div class="ch-num">10</div>
+      <h2 class="ch-title">Build It: FeastFest</h2>
+      <p class="ch-intro">Now apply everything you've learned. You're building a landing page for <strong>FeastFest</strong> — an annual street food festival. Start from mobile, layer up to desktop. Every CSS rule you write comes from what you learned in chapters 1–9.</p>
+
+      <div class="exercise-intro-box">
+        <div class="eib-title">What you'll build</div>
+        <div class="eib-sections">
+          <div class="eib-sec" style="--ec: #ef4444;">① Header + Nav</div>
+          <div class="eib-sec" style="--ec: #f97316;">② Hero Section</div>
+          <div class="eib-sec" style="--ec: #eab308;">③ Featured Stalls</div>
+          <div class="eib-sec" style="--ec: #22c55e;">④ Schedule</div>
+          <div class="eib-sec" style="--ec: #6366f1;">⑤ About</div>
+          <div class="eib-sec" style="--ec: #ec4899;">⑥ Footer</div>
+        </div>
+      </div>
+
+      <!-- Wireframes -->
+      <h3 class="sub-heading">The Wireframes</h3>
+      <div class="wireframe-pair">
+
+        <!-- Mobile wireframe -->
+        <div class="wf-device">
+          <div class="wf-device-label">Mobile (375px)</div>
+          <div class="wf-phone-shell">
+            <div class="wf-screen">
+              <div class="wf-site">
+
+                <!-- Header -->
+                <div class="wf-hdr" style="--wc: #ef4444;">
+                  <div class="wf-hdr-logo">FeastFest</div>
+                  <div class="wf-hdr-burger">☰</div>
+                  <div class="wf-ann">① header</div>
+                </div>
+
+                <!-- Hero -->
+                <div class="wf-sec wf-hero-sec" style="--wc: #f97316;">
+                  <div class="wf-tag">EST. 2025</div>
+                  <div class="wf-h1b">The City's Biggest Street Food Festival</div>
+                  <div class="wf-pb">40+ stalls · Live Music · 15–17 August</div>
+                  <div class="wf-btnb">Get Tickets</div>
+                  <div class="wf-ann">② hero</div>
+                </div>
+
+                <!-- Stalls - mobile stacked -->
+                <div class="wf-sec" style="--wc: #eab308;">
+                  <div class="wf-h2b">Featured Stalls</div>
+                  <div class="wf-cards-col">
+                    <div class="wf-card-item">🍕 Card 1</div>
+                    <div class="wf-card-item">🍜 Card 2</div>
+                    <div class="wf-card-item">🥙 Card 3</div>
+                  </div>
+                  <div class="wf-ann">③ stalls — 1 column</div>
+                </div>
+
+                <!-- Schedule - mobile list -->
+                <div class="wf-sec" style="--wc: #22c55e;">
+                  <div class="wf-h2b">Schedule</div>
+                  <div class="wf-sched-list">
+                    <div class="wf-sched-row"><span>10:00</span><span>Gates Open</span></div>
+                    <div class="wf-sched-row"><span>12:00</span><span>Live Band</span></div>
+                    <div class="wf-sched-row"><span>18:00</span><span>Closing</span></div>
+                  </div>
+                  <div class="wf-ann">④ schedule — list</div>
+                </div>
+
+                <!-- About - mobile stacked -->
+                <div class="wf-sec" style="--wc: #6366f1;">
+                  <div class="wf-img-placeholder">📷 Photo</div>
+                  <div class="wf-h2b">About FeastFest</div>
+                  <div class="wf-pb-small">Text paragraph here...</div>
+                  <div class="wf-ann">⑤ about — stacked</div>
+                </div>
+
+                <!-- Footer -->
+                <div class="wf-ftr" style="--wc: #ec4899;">
+                  <div class="wf-ftr-content">FeastFest · Links · © 2025</div>
+                  <div class="wf-ann">⑥ footer</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop wireframe -->
+        <div class="wf-device wf-device-desktop">
+          <div class="wf-device-label">Desktop (1024px+)</div>
+          <div class="wf-desktop-shell">
+            <div class="wf-screen wf-screen-desktop">
+              <div class="wf-site-desktop">
+
+                <!-- Desktop Header -->
+                <div class="wf-hdr wf-hdr-desktop" style="--wc: #ef4444;">
+                  <div class="wf-hdr-logo">FeastFest</div>
+                  <div class="wf-hdr-nav">Stalls · Schedule · About · Visit</div>
+                  <div class="wf-ann wf-ann-desktop">① header + full nav</div>
+                </div>
+
+                <!-- Desktop Hero -->
+                <div class="wf-sec wf-hero-desktop" style="--wc: #f97316;">
+                  <div class="wf-hero-text-col">
+                    <div class="wf-tag">EST. 2025</div>
+                    <div class="wf-h1b">The City's Biggest Street Food Festival</div>
+                    <div class="wf-pb">40+ stalls · Live Music · 15–17 August</div>
+                    <div class="wf-btnb">Get Tickets</div>
+                  </div>
+                  <div class="wf-hero-img-col">📷 Hero Image</div>
+                  <div class="wf-ann wf-ann-desktop">② hero — 2 columns</div>
+                </div>
+
+                <!-- Desktop Stalls - 3 column -->
+                <div class="wf-sec" style="--wc: #eab308;">
+                  <div class="wf-h2b">Featured Stalls</div>
+                  <div class="wf-cards-row">
+                    <div class="wf-card-item">🍕 Card 1</div>
+                    <div class="wf-card-item">🍜 Card 2</div>
+                    <div class="wf-card-item">🥙 Card 3</div>
+                  </div>
+                  <div class="wf-ann wf-ann-desktop">③ stalls — 3 columns</div>
+                </div>
+
+                <!-- Desktop Schedule + About side by side -->
+                <div class="wf-sec wf-two-col-sec" style="--wc: #22c55e;">
+                  <div class="wf-col-half" style="border: 1px dashed #22c55e;">
+                    <div class="wf-h2b">Schedule</div>
+                    <div class="wf-sched-list">
+                      <div class="wf-sched-row"><span>10:00</span><span>Gates Open</span></div>
+                      <div class="wf-sched-row"><span>12:00</span><span>Live Band</span></div>
+                    </div>
+                  </div>
+                  <div class="wf-col-half" style="border: 1px dashed #6366f1;">
+                    <div class="wf-img-placeholder">📷</div>
+                    <div class="wf-h2b">About FeastFest</div>
+                    <div class="wf-pb-small">Text here...</div>
+                  </div>
+                  <div class="wf-ann wf-ann-desktop">④⑤ side by side on desktop</div>
+                </div>
+
+                <!-- Desktop Footer -->
+                <div class="wf-ftr wf-ftr-desktop" style="--wc: #ec4899;">
+                  <div>FeastFest</div>
+                  <div>Stalls · Schedule · About</div>
+                  <div>© 2025</div>
+                  <div class="wf-ann wf-ann-desktop">⑥ footer — 3 columns</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Guiding Questions -->
+      <h3 class="sub-heading">Ask Yourself Before You Start</h3>
+      <div class="questions-grid">
+
+        <div class="q-card">
+          <div class="q-num">Q1</div>
+          <div class="q-body">
+            <div class="q-text">Which chapter's technique do you use for the <strong>Featured Stalls</strong> section to go from 1 column (mobile) to 3 columns (desktop)?</div>
+            <div class="q-hint">Hint: You can do this with <em>zero</em> media queries using one line from Chapter 6.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q2</div>
+          <div class="q-body">
+            <div class="q-text">The hero heading should be readable on a 375px phone but large and impactful on a 1440px monitor. What CSS function handles this smoothly?</div>
+            <div class="q-hint">Hint: Chapter 8. Think: minimum value, preferred value, maximum value.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q3</div>
+          <div class="q-body">
+            <div class="q-text">The hamburger nav needs to be visible on mobile and hidden on desktop, while the full nav links are the opposite. What is the CSS technique called?</div>
+            <div class="q-hint">Hint: Chapter 9. You use <code>display: none</code> and a media query to swap them.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q4</div>
+          <div class="q-body">
+            <div class="q-text">Each stall card has a food photo. On desktop the cards are wider than on mobile. How do you stop the photo from distorting as the card size changes?</div>
+            <div class="q-hint">Hint: Chapter 7. Two CSS properties: <code>aspect-ratio</code> and <code>object-fit</code>.</div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q5</div>
+          <div class="q-body">
+            <div class="q-text">On desktop, the Schedule and About sections sit side by side. On mobile they stack. What's the minimum CSS needed — write it out before you look at the skeleton.</div>
+            <div class="q-hint">Hint: Chapter 5 or 6. Flexbox or Grid. Start with <code>display: grid; grid-template-columns: 1fr;</code></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- HTML Skeleton -->
+      <h3 class="sub-heading" style="margin-top: 3rem;">Step 1 — Write the HTML Skeleton</h3>
+      <p class="skeleton-intro">Start with the HTML structure. Replace every <code>???</code> with the correct tag, attribute, or value. Don't add CSS yet.</p>
+
+      <div class="code-block">
+        <div class="code-header">feastfest/index.html</div>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="???" content="width=device-width, initial-scale=1.0" /&gt;  &lt;!-- Ch.02 --&gt;
+  &lt;title&gt;FeastFest 2025 — Street Food Festival&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;!-- ① HEADER --&gt;
+  &lt;???&gt;
+    &lt;a href="#" class="logo"&gt;FeastFest&lt;/a&gt;
+    &lt;input type="checkbox" id="???" class="nav-toggle" /&gt;
+    &lt;label for="nav-toggle" class="nav-burger"&gt;
+      &lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;???&gt;
+      &lt;a href="#stalls"&gt;Stalls&lt;/a&gt;
+      &lt;a href="#schedule"&gt;Schedule&lt;/a&gt;
+      &lt;a href="#about"&gt;About&lt;/a&gt;
+      &lt;a href="#visit"&gt;Visit&lt;/a&gt;
+    &lt;/???&gt;
+  &lt;/???&gt;
+
+  &lt;???&gt;  &lt;!-- all main content --&gt;
+
+    &lt;!-- ② HERO --&gt;
+    &lt;section id="???"&gt;
+      &lt;div class="hero-content"&gt;
+        &lt;p class="eyebrow"&gt;EST. 2025 · BANGALORE&lt;/p&gt;
+        &lt;???&gt;The City's Biggest Street Food Festival&lt;/???&gt;
+        &lt;p&gt;40+ stalls · Live Music · 15–17 August, Cubbon Park&lt;/p&gt;
+        &lt;a href="#???" class="btn-primary"&gt;Get Tickets →&lt;/a&gt;
+      &lt;/div&gt;
+      &lt;div class="hero-image"&gt;
+        &lt;img src="hero.jpg" alt="???" /&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- ③ FEATURED STALLS --&gt;
+    &lt;section id="???"&gt;
+      &lt;h2&gt;Featured Stalls&lt;/h2&gt;
+      &lt;div class="???"&gt;  &lt;!-- the grid container --&gt;
+
+        &lt;div class="stall-card"&gt;
+          &lt;div class="card-img"&gt;
+            &lt;img src="pizza.jpg" alt="???" /&gt;
+          &lt;/div&gt;
+          &lt;div class="card-body"&gt;
+            &lt;h3&gt;Pizza Republica&lt;/h3&gt;
+            &lt;p&gt;Wood-fired Neapolitan pizza with local toppings.&lt;/p&gt;
+            &lt;span class="tag"&gt;Italian&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- repeat .stall-card for: Noodle Bar, Wrap Corner, Falafel Hub, Taco Stop, Sweet Spot --&gt;
+
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- ④ SCHEDULE --&gt;
+    &lt;section id="???"&gt;
+      &lt;h2&gt;Event Schedule&lt;/h2&gt;
+      &lt;div class="schedule-list"&gt;
+        &lt;div class="schedule-row"&gt;
+          &lt;span class="sched-time"&gt;10:00 AM&lt;/span&gt;
+          &lt;span class="sched-event"&gt;Gates Open — All Stalls Active&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="schedule-row"&gt;
+          &lt;span class="sched-time"&gt;12:00 PM&lt;/span&gt;
+          &lt;span class="sched-event"&gt;Live Band: The Spice Route&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="schedule-row"&gt;
+          &lt;span class="sched-time"&gt;3:00 PM&lt;/span&gt;
+          &lt;span class="sched-event"&gt;Chef Cook-Off Competition&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="schedule-row"&gt;
+          &lt;span class="sched-time"&gt;6:00 PM&lt;/span&gt;
+          &lt;span class="sched-event"&gt;Closing Ceremony &amp; Raffle&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- ⑤ ABOUT --&gt;
+    &lt;section id="???"&gt;
+      &lt;div class="about-image"&gt;
+        &lt;img src="festival.jpg" alt="???" /&gt;
+      &lt;/div&gt;
+      &lt;div class="about-text"&gt;
+        &lt;p class="eyebrow"&gt;Our Story&lt;/p&gt;
+        &lt;h2&gt;Started by food lovers, for food lovers.&lt;/h2&gt;
+        &lt;p&gt;FeastFest began in 2018 as a small gathering of 10 street food vendors in a parking lot. Today it's Bangalore's most anticipated food event, hosting 40+ stalls, 5,000+ visitors, and 3 days of incredible flavours.&lt;/p&gt;
+        &lt;a href="#visit" class="btn-outline"&gt;Find the Venue →&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+  &lt;/???&gt;
+
+  &lt;!-- ⑥ FOOTER --&gt;
+  &lt;???&gt;
+    &lt;div class="footer-brand"&gt;
+      &lt;div class="footer-logo"&gt;FeastFest&lt;/div&gt;
+      &lt;p&gt;The City's Biggest Street Food Festival&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;nav class="footer-nav"&gt;
+      &lt;a href="#stalls"&gt;Stalls&lt;/a&gt;
+      &lt;a href="#schedule"&gt;Schedule&lt;/a&gt;
+      &lt;a href="#about"&gt;About&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;???&gt;&amp;copy; 2025 FeastFest. All rights reserved.&lt;/???&gt;
+  &lt;/???&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+
+      <!-- CSS Skeleton -->
+      <h3 class="sub-heading" style="margin-top: 3rem;">Step 2 — Write the CSS (Mobile-First)</h3>
+      <p class="skeleton-intro">Now style it. Write mobile styles first — no media queries yet. Then add breakpoints to enhance for larger screens.</p>
+
+      <div class="code-block">
+        <div class="code-header">feastfest/styles.css — complete this</div>
+        <pre><code>/* ══ RESET &amp; BASE ══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Ch.07 — fix all images globally */
+img { ???: 100%; height: auto; display: block; }
+
+/* ══ CSS VARIABLES ══ */
+:root {
+  --primary:  #e85d04;
+  --dark:     #1a0a00;
+  --bg:       #fffaf5;
+  --text:     #2d1a00;
+  --muted:    #6b5640;
+
+  /* Ch.08 — fluid type scale */
+  --text-body: clamp(1rem, 2.5vw, 1.125rem);
+  --text-h2:   clamp(1.5rem, 4vw, 2.5rem);
+  --text-hero: clamp(2rem, ???, 4.5rem);     /* fill in the preferred value */
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--text-body);
+  line-height: 1.7;
+}
+
+.container {
+  width: ???(1200px, 90%);   /* Ch.03 — never wider than 1200px, 90% on small screens */
+  margin: 0 auto;
+}
+
+/* ══ ① HEADER — Ch.09 ══ */
+header {
+  position: sticky;
+  top: 0;
+  background: var(--dark);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  gap: 1rem;
+  z-index: 100;
+}
+
+.logo { font-size: 1.25rem; font-weight: 700; color: var(--primary); text-decoration: none; margin-right: auto; }
+
+.nav-toggle { display: none; }
+
+.nav-burger {
+  display: ???;   /* show on mobile */
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.nav-burger span { display: block; width: 24px; height: 2px; background: white; transition: all 0.3s; }
+
+.main-nav {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0; right: 0;
+  background: var(--dark);
+  padding: 1rem 1.5rem;
+  gap: 0.5rem;
+}
+.main-nav a { color: white; text-decoration: none; padding: 0.5rem 0; }
+
+.nav-toggle:checked ~ .main-nav { display: ???; }
+.nav-toggle:checked ~ .nav-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle:checked ~ .nav-burger span:nth-child(2) { opacity: 0; }
+.nav-toggle:checked ~ .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ══ ② HERO — mobile: stacked ══ */
+#hero {
+  display: grid;
+  grid-template-columns: ???;   /* 1 column on mobile */
+  min-height: 80svh;
+  align-items: center;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem);
+  background: var(--dark);
+  color: white;
+  gap: 2rem;
+}
+
+.hero-content { display: flex; flex-direction: column; gap: 1.25rem; }
+#hero h1 { font-size: var(--text-hero); line-height: 1.1; }
+
+.hero-image { border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; }
+.hero-image img { width: 100%; height: 100%; object-fit: ???; }
+
+/* ══ ③ FEATURED STALLS — Ch.06 ══ */
+#stalls { padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 4vw, 3rem); }
+#stalls h2 { font-size: var(--text-h2); text-align: center; margin-bottom: 2rem; }
+
+.stalls-grid {
+  display: grid;
+  /* Ch.06 — auto-reflow without media queries */
+  grid-template-columns: repeat(auto-fill, minmax(???, 1fr));
+  gap: 1.5rem;
+}
+
+.stall-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.card-img { aspect-ratio: ???; }   /* 16:9 */
+.card-img img { width: 100%; height: 100%; object-fit: cover; }
+.card-body { padding: 1rem; }
+.card-body h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+.tag { background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; }
+
+/* ══ ④ SCHEDULE — mobile: list ══ */
+#schedule { padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 4vw, 3rem); background: #fff8f2; }
+#schedule h2 { font-size: var(--text-h2); margin-bottom: 2rem; }
+
+.schedule-list { display: flex; flex-direction: column; gap: 0; max-width: 600px; }
+.schedule-row {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e8d8c8;
+  align-items: center;
+}
+.sched-time { font-weight: 700; color: var(--primary); min-width: 90px; }
+
+/* ══ ⑤ ABOUT — mobile: stacked ══ */
+#about {
+  display: grid;
+  grid-template-columns: ???;   /* 1 column on mobile */
+  gap: 2rem;
+  align-items: center;
+  padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 4vw, 3rem);
+}
+.about-image { aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; }
+.about-image img { width: 100%; height: 100%; object-fit: cover; }
+.about-text { display: flex; flex-direction: column; gap: 1rem; }
+.about-text h2 { font-size: var(--text-h2); }
+
+/* ══ ⑥ FOOTER ══ */
+footer {
+  background: var(--dark);
+  color: rgba(255,255,255,0.8);
+  padding: 3rem clamp(1rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+}
+.footer-logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
+.footer-nav { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+.footer-nav a { color: rgba(255,255,255,0.7); text-decoration: none; }
+
+/* ══ BUTTONS ══ */
+.btn-primary {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+.btn-primary:hover { background: #c44e00; }
+.btn-outline { display: inline-block; border: 2px solid var(--primary); color: var(--primary); padding: 0.75rem 1.75rem; border-radius: 8px; text-decoration: none; font-weight: 600; align-self: flex-start; }
+
+/* ══ TABLET (768px+) ══ */
+@media (min-width: 768px) {
+
+  /* Header: hide burger, show full nav */
+  .nav-burger { display: ???; }   /* hide */
+  .main-nav {
+    display: ???;   /* flex */
+    flex-direction: row;
+    position: static;
+    background: none;
+    padding: 0;
+    gap: 2rem;
+  }
+  .main-nav a { padding: 0; }
+
+  /* Footer: row on tablet */
+  footer {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    align-items: flex-start;
+  }
+  .footer-nav { justify-content: flex-start; }
+}
+
+/* ══ DESKTOP (1024px+) ══ */
+@media (min-width: 1024px) {
+
+  /* Hero: 2 columns — text left, image right */
+  #hero {
+    grid-template-columns: ???;   /* 3fr for text, 2fr for image */
+  }
+
+  /* About: 2 columns — image left, text right */
+  #about {
+    grid-template-columns: ???;   /* 1fr 1fr */
+  }
+}</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>When you're done:</strong> Open your file on your phone (use Live Server in VS Code → copy the local network URL). Check that (1) the viewport meta tag is there, (2) the nav hamburger works, (3) the stalls grid reflowss naturally, (4) images don't overflow. Then resize your desktop browser from narrow to wide and watch it come alive.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">RWD</div>
+      <p>Responsive Web Design — Student Handbook · 10 Chapters</p>
+      <p><small>&copy; 2025 — Build once. Respond everywhere.</small></p>
+    </div>
+  </footer>
+
+</body>
+</html>
