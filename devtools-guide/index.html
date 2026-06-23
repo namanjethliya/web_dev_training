@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browser DevTools guide for students — inspect HTML, debug CSS, use the console, and more." />
+  <title>Browser DevTools — The Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">DevTools</h1>
+    <p class="hero-sub">Browser Developer Tools</p>
+    <p class="hero-desc">Inspect, edit, debug — live in the browser. The skill every developer uses every single day.</p>
+    <div class="hero-pills">
+      <span class="pill">8 Chapters</span>
+      <span class="pill">Chrome &amp; Firefox</span>
+      <span class="pill">Hands-on</span>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#opening">01 Opening</a></li>
+      <li><a href="#panels">02 Panels</a></li>
+      <li><a href="#inspect-html">03 Inspect HTML</a></li>
+      <li><a href="#debug-css">04 Debug CSS</a></li>
+      <li><a href="#box-model">05 Box Model</a></li>
+      <li><a href="#responsive">06 Responsive Mode</a></li>
+      <li><a href="#console">07 Console</a></li>
+      <li><a href="#tips">08 Pro Tips</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · OPENING DEVTOOLS
+    ══════════════════════════════ -->
+    <section id="opening" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">Opening DevTools</h2>
+      <p class="ch-intro">Three ways to open DevTools in any browser. You'll use these every day, so memorize the keyboard shortcuts.</p>
+
+      <h3 class="sub-heading">Keyboard Shortcuts</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">Mac</div>
+          <div class="shortcut-block">
+            <div class="shortcut-row"><kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>I</kbd> <span>Open DevTools</span></div>
+            <div class="shortcut-row"><kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>J</kbd> <span>Open Console tab</span></div>
+            <div class="shortcut-row"><kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>C</kbd> <span>Open Inspector</span></div>
+            <div class="shortcut-row"><kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> <span>Command palette</span></div>
+          </div>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">Windows / Linux</div>
+          <div class="shortcut-block">
+            <div class="shortcut-row"><kbd>F12</kbd> <span>Open DevTools</span></div>
+            <div class="shortcut-row"><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd> <span>Open DevTools</span></div>
+            <div class="shortcut-row"><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J</kbd> <span>Open Console tab</span></div>
+            <div class="shortcut-row"><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> <span>Open Inspector</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-tag">Right-click Method</div>
+          <p>Right-click on any element on the page → click <strong>"Inspect"</strong>.</p>
+          <p>DevTools opens with that element already selected in the Elements panel. Fastest way to inspect a specific element.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Docking Position</h3>
+      <p>DevTools can dock to different sides of your screen. Click the <strong>⋮ (three-dot menu)</strong> in the top-right of the DevTools panel to change docking.</p>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Dock to Bottom</div>
+          <p>Good for wide monitors. You see page and DevTools at the same time.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Dock to Right (Recommended)</div>
+          <p>Best for most use cases. Page on the left, DevTools on the right.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Undock (Separate Window)</div>
+          <p>Useful with two monitors — DevTools on one screen, page on the other.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · PANELS OVERVIEW
+    ══════════════════════════════ -->
+    <section id="panels" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">The Panels</h2>
+      <p class="ch-intro">DevTools is split into several tabs (panels). As a beginner, you'll live in just three of them. The rest you'll use later.</p>
+
+      <h3 class="sub-heading">The Big Three (Learn These First)</h3>
+      <div class="card-row">
+        <div class="card highlight-card">
+          <div class="card-tag">Elements</div>
+          <p>Shows the HTML structure of the page. Click any element to select it. See and edit its CSS on the right. This is where you'll spend 80% of your time.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">Console</div>
+          <p>Shows JavaScript errors, warnings, and log messages. You can also type and run JavaScript directly here.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">Sources</div>
+          <p>See your HTML, CSS, and JavaScript files as the browser has loaded them. Useful for reading your actual code.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Other Panels (For Later)</h3>
+      <div class="panels-table">
+        <table>
+          <thead>
+            <tr><th>Panel</th><th>What it does</th><th>When you'll use it</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Network</code></td><td>Shows every file the browser loads (images, CSS, JS, API calls)</td><td>When images aren't loading or pages are slow</td></tr>
+            <tr><td><code>Performance</code></td><td>Records and profiles page loading and rendering speed</td><td>Advanced — when optimizing slow pages</td></tr>
+            <tr><td><code>Application</code></td><td>Inspect cookies, localStorage, sessionStorage</td><td>When building forms or auth flows</td></tr>
+            <tr><td><code>Lighthouse</code></td><td>Audits your page for performance, SEO, accessibility</td><td>Before launching a site</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <strong>Tip:</strong> If you don't see a panel, click the <strong>&gt;&gt;</strong> arrow at the end of the panel tab bar to reveal hidden panels.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · INSPECT HTML
+    ══════════════════════════════ -->
+    <section id="inspect-html" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Inspecting &amp; Editing HTML</h2>
+      <p class="ch-intro">The Elements panel shows the live DOM — the HTML as the browser sees it. You can edit it directly and see changes instantly.</p>
+
+      <h3 class="sub-heading">The Elements Panel Layout</h3>
+      <div class="devtools-mockup">
+        <div class="dt-toolbar">
+          <span class="dt-tab active">Elements</span>
+          <span class="dt-tab">Console</span>
+          <span class="dt-tab">Sources</span>
+          <span class="dt-tab">Network</span>
+        </div>
+        <div class="dt-body">
+          <div class="dt-html-panel">
+            <div class="dt-html-line">
+              <span class="dt-arrow">▶</span>
+              <span class="dt-tag">&lt;html&gt;</span>
+            </div>
+            <div class="dt-html-line indent-1">
+              <span class="dt-arrow">▶</span>
+              <span class="dt-tag">&lt;head&gt;</span>
+              <span class="dt-comment">…</span>
+              <span class="dt-tag">&lt;/head&gt;</span>
+            </div>
+            <div class="dt-html-line indent-1 selected-line">
+              <span class="dt-arrow selected-arrow">▼</span>
+              <span class="dt-tag">&lt;body&gt;</span>
+            </div>
+            <div class="dt-html-line indent-2 selected-line">
+              <span class="dt-arrow">▶</span>
+              <span class="dt-tag selected-tag">&lt;h1 <span class="dt-attr">class=</span><span class="dt-str">"hero-title"</span>&gt;</span>
+              <span class="dt-text">Hello World</span>
+              <span class="dt-tag">&lt;/h1&gt;</span>
+              <span class="dt-badge">== $0</span>
+            </div>
+            <div class="dt-html-line indent-2">
+              <span class="dt-arrow">▶</span>
+              <span class="dt-tag">&lt;p&gt;</span>
+              <span class="dt-text">Some text…</span>
+              <span class="dt-tag">&lt;/p&gt;</span>
+            </div>
+            <div class="dt-html-line indent-1">
+              <span class="dt-tag">&lt;/body&gt;</span>
+            </div>
+          </div>
+          <div class="dt-css-panel">
+            <div class="dt-css-header">Styles</div>
+            <div class="dt-css-rule">
+              <div class="dt-css-selector">h1.hero-title</div>
+              <div class="dt-css-prop"><span class="dt-prop-name">font-size</span>: <span class="dt-prop-val">3rem</span>;</div>
+              <div class="dt-css-prop"><span class="dt-prop-name">color</span>: <span class="dt-prop-val">#1a1208</span>;</div>
+              <div class="dt-css-prop"><span class="dt-prop-name">font-weight</span>: <span class="dt-prop-val">900</span>;</div>
+            </div>
+            <div class="dt-css-rule inherited">
+              <div class="dt-css-selector">body</div>
+              <div class="dt-css-prop"><span class="dt-prop-name">font-family</span>: <span class="dt-prop-val">serif</span>;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="diagram-caption">Left: the HTML tree. Right: CSS rules for the selected element. The highlighted line is the currently selected element.</p>
+
+      <h3 class="sub-heading">Selecting Elements</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Method 1 — Click in HTML tree</div>
+          <p>Click any line in the Elements panel to select that element. The element highlights on the page.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Method 2 — Inspector Cursor</div>
+          <p>Click the <strong>cursor icon</strong> (top-left of DevTools) then click any element on the page. DevTools jumps to it in the tree.</p>
+          <p style="margin-top:6px;font-family:var(--font-mono);font-size:0.78rem;">Mac: <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Method 3 — Right-click</div>
+          <p>Right-click any element on the page → "Inspect". Fastest for targeting a specific element.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Editing HTML Live</h3>
+      <p>All edits are temporary — refreshing the page resets everything. This is for experimenting, not saving.</p>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Edit Text Content</div>
+          <p>Double-click the text inside a tag to edit it inline. Press <kbd>Enter</kbd> to confirm.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Edit as HTML</div>
+          <p>Right-click an element in the tree → <strong>"Edit as HTML"</strong>. A text area opens where you can rewrite the entire element.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Edit Attributes</div>
+          <p>Double-click any attribute (like <code>class="..."</code>) to edit it. Great for testing class changes.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Add/Remove Class</div>
+          <p>In the Styles panel, click <strong>.cls</strong> to toggle classes on and off without editing HTML.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Remember:</strong> Changes in DevTools are NOT saved to your files. They only exist in the browser's memory. Refresh the page and they're gone.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · DEBUG CSS
+    ══════════════════════════════ -->
+    <section id="debug-css" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Debugging CSS</h2>
+      <p class="ch-intro">The Styles panel is your CSS debugger. It shows every rule applied to an element, where it comes from, and which rules are being overridden.</p>
+
+      <h3 class="sub-heading">Reading the Styles Panel</h3>
+      <div class="styles-mockup">
+        <div class="sm-header">Styles &nbsp; <span class="sm-computed-link">Computed</span></div>
+        <div class="sm-filter"><input type="text" placeholder="Filter" /></div>
+        <div class="sm-rule">
+          <div class="sm-source">styles.css:42</div>
+          <div class="sm-selector">h1.hero-title</div>
+          <div class="sm-prop"><span class="sm-name">font-size</span>: <span class="sm-val editable">3rem</span>;</div>
+          <div class="sm-prop"><span class="sm-name">color</span>: <span class="sm-val editable">#1a1208</span>;</div>
+          <div class="sm-prop"><span class="sm-name">margin-bottom</span>: <span class="sm-val editable">24px</span>;</div>
+        </div>
+        <div class="sm-rule">
+          <div class="sm-source">styles.css:10</div>
+          <div class="sm-selector">h1</div>
+          <div class="sm-prop strikethrough"><span class="sm-name">font-size</span>: <span class="sm-val">2rem</span>;</div>
+          <div class="sm-prop strikethrough"><span class="sm-name">color</span>: <span class="sm-val">black</span>;</div>
+        </div>
+        <div class="sm-rule inherited-rule">
+          <div class="sm-source">Inherited from <code>body</code></div>
+          <div class="sm-prop"><span class="sm-name">font-family</span>: <span class="sm-val">serif</span>;</div>
+          <div class="sm-prop"><span class="sm-name">line-height</span>: <span class="sm-val">1.6</span>;</div>
+        </div>
+      </div>
+
+      <div class="annotation-row">
+        <div class="annotation"><span class="ann-num">1</span> <strong>Source file and line number</strong> — click to jump to that line in your CSS file</div>
+        <div class="annotation"><span class="ann-num">2</span> <strong>Strikethrough rules</strong> — being overridden by a more specific rule above it</div>
+        <div class="annotation"><span class="ann-num">3</span> <strong>Inherited rules</strong> — styles coming from a parent element like <code>body</code></div>
+        <div class="annotation"><span class="ann-num">4</span> <strong>Editable values</strong> — click any value to change it live. Great for experimenting.</div>
+      </div>
+
+      <h3 class="sub-heading">Editing CSS Live</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Change a value</div>
+          <p>Click any CSS value in the Styles panel and type a new one. The page updates instantly.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Toggle a property</div>
+          <p>Hover over a rule — a checkbox appears. Uncheck it to disable that property. Check it again to re-enable.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Add a new property</div>
+          <p>Click the empty space below any rule's last property. Type a new property name and value.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Nudge number values</div>
+          <p>Click a number value (like <code>24px</code>) and press <kbd>↑</kbd> / <kbd>↓</kbd> to increment/decrement. Hold <kbd>Shift</kbd> to step by 10.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The Computed Tab</h3>
+      <p>The <strong>Computed</strong> tab (next to Styles) shows the <em>final resolved value</em> of every CSS property — after all inheritance, specificity, and shorthand expansion is resolved.</p>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Use it when…</div>
+          <p>A style isn't working and you can't figure out why. The Computed tab shows exactly what value the browser is actually using.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Trace back to source</div>
+          <p>Click the arrow next to any computed value to jump to the exact CSS rule that set it. Traces the source even through inheritance.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Force Element States</h3>
+      <p>Click the <strong>:hov</strong> button in the Styles panel to force an element into a state like <code>:hover</code>, <code>:focus</code>, or <code>:active</code> — without having to actually hover or click it.</p>
+      <div class="state-demo">
+        <div class="state-checkbox"><input type="checkbox" id="hover" /><label for="hover">:hover</label></div>
+        <div class="state-checkbox"><input type="checkbox" id="focus" /><label for="focus">:focus</label></div>
+        <div class="state-checkbox"><input type="checkbox" id="active" /><label for="active">:active</label></div>
+        <div class="state-checkbox"><input type="checkbox" id="visited" /><label for="visited">:visited</label></div>
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-top:10px;">This is essential for debugging hover and focus styles — you can inspect the CSS that only appears on mouse hover.</p>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · BOX MODEL
+    ══════════════════════════════ -->
+    <section id="box-model" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">The Box Model Visualizer</h2>
+      <p class="ch-intro">The Computed tab has a visual box model diagram showing the exact margin, border, padding, and content size of the selected element.</p>
+
+      <h3 class="sub-heading">Reading the Diagram</h3>
+      <div class="box-model-diagram">
+        <div class="bm-margin">
+          <span class="bm-label">margin</span>
+          <div class="bm-border">
+            <span class="bm-label">border</span>
+            <div class="bm-padding">
+              <span class="bm-label">padding</span>
+              <div class="bm-content">
+                <div class="bm-size">320 × 48</div>
+              </div>
+            </div>
+          </div>
+          <div class="bm-values">
+            <span class="bm-top">16</span>
+            <span class="bm-right">24</span>
+            <span class="bm-bottom">16</span>
+            <span class="bm-left">24</span>
+          </div>
+        </div>
+      </div>
+      <p class="diagram-caption">Each layer shows the pixel value for top / right / bottom / left. Click any value to edit it.</p>
+
+      <h3 class="sub-heading">What Each Layer Means</h3>
+      <div class="card-row">
+        <div class="card bm-margin-card">
+          <div class="card-tag">Margin (outermost)</div>
+          <p>Space outside the border. Pushes other elements away. Never has a background color.</p>
+        </div>
+        <div class="card bm-border-card">
+          <div class="card-tag">Border</div>
+          <p>The visible edge of the element. Has width, style, and color.</p>
+        </div>
+        <div class="card bm-padding-card">
+          <div class="card-tag">Padding</div>
+          <p>Space between the border and the content. Takes the element's background color.</p>
+        </div>
+        <div class="card bm-content-card">
+          <div class="card-tag">Content (innermost)</div>
+          <p>The actual text, image, or child elements. Controlled by <code>width</code> and <code>height</code>.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Why This is Useful</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Debugging spacing</div>
+          <p>Something has unexpected space around it? Select the element and check the box model. You'll instantly see if it's margin, padding, or border causing it.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Finding exact sizes</div>
+          <p>The content area shows the actual rendered pixel width and height — useful when you need precise sizing.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Quick trick:</strong> In the Elements panel, hover over any element in the HTML tree — the browser highlights it on the page with the box model layers colored in (blue = content, green = padding, orange = margin).
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · RESPONSIVE MODE
+    ══════════════════════════════ -->
+    <section id="responsive" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Responsive / Device Mode</h2>
+      <p class="ch-intro">Test how your page looks on phones and tablets without a real device. DevTools can simulate any screen size.</p>
+
+      <h3 class="sub-heading">How to Open Device Mode</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">Keyboard</div>
+          <div class="shortcut-block">
+            <div class="shortcut-row"><kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> <span>Mac</span></div>
+            <div class="shortcut-row"><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> <span>Windows</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-tag">Click</div>
+          <p>Click the <strong>phone/tablet icon</strong> in the top-left corner of DevTools (next to the inspector cursor icon).</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Device Mode Controls</h3>
+      <div class="device-mode-mockup">
+        <div class="dm-toolbar">
+          <div class="dm-device-select">
+            <span class="dm-label">Dimensions:</span>
+            <select class="dm-select">
+              <option>iPhone 14 Pro</option>
+              <option>iPad Air</option>
+              <option selected>Responsive</option>
+            </select>
+          </div>
+          <div class="dm-size">
+            <input class="dm-input" value="375" /> × <input class="dm-input" value="812" />
+          </div>
+          <div class="dm-dpr">
+            <span class="dm-label">DPR:</span>
+            <select class="dm-select"><option selected>3</option></select>
+          </div>
+          <div class="dm-throttle">
+            <span class="dm-label">Throttle:</span>
+            <select class="dm-select"><option>No throttling</option><option>Fast 4G</option><option selected>Slow 4G</option></select>
+          </div>
+        </div>
+        <div class="dm-body">
+          <div class="dm-phone">
+            <div class="dm-screen">
+              <div class="dm-page-preview">
+                <div class="dp-nav"></div>
+                <div class="dp-hero"></div>
+                <div class="dp-cards">
+                  <div class="dp-card"></div>
+                  <div class="dp-card"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">What You Can Do</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Pick a device</div>
+          <p>Choose a preset like "iPhone 14" or "iPad Air" from the dropdown. Sets exact screen size and pixel ratio.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Drag to resize</div>
+          <p>In "Responsive" mode, drag the blue handles to set any width. Watch your media queries kick in as you resize.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Type exact size</div>
+          <p>Type a width and height in the number inputs. Useful for testing specific breakpoints (e.g. 768px).</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Throttle network</div>
+          <p>Simulate slow mobile internet. See how fast (or slow) your page loads on a phone connection.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Important:</strong> Device mode simulates screen size but does NOT simulate a real phone's CPU, memory, or touch input. Always test on a real device before launching.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · CONSOLE
+    ══════════════════════════════ -->
+    <section id="console" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">The Console</h2>
+      <p class="ch-intro">The Console shows messages from your code — errors, warnings, and anything you print with <code>console.log()</code>. It's also a JavaScript sandbox where you can run code directly.</p>
+
+      <h3 class="sub-heading">Message Types</h3>
+      <div class="console-mockup">
+        <div class="console-toolbar">
+          <span class="console-tab active">Console</span>
+          <span class="console-clear" title="Clear console">⊘</span>
+          <span class="console-filter-row">
+            <span class="cf cf-all active">All</span>
+            <span class="cf cf-error">Errors</span>
+            <span class="cf cf-warn">Warnings</span>
+            <span class="cf cf-info">Info</span>
+            <span class="cf cf-verbose">Verbose</span>
+          </span>
+        </div>
+        <div class="console-body">
+          <div class="console-line error">
+            <span class="console-icon">✕</span>
+            <span class="console-text">Cannot read properties of null (reading 'style')</span>
+            <span class="console-source">main.js:14</span>
+          </div>
+          <div class="console-line warning">
+            <span class="console-icon">⚠</span>
+            <span class="console-text">&lt;img&gt; element is missing required alt attribute</span>
+            <span class="console-source">index.html:38</span>
+          </div>
+          <div class="console-line info">
+            <span class="console-icon">ℹ</span>
+            <span class="console-text">Page loaded in 1.24s</span>
+            <span class="console-source">performance.js:8</span>
+          </div>
+          <div class="console-line log">
+            <span class="console-icon"> </span>
+            <span class="console-text">User clicked the button</span>
+            <span class="console-source">app.js:22</span>
+          </div>
+          <div class="console-prompt">
+            <span class="console-caret">&gt;</span>
+            <span class="console-cursor">|</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Reading Error Messages</h3>
+      <div class="card-row">
+        <div class="card error-card">
+          <div class="card-tag">Errors (red)</div>
+          <p>Something broke. The code stopped working. Always fix these first — they're blocking something from running.</p>
+          <p>Click the file link (<code>main.js:14</code>) to jump to exactly where it happened.</p>
+        </div>
+        <div class="card warning-card">
+          <div class="card-tag">Warnings (yellow)</div>
+          <p>Something might be wrong — missing <code>alt</code> on an image, deprecated syntax, etc. The page still works but you should fix these.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Log (white)</div>
+          <p>Normal messages from <code>console.log()</code>. Usually put there by you or a library for debugging.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">console.log() — Your Best Friend</h3>
+      <p>Add <code>console.log()</code> anywhere in your JavaScript to print a value. It shows up in the Console tab.</p>
+      <div class="code-block full-code">
+        <pre><code>// Print a simple value
+console.log("Hello from JS");
+
+// Print a variable
+let name = "Naman";
+console.log(name);          // → Naman
+
+// Print an object
+let user = { name: "Naman", age: 25 };
+console.log(user);          // → {name: "Naman", age: 25}
+
+// Label your output
+console.log("User object:", user);
+
+// Other console methods
+console.warn("This is a warning");
+console.error("This is an error");
+console.table([{ a: 1 }, { a: 2 }]);  // Pretty table output</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The Console as a Scratch Pad</h3>
+      <p>Click on the prompt line (<code>&gt;</code>) at the bottom of the Console and type any JavaScript. Press <kbd>Enter</kbd> to run it.</p>
+      <div class="code-block full-code">
+        <pre><code>// Select an element and change it
+document.querySelector("h1").style.color = "red";
+
+// Check a CSS variable value
+getComputedStyle(document.body).getPropertyValue("--accent");
+
+// Find all images on the page
+document.querySelectorAll("img").length;
+
+// Check what's in localStorage
+localStorage.getItem("theme");</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>$0 shortcut:</strong> In the console, type <code>$0</code> to reference the element currently selected in the Elements panel. So <code>$0.style.color = "red"</code> changes the selected element's color instantly.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · PRO TIPS
+    ══════════════════════════════ -->
+    <section id="tips" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Pro Tips &amp; Shortcuts</h2>
+      <p class="ch-intro">These are the shortcuts and tricks that separate beginners from developers who move fast. Learn one at a time.</p>
+
+      <h3 class="sub-heading">Selector Tricks</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Copy CSS Selector</div>
+          <p>Right-click an element in the Elements panel → <strong>Copy → Copy selector</strong>. Gets you a CSS selector you can paste into your stylesheet.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Copy Element</div>
+          <p>Right-click → <strong>Copy → Copy outerHTML</strong>. Copies the full HTML of the element. Useful for grabbing elements from live sites.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Scroll into View</div>
+          <p>Right-click an element in the tree → <strong>Scroll into view</strong>. The page scrolls to show that element — great for finding off-screen elements.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">CSS Tricks</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Color Picker</div>
+          <p>Click the colored square next to any color value in the Styles panel. A color picker opens — choose any color visually.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Search CSS</div>
+          <p>Press <kbd>Ctrl</kbd>+<kbd>F</kbd> inside the Styles panel to search across all CSS rules for the selected element.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">See all CSS for a selector</div>
+          <p>In Sources, press <kbd>Ctrl</kbd>+<kbd>F</kbd> and search your CSS file. Or use the <strong>Coverage</strong> panel to see which CSS is unused.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Keyboard Shortcuts Reference</h3>
+      <div class="panels-table">
+        <table>
+          <thead>
+            <tr><th>Action</th><th>Mac</th><th>Windows</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Open DevTools</td><td><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd></td><td><kbd>F12</kbd></td></tr>
+            <tr><td>Open Inspector (click to select)</td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></td></tr>
+            <tr><td>Open Console</td><td><kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>J</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd></td></tr>
+            <tr><td>Toggle Device Mode</td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd></td></tr>
+            <tr><td>Command palette</td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td></tr>
+            <tr><td>Search in DevTools</td><td><kbd>Cmd</kbd>+<kbd>F</kbd></td><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td></tr>
+            <tr><td>Clear console</td><td><kbd>Cmd</kbd>+<kbd>K</kbd></td><td><kbd>Ctrl</kbd>+<kbd>L</kbd></td></tr>
+            <tr><td>Previous console command</td><td colspan="2"><kbd>↑</kbd> arrow key</td></tr>
+            <tr><td>Expand/collapse all nodes</td><td colspan="2">Hold <kbd>Alt</kbd> + click triangle</td></tr>
+            <tr><td>Nudge CSS value by 1</td><td colspan="2"><kbd>↑</kbd> / <kbd>↓</kbd></td></tr>
+            <tr><td>Nudge CSS value by 10</td><td colspan="2"><kbd>Shift</kbd>+<kbd>↑</kbd> / <kbd>↓</kbd></td></tr>
+            <tr><td>Nudge CSS value by 0.1</td><td colspan="2"><kbd>Alt</kbd>+<kbd>↑</kbd> / <kbd>↓</kbd></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-heading">Debugging Workflow</h3>
+      <p>When something doesn't look right, follow this process:</p>
+      <div class="workflow-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Inspect the element</strong>
+            <p>Right-click → Inspect. Select the element that's broken.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Check the Styles panel</strong>
+            <p>Look for strikethrough rules. Find the rule that's winning the specificity battle.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Check the Computed tab</strong>
+            <p>See the actual value the browser is using. Click the arrow to trace it back to the source rule.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Check the Box Model</strong>
+            <p>If spacing is wrong, look at the box model diagram. Is extra space coming from margin, padding, or border?</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <strong>Edit live to confirm the fix</strong>
+            <p>Try your fix in DevTools first. Once it works, copy it to your actual file.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Golden rule:</strong> Never guess and refresh. Use DevTools to experiment live, confirm the fix works, then transfer to your code. This saves hours.
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Browser DevTools — Student Handbook &nbsp;·&nbsp; Open DevTools right now and try it on this page.</p>
+  </footer>
+
+</body>
+</html>
