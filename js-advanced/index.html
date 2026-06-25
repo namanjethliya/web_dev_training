@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JavaScript Advanced Topics — error handling, regex, storage, debugging, performance, and design patterns. Interactive sandbox on every chapter." />
+  <title>JavaScript Advanced Topics — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">JavaScript<br><span class="hero-accent">Advanced Topics</span></h1>
+    <p class="hero-sub">Error handling, regex, storage, debugging, performance, and patterns.</p>
+    <p class="hero-desc">Go beyond the basics — learn to handle errors gracefully, match patterns with regex, use browser storage, debug effectively, and write scalable code with design patterns.</p>
+    <div class="hero-pills">
+      <span class="pill">9 Chapters</span>
+      <span class="pill">Live Sandboxes</span>
+      <span class="pill">Build It Exercise</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#error-handling">01 Error Handling</a></li>
+      <li><a href="#regex">02 Regular Expressions</a></li>
+      <li><a href="#storage">03 Local &amp; Session Storage</a></li>
+      <li><a href="#debugging">04 Debugging Like a Pro</a></li>
+      <li><a href="#web-apis">05 Web APIs</a></li>
+      <li><a href="#performance">06 Performance — Throttle &amp; Debounce</a></li>
+      <li><a href="#patterns-module">07 Design Patterns — Module &amp; Singleton</a></li>
+      <li><a href="#patterns-observer">08 Design Patterns — Observer &amp; Factory</a></li>
+      <li><a href="#smart-form">09 Build It: Smart Form Validator</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · ERROR HANDLING
+    ══════════════════════════════ -->
+    <section id="error-handling" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">Error Handling</h2>
+      <p class="ch-intro">Errors are inevitable in any program. JavaScript gives you tools to catch them gracefully, recover from them, and even create your own custom error types — so your app never just silently dies.</p>
+
+      <h3 class="sub-heading">try / catch / finally</h3>
+      <p style="margin-bottom:1rem;">Wrap code that might fail in a <code>try</code> block. If it throws, the <code>catch</code> block runs. The <code>finally</code> block always runs — whether or not there was an error.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>try {
+  // Code that might throw
+  const result = JSON.parse("{ invalid json }");
+  console.log(result);
+} catch (error) {
+  // Runs only when an error is thrown
+  console.log("Caught:", error.message);
+} finally {
+  // Always runs — use for cleanup
+  console.log("Done — this always prints");
+}
+// Output:
+// Caught: Unexpected token 'i', "{ invalid json }" is not valid JSON
+// Done — this always prints</code></pre>
+      </div>
+
+      <h3 class="sub-heading">throw — Raise Your Own Errors</h3>
+      <p style="margin-bottom:1rem;">You can throw any value, but best practice is to throw an instance of <code>Error</code> (or a subclass). This preserves the stack trace and message.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Division by zero is not allowed");
+  }
+  return a / b;
+}
+
+try {
+  console.log(divide(10, 2));   // 5
+  console.log(divide(10, 0));   // throws!
+} catch (e) {
+  console.log("Error:", e.message);
+}
+// Output:
+// 5
+// Error: Division by zero is not allowed</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Built-in Error Types</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Error Type</th><th>When it occurs</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Error</code></td>
+            <td>Generic base — use when no specific type fits</td>
+            <td><code>throw new Error("oops")</code></td>
+          </tr>
+          <tr>
+            <td><code>TypeError</code></td>
+            <td>Operation on wrong type</td>
+            <td><code>null.property</code></td>
+          </tr>
+          <tr>
+            <td><code>RangeError</code></td>
+            <td>Value outside allowable range</td>
+            <td><code>new Array(-1)</code></td>
+          </tr>
+          <tr>
+            <td><code>ReferenceError</code></td>
+            <td>Accessing an undeclared variable</td>
+            <td><code>console.log(x)</code> (x not declared)</td>
+          </tr>
+          <tr>
+            <td><code>SyntaxError</code></td>
+            <td>Invalid JavaScript syntax</td>
+            <td><code>JSON.parse("bad")</code></td>
+          </tr>
+          <tr>
+            <td><code>URIError</code></td>
+            <td>Malformed URI passed to decodeURIComponent</td>
+            <td><code>decodeURIComponent("%")</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Custom Error Classes</h3>
+      <p style="margin-bottom:1rem;">Extend <code>Error</code> to create domain-specific error types. Then you can catch different errors differently using <code>instanceof</code>.</p>
+      <div class="code-block">
+        <div class="code-header">custom-errors.js</div>
+        <pre><code>class ValidationError extends Error {
+  constructor(message, field) {
+    super(message);
+    this.name    = "ValidationError";
+    this.field   = field;   // custom property
+  }
+}
+
+class NetworkError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.name       = "NetworkError";
+    this.statusCode = statusCode;
+  }
+}
+
+function validateAge(age) {
+  if (typeof age !== "number") {
+    throw new ValidationError("Age must be a number", "age");
+  }
+  if (age < 0 || age > 150) {
+    throw new ValidationError("Age out of range", "age");
+  }
+}
+
+try {
+  validateAge("twenty");
+} catch (e) {
+  if (e instanceof ValidationError) {
+    console.log(`Validation failed on field "${e.field}": ${e.message}`);
+  } else if (e instanceof NetworkError) {
+    console.log(`Network error ${e.statusCode}: ${e.message}`);
+  } else {
+    throw e;   // re-throw unknown errors
+  }
+}
+// Output: Validation failed on field "age": Age must be a number</code></pre>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <p><strong>Re-throwing:</strong> If you catch an error but it's not the type you expected, re-throw it with <code>throw e</code>. Swallowing every error silently is one of the most common mistakes in error handling — it hides real bugs.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Error Handling</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Basic try/catch/finally
+try {
+  const data = JSON.parse("not valid json");
+} catch (e) {
+  console.log("Caught:", e.constructor.name, "-", e.message);
+} finally {
+  console.log("finally always runs");
+}
+
+// Custom validation
+class ValidationError extends Error {
+  constructor(msg, field) {
+    super(msg);
+    this.name = "ValidationError";
+    this.field = field;
+  }
+}
+
+function validateEmail(email) {
+  if (!email.includes("@")) {
+    throw new ValidationError("Invalid email address", "email");
+  }
+  return true;
+}
+
+try {
+  validateEmail("notanemail");
+} catch (e) {
+  if (e instanceof ValidationError) {
+    console.log(`Field "${e.field}": ${e.message}`);
+  }
+}
+
+// TypeError example
+try {
+  null.toString();
+} catch (e) {
+  console.log(e instanceof TypeError, e.message);
+}'
+>// Basic try/catch/finally
+try {
+  const data = JSON.parse("not valid json");
+} catch (e) {
+  console.log("Caught:", e.constructor.name, "-", e.message);
+} finally {
+  console.log("finally always runs");
+}
+
+// Custom validation
+class ValidationError extends Error {
+  constructor(msg, field) {
+    super(msg);
+    this.name = "ValidationError";
+    this.field = field;
+  }
+}
+
+function validateEmail(email) {
+  if (!email.includes("@")) {
+    throw new ValidationError("Invalid email address", "email");
+  }
+  return true;
+}
+
+try {
+  validateEmail("notanemail");
+} catch (e) {
+  if (e instanceof ValidationError) {
+    console.log(`Field "${e.field}": ${e.message}`);
+  }
+}
+
+// TypeError example
+try {
+  null.toString();
+} catch (e) {
+  console.log(e instanceof TypeError, e.message);
+}</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Golden rule:</strong> Only catch errors you can meaningfully handle. If you don't know how to recover from an error, re-throw it. Silent catch blocks that do nothing are worse than no error handling at all.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch" target="_blank" rel="noopener">try/catch — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error" target="_blank" rel="noopener">Error — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-error-handling-best-practices-1e10fbd06a26" target="_blank" rel="noopener">Error Handling Best Practices — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · REGULAR EXPRESSIONS
+    ══════════════════════════════ -->
+    <section id="regex" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Regular Expressions</h2>
+      <p class="ch-intro">Regular expressions (regex) are patterns that match text. They let you validate inputs, search strings, extract data, and replace text — all with compact, powerful syntax.</p>
+
+      <h3 class="sub-heading">Creating a Regex</h3>
+      <div class="code-block">
+        <div class="code-header">Two ways to create a regex</div>
+        <pre><code>// Literal syntax — preferred for known patterns
+const pattern = /hello/;
+
+// Constructor — useful for dynamic patterns built from variables
+const word = "hello";
+const dynamic = new RegExp(word, "i");  // case-insensitive</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Character Classes &amp; Quantifiers</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Character Classes</div>
+          <p><code>\d</code> — digit (0–9)<br>
+          <code>\w</code> — word char (a-z, A-Z, 0-9, _)<br>
+          <code>\s</code> — whitespace (space, tab, newline)<br>
+          <code>[abc]</code> — any of a, b, or c<br>
+          <code>[^abc]</code> — anything except a, b, c<br>
+          <code>[a-z]</code> — any lowercase letter<br>
+          <code>.</code> — any character except newline</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Quantifiers</div>
+          <p><code>*</code> — 0 or more<br>
+          <code>+</code> — 1 or more<br>
+          <code>?</code> — 0 or 1 (optional)<br>
+          <code>{3}</code> — exactly 3<br>
+          <code>{2,5}</code> — 2 to 5<br>
+          <code>{2,}</code> — 2 or more<br>
+          <code>^</code> / <code>$</code> — start / end of string</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Flags</div>
+          <p><code>g</code> — global (find all matches)<br>
+          <code>i</code> — case-insensitive<br>
+          <code>m</code> — multiline (^ and $ match line start/end)<br>
+          <code>s</code> — dotAll (. matches newline too)</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Key Methods</h3>
+      <div class="code-block">
+        <div class="code-header">regex-methods.js</div>
+        <pre><code>const email = "user@example.com";
+const phone = "9876543210";
+
+// .test() — returns true/false — use for validation
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+console.log(emailRegex.test(email));       // true
+console.log(emailRegex.test("notvalid"));  // false
+
+// .match() — returns array of matches or null
+const str = "Call 9876543210 or 9123456789 for details";
+const phones = str.match(/\d{10}/g);       // g flag = all matches
+console.log(phones);  // ["9876543210", "9123456789"]
+
+// .exec() — like match but iterates, includes capture groups
+const dateStr = "Today is 2024-06-15";
+const dateRegex = /(\d{4})-(\d{2})-(\d{2})/;
+const match = dateRegex.exec(dateStr);
+if (match) {
+  console.log("Full:", match[0]);   // "2024-06-15"
+  console.log("Year:", match[1]);   // "2024"
+  console.log("Month:", match[2]);  // "06"
+  console.log("Day:", match[3]);    // "15"
+}
+
+// .replace() — substitute matches
+const messy = "Hello   World  with  extra   spaces";
+const clean = messy.replace(/\s+/g, " ");
+console.log(clean);  // "Hello World with extra spaces"
+
+// Replace with a function
+const names = "john doe, jane smith";
+const titled = names.replace(/\b\w/g, ch => ch.toUpperCase());
+console.log(titled);  // "John Doe, Jane Smith"
+
+// .split() with regex
+const csv = "apple, banana,cherry ,  date";
+const fruits = csv.split(/\s*,\s*/);
+console.log(fruits);  // ["apple", "banana", "cherry", "date"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Common Validation Patterns</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Pattern</th><th>Regex</th><th>What it validates</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Email</td>
+            <td><code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code></td>
+            <td>Has @ and domain — basic check</td>
+          </tr>
+          <tr>
+            <td>Indian mobile</td>
+            <td><code>/^[6-9]\d{9}$/</code></td>
+            <td>Starts with 6-9, 10 digits total</td>
+          </tr>
+          <tr>
+            <td>PIN code</td>
+            <td><code>/^\d{6}$/</code></td>
+            <td>Exactly 6 digits</td>
+          </tr>
+          <tr>
+            <td>Alphanumeric</td>
+            <td><code>/^[a-zA-Z0-9]+$/</code></td>
+            <td>Letters and numbers only</td>
+          </tr>
+          <tr>
+            <td>Hex colour</td>
+            <td><code>/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/</code></td>
+            <td>#fff or #ffffff format</td>
+          </tr>
+          <tr>
+            <td>URL (simple)</td>
+            <td><code>/^https?:\/\/.+\..+/</code></td>
+            <td>Starts with http:// or https://</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Try It — Regular Expressions</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// .test() — validation
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+console.log("Valid email?", emailRegex.test("user@example.com"));    // true
+console.log("Valid email?", emailRegex.test("notvalid.com"));        // false
+
+// .match() — find all numbers in a string
+const text = "Order 42 shipped on June 15, 2024 via route 7";
+const numbers = text.match(/\d+/g);
+console.log("Numbers found:", numbers);  // ["42", "15", "2024", "7"]
+
+// .replace() — clean whitespace
+const messy = "too   many    spaces   here";
+console.log(messy.replace(/\s+/g, " "));  // "too many spaces here"
+
+// Capture groups — extract parts of a date
+const dateRegex = /(\d{4})-(\d{2})-(\d{2})/;
+const m = "2024-06-15".match(dateRegex);
+console.log("Year:", m[1], "Month:", m[2], "Day:", m[3]);
+
+// Title case with replace + function
+const name = "john doe";
+const titled = name.replace(/\b\w/g, c => c.toUpperCase());
+console.log(titled); // "John Doe"'
+>// .test() — validation
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+console.log("Valid email?", emailRegex.test("user@example.com"));    // true
+console.log("Valid email?", emailRegex.test("notvalid.com"));        // false
+
+// .match() — find all numbers in a string
+const text = "Order 42 shipped on June 15, 2024 via route 7";
+const numbers = text.match(/\d+/g);
+console.log("Numbers found:", numbers);  // ["42", "15", "2024", "7"]
+
+// .replace() — clean whitespace
+const messy = "too   many    spaces   here";
+console.log(messy.replace(/\s+/g, " "));  // "too many spaces here"
+
+// Capture groups — extract parts of a date
+const dateRegex = /(\d{4})-(\d{2})-(\d{2})/;
+const m = "2024-06-15".match(dateRegex);
+console.log("Year:", m[1], "Month:", m[2], "Day:", m[3]);
+
+// Title case with replace + function
+const name = "john doe";
+const titled = name.replace(/\b\w/g, c => c.toUpperCase());
+console.log(titled); // "John Doe"</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Testing regex:</strong> Use <a href="https://regex101.com" target="_blank" rel="noopener">regex101.com</a> to build and test patterns interactively. Paste your pattern and a test string — it highlights matches and explains each part of the regex.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank" rel="noopener">RegExp — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/introduction-to-regex-in-javascript-6ea7bf4e5a08" target="_blank" rel="noopener">Regex in JavaScript — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · LOCAL STORAGE & SESSION STORAGE
+    ══════════════════════════════ -->
+    <section id="storage" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Local Storage &amp; Session Storage</h2>
+      <p class="ch-intro">Browsers give you two simple key-value stores to persist data on the user's device — no server, no database needed. Perfect for preferences, form state, and small datasets.</p>
+
+      <h3 class="sub-heading">localStorage vs sessionStorage</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">localStorage</div>
+          <p>Data persists until explicitly cleared. Survives tab closes, browser restarts, and computer reboots. Shared across all tabs of the same origin.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">sessionStorage</div>
+          <p>Data lasts only for the browser tab session. Cleared when the tab is closed. Each tab gets its own isolated storage — not shared.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The Core API</h3>
+      <div class="code-block">
+        <div class="code-header">storage.js</div>
+        <pre><code>// setItem — save a string value
+localStorage.setItem("theme", "dark");
+localStorage.setItem("username", "Naman");
+
+// getItem — retrieve (returns null if key doesn't exist)
+const theme = localStorage.getItem("theme");    // "dark"
+const missing = localStorage.getItem("xyz");    // null
+
+// removeItem — delete one key
+localStorage.removeItem("username");
+
+// clear — wipe everything for this origin
+// localStorage.clear();  // ← be careful!
+
+// length and key() — iterate all stored keys
+console.log(localStorage.length);
+for (let i = 0; i < localStorage.length; i++) {
+  const key = localStorage.key(i);
+  console.log(key, "=", localStorage.getItem(key));
+}
+
+// sessionStorage works identically — just different scope
+sessionStorage.setItem("tempData", "only for this tab");</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Storing Objects — JSON.stringify / JSON.parse</h3>
+      <p style="margin-bottom:1rem;">localStorage only stores strings. To store objects or arrays, serialize them with <code>JSON.stringify()</code> and deserialize with <code>JSON.parse()</code>.</p>
+      <div class="code-block">
+        <div class="code-header">storage-objects.js</div>
+        <pre><code>// Saving an object
+const user = { name: "Naman", age: 25, role: "student" };
+localStorage.setItem("user", JSON.stringify(user));
+
+// Retrieving — JSON.parse converts string back to object
+const stored = localStorage.getItem("user");
+if (stored) {
+  const parsed = JSON.parse(stored);
+  console.log(parsed.name);  // "Naman"
+  console.log(parsed.age);   // 25
+}
+
+// Saving an array
+const scores = [78, 85, 90, 62];
+localStorage.setItem("scores", JSON.stringify(scores));
+const loadedScores = JSON.parse(localStorage.getItem("scores"));
+console.log(loadedScores);   // [78, 85, 90, 62]
+
+// Helper functions — wrap with error handling
+function saveToStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.error("Storage failed:", e.message);
+  }
+}
+
+function loadFromStorage(key, defaultValue = null) {
+  try {
+    const item = localStorage.getItem(key);
+    return item !== null ? JSON.parse(item) : defaultValue;
+  } catch (e) {
+    console.error("Parse failed:", e.message);
+    return defaultValue;
+  }
+}
+
+saveToStorage("prefs", { fontSize: 16, lang: "en" });
+const prefs = loadFromStorage("prefs", { fontSize: 14, lang: "en" });
+console.log(prefs.fontSize);  // 16</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Storage Events</h3>
+      <p style="margin-bottom:1rem;">When localStorage changes in one tab, other tabs of the same origin receive a <code>storage</code> event. Useful for syncing state across tabs.</p>
+      <div class="code-block">
+        <div class="code-header">Listening for storage changes in other tabs</div>
+        <pre><code>// This fires in OTHER tabs — not the tab that made the change
+window.addEventListener("storage", (event) => {
+  console.log("Key changed:", event.key);
+  console.log("Old value:", event.oldValue);
+  console.log("New value:", event.newValue);
+  console.log("From origin:", event.url);
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Local Storage</h3>
+      <p style="margin-bottom:0.75rem;">localStorage is fully accessible here. Values you set will persist in your browser's storage. Open DevTools → Application → Local Storage to see them.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='try {
+  // Save some values
+  localStorage.setItem("lesson", "storage");
+  localStorage.setItem("progress", JSON.stringify({ chapter: 3, done: false }));
+
+  // Retrieve them
+  console.log("lesson:", localStorage.getItem("lesson"));
+
+  const prog = JSON.parse(localStorage.getItem("progress"));
+  console.log("chapter:", prog.chapter);
+  console.log("done:", prog.done);
+
+  // How many keys are stored?
+  console.log("Total keys in storage:", localStorage.length);
+
+  // List all keys
+  for (let i = 0; i < localStorage.length; i++) {
+    console.log(" key[" + i + "]:", localStorage.key(i));
+  }
+
+  // Cleanup — remove what we added
+  localStorage.removeItem("lesson");
+  localStorage.removeItem("progress");
+  console.log("Cleaned up. Keys now:", localStorage.length);
+} catch (e) {
+  console.error("Storage error:", e.message);
+}'
+>try {
+  // Save some values
+  localStorage.setItem("lesson", "storage");
+  localStorage.setItem("progress", JSON.stringify({ chapter: 3, done: false }));
+
+  // Retrieve them
+  console.log("lesson:", localStorage.getItem("lesson"));
+
+  const prog = JSON.parse(localStorage.getItem("progress"));
+  console.log("chapter:", prog.chapter);
+  console.log("done:", prog.done);
+
+  // How many keys are stored?
+  console.log("Total keys in storage:", localStorage.length);
+
+  // List all keys
+  for (let i = 0; i < localStorage.length; i++) {
+    console.log(" key[" + i + "]:", localStorage.key(i));
+  }
+
+  // Cleanup — remove what we added
+  localStorage.removeItem("lesson");
+  localStorage.removeItem("progress");
+  console.log("Cleaned up. Keys now:", localStorage.length);
+} catch (e) {
+  console.error("Storage error:", e.message);
+}</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p><strong>Limits &amp; gotchas:</strong> Each origin gets ~5 MB of localStorage. In private/incognito mode, storage may be blocked or cleared on exit. Always wrap localStorage calls in <code>try/catch</code> — users can disable storage, or you might exceed the quota.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>When to use which:</strong> Use <code>localStorage</code> for user preferences, cached API responses, and anything that should survive a browser restart. Use <code>sessionStorage</code> for temporary state like multi-step form data within a single tab session.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank" rel="noopener">localStorage — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/localstorage-vs-sessionstorage-vs-cookie-4a85f1c8e72e" target="_blank" rel="noopener">Storage Comparison — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · DEBUGGING LIKE A PRO
+    ══════════════════════════════ -->
+    <section id="debugging" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Debugging Like a Pro</h2>
+      <p class="ch-intro">Debugging is a core developer skill — not just fixing bugs, but knowing how to find them fast. The browser DevTools and the <code>console</code> object give you everything you need.</p>
+
+      <h3 class="sub-heading">Beyond console.log — The Full console API</h3>
+      <div class="code-block">
+        <div class="code-header">console-methods.js</div>
+        <pre><code>// console.table — display arrays/objects as a table
+const users = [
+  { name: "Naman", age: 25, role: "admin" },
+  { name: "Priya", age: 22, role: "user"  },
+  { name: "Raj",   age: 30, role: "mod"   }
+];
+console.table(users);  // renders a formatted table in DevTools
+
+// console.group / console.groupEnd — collapsible groups
+console.group("User Validation");
+  console.log("Checking name...");
+  console.log("Checking email...");
+  console.warn("Email not verified");
+console.groupEnd();
+
+// console.time / console.timeEnd — measure execution time
+console.time("loop");
+let sum = 0;
+for (let i = 0; i < 1_000_000; i++) sum += i;
+console.timeEnd("loop");  // "loop: 3.41ms"
+
+// console.count — count how many times a label is reached
+function processItem(type) {
+  console.count(type);
+}
+processItem("A");  // A: 1
+processItem("B");  // B: 1
+processItem("A");  // A: 2
+
+// console.assert — only logs when condition is false
+console.assert(1 === 1, "Math is broken");  // nothing printed
+console.assert(1 === 2, "1 is not 2!");     // prints assertion error
+
+// console.dir — inspect DOM node properties
+// console.dir(document.body);  // shows all properties/methods
+
+// console.trace — show the call stack
+function a() { b(); }
+function b() { console.trace("called from b"); }
+a();  // prints: called from b → b → a</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The debugger Statement</h3>
+      <p style="margin-bottom:1rem;">Place <code>debugger</code> anywhere in your code. When DevTools is open, execution pauses there — exactly like a manual breakpoint. No need to find the line in the Sources panel.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>function calculateTotal(cart) {
+  debugger;  // execution pauses here when DevTools is open
+  let total = 0;
+  for (const item of cart) {
+    total += item.price * item.qty;
+  }
+  return total;
+}
+// Open DevTools (F12) first, then call this function
+// You can inspect cart, item, total in the Scope panel</code></pre>
+      </div>
+
+      <h3 class="sub-heading">DevTools — Key Panels for Debugging</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Console Panel</div>
+          <p>Run JS interactively, see logs, errors, and warnings. Filter by level. Click file:line links to jump to source.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Sources Panel</div>
+          <p>Browse your files. Click a line number to set a breakpoint. Execution stops there — inspect variables in the Scope sidebar.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Call Stack Panel</div>
+          <p>Shows the chain of function calls that led to the current pause. Click any frame to jump to that function's context.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Watch Expressions</div>
+          <p>Add expressions (e.g., <code>user.age > 18</code>, <code>cart.length</code>) to the Watch panel. They re-evaluate at every breakpoint pause.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">🛠️</div>
+        <div class="insight-content">
+          <p><strong>Breakpoint workflow:</strong> (1) Open DevTools → Sources. (2) Click a line number to add a breakpoint. (3) Trigger the code (click a button, reload). (4) Execution pauses. (5) Use Step Over (F10) to go line by line, Step Into (F11) to enter a function call. (6) Check Scope for local variables, Watch for your expressions.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Console Methods</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// console.table — great for arrays of objects
+const products = [
+  { name: "Laptop", price: 50000, stock: 12 },
+  { name: "Phone",  price: 25000, stock: 35 },
+  { name: "Tablet", price: 18000, stock: 8  }
+];
+console.table(products);
+
+// console.time — measure performance
+console.time("array-fill");
+const arr = [];
+for (let i = 0; i < 10000; i++) arr.push(i * 2);
+console.timeEnd("array-fill");
+
+// console.count
+function greet(name) {
+  console.count("greet called");
+  return "Hello, " + name;
+}
+greet("Naman");
+greet("Priya");
+greet("Raj");
+
+// console.assert
+const age = 17;
+console.assert(age >= 18, "User is a minor — cannot proceed!");
+
+// console.group
+console.group("Config Check");
+console.log("Theme: dark");
+console.warn("Language not set — defaulting to en");
+console.groupEnd();'
+>// console.table — great for arrays of objects
+const products = [
+  { name: "Laptop", price: 50000, stock: 12 },
+  { name: "Phone",  price: 25000, stock: 35 },
+  { name: "Tablet", price: 18000, stock: 8  }
+];
+console.table(products);
+
+// console.time — measure performance
+console.time("array-fill");
+const arr = [];
+for (let i = 0; i < 10000; i++) arr.push(i * 2);
+console.timeEnd("array-fill");
+
+// console.count
+function greet(name) {
+  console.count("greet called");
+  return "Hello, " + name;
+}
+greet("Naman");
+greet("Priya");
+greet("Raj");
+
+// console.assert
+const age = 17;
+console.assert(age >= 18, "User is a minor — cannot proceed!");
+
+// console.group
+console.group("Config Check");
+console.log("Theme: dark");
+console.warn("Language not set — defaulting to en");
+console.groupEnd();</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Debugging mindset:</strong> Don't guess — verify. When something isn't right, add <code>console.log()</code> before and after the suspect code to narrow down where the value changes. Binary search your way to the bug.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/console" target="_blank" rel="noopener">Console API — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/mastering-javascript-debugging-in-the-browser-9b8e8f2bfc93" target="_blank" rel="noopener">Debugging Masterclass — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · WEB APIS — BROWSER SUPERPOWERS
+    ══════════════════════════════ -->
+    <section id="web-apis" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Web APIs — Browser Superpowers</h2>
+      <p class="ch-intro">The browser ships with a rich set of built-in APIs. You don't install them — they're already there. GPS, clipboard access, notifications — all through JavaScript.</p>
+
+      <h3 class="sub-heading">Geolocation API</h3>
+      <p style="margin-bottom:1rem;">Get the user's physical location (requires permission + HTTPS in production).</p>
+      <div class="code-block">
+        <div class="code-header">geolocation.js — requires HTTPS and user permission</div>
+        <pre><code>if ("geolocation" in navigator) {
+  // Always check for support first!
+  navigator.geolocation.getCurrentPosition(
+    // Success callback
+    (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const acc = position.coords.accuracy;  // meters
+      console.log(`Location: ${lat}, ${lon} (±${acc}m)`);
+    },
+    // Error callback
+    (error) => {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          console.log("User denied location access");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          console.log("Location unavailable");
+          break;
+        case error.TIMEOUT:
+          console.log("Request timed out");
+          break;
+      }
+    },
+    // Options
+    { timeout: 10000, enableHighAccuracy: true }
+  );
+} else {
+  console.log("Geolocation not supported in this browser");
+}
+
+// Watch for continuous updates (e.g. for navigation)
+const watchId = navigator.geolocation.watchPosition((pos) => {
+  console.log("Updated position:", pos.coords.latitude);
+});
+// Stop watching
+// navigator.geolocation.clearWatch(watchId);</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Clipboard API</h3>
+      <p style="margin-bottom:1rem;">Read from and write to the system clipboard. Requires HTTPS and user gesture (a click). The modern async API is much cleaner than the old <code>document.execCommand</code>.</p>
+      <div class="code-block">
+        <div class="code-header">clipboard.js — requires HTTPS and user gesture</div>
+        <pre><code>// Write to clipboard (e.g., "Copy to clipboard" button)
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    console.log("Copied:", text);
+  } catch (e) {
+    console.error("Copy failed:", e.message);
+  }
+}
+
+// Read from clipboard (requires explicit user permission)
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    console.log("Pasted:", text);
+    return text;
+  } catch (e) {
+    console.error("Paste failed:", e.message);
+  }
+}
+
+// In a button handler:
+document.getElementById("copyBtn").addEventListener("click", () => {
+  copyToClipboard("https://example.com/share/abc123");
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Notifications API</h3>
+      <p style="margin-bottom:1rem;">Show desktop notifications to the user. Requires permission — and HTTPS in production. Never request permission without a clear user action.</p>
+      <div class="code-block">
+        <div class="code-header">notifications.js — requires HTTPS and permission</div>
+        <pre><code>async function requestAndNotify(title, body) {
+  // Check support
+  if (!("Notification" in window)) {
+    console.log("Notifications not supported");
+    return;
+  }
+
+  // Request permission (only ask after a user action — e.g., a click)
+  const permission = await Notification.requestPermission();
+
+  if (permission === "granted") {
+    const notification = new Notification(title, {
+      body:  body,
+      icon:  "/icon.png",   // optional
+      badge: "/badge.png",  // optional
+      tag:   "update-1"     // replaces previous notification with same tag
+    });
+
+    // Handle click on the notification
+    notification.onclick = () => {
+      window.focus();
+      notification.close();
+    };
+  } else {
+    console.log("Permission:", permission);  // "denied" or "default"
+  }
+}
+
+// Only call inside a button click handler
+// requestAndNotify("New Message", "Naman sent you a file");</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Other Useful Browser APIs</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Fetch API</div>
+          <p>Load data from URLs without page refresh. <code>fetch(url).then(r =&gt; r.json())</code> — covered deeply in the Async chapter.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Web Storage API</div>
+          <p><code>localStorage</code> and <code>sessionStorage</code> — covered in Chapter 03.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Intersection Observer</div>
+          <p>Detect when an element scrolls into view — perfect for lazy loading images and scroll animations.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Web Workers</div>
+          <p>Run heavy computation in a background thread without blocking the UI. Use <code>new Worker('worker.js')</code>.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">🔒</div>
+        <div class="insight-content">
+          <p><strong>HTTPS requirement:</strong> Many powerful APIs (Geolocation, Clipboard, Notifications, Service Workers, Camera, Microphone) require a secure context (HTTPS). They will silently fail or throw on plain HTTP. On localhost they work without HTTPS during development.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Feature Detection</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Feature detection — check before you use
+const features = {
+  geolocation:   "geolocation" in navigator,
+  clipboard:     "clipboard" in navigator,
+  notifications: "Notification" in window,
+  localStorage:  (() => { try { localStorage.setItem("_t", "1"); localStorage.removeItem("_t"); return true; } catch(e) { return false; } })(),
+  serviceWorker: "serviceWorker" in navigator,
+  webWorker:     typeof Worker !== "undefined",
+  fetch:         typeof fetch !== "undefined",
+};
+
+for (const [api, supported] of Object.entries(features)) {
+  console.log((supported ? "✓" : "✗") + " " + api + ": " + (supported ? "available" : "not available"));
+}'
+>// Feature detection — check before you use
+const features = {
+  geolocation:   "geolocation" in navigator,
+  clipboard:     "clipboard" in navigator,
+  notifications: "Notification" in window,
+  localStorage:  (() => { try { localStorage.setItem("_t", "1"); localStorage.removeItem("_t"); return true; } catch(e) { return false; } })(),
+  serviceWorker: "serviceWorker" in navigator,
+  webWorker:     typeof Worker !== "undefined",
+  fetch:         typeof fetch !== "undefined",
+};
+
+for (const [api, supported] of Object.entries(features)) {
+  console.log((supported ? "✓" : "✗") + " " + api + ": " + (supported ? "available" : "not available"));
+}</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Always feature-detect:</strong> Before using any Web API, check it exists: <code>if ("geolocation" in navigator)</code>. This is called feature detection and prevents crashes in browsers that don't support the API. <a href="https://caniuse.com" target="_blank" rel="noopener">caniuse.com</a> shows browser support tables.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API" target="_blank" rel="noopener">Geolocation — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-browser-apis-you-should-know-in-2024-9e1b43bc4b11" target="_blank" rel="noopener">Browser APIs You Should Know — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · PERFORMANCE — THROTTLE & DEBOUNCE
+    ══════════════════════════════ -->
+    <section id="performance" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Performance — Throttle &amp; Debounce</h2>
+      <p class="ch-intro">Some events fire hundreds of times per second — scroll, resize, keypress. Running expensive code on every single event kills performance. Throttle and debounce are the two solutions.</p>
+
+      <h3 class="sub-heading">The Problem — Event Flooding</h3>
+      <div class="code-block">
+        <div class="code-header">The scroll event without any optimization</div>
+        <pre><code>// BAD — scroll fires up to 100+ times/second while scrolling
+// Each call does expensive DOM work → janky UI
+window.addEventListener("scroll", () => {
+  // This runs 100+ times per second while scrolling
+  document.getElementById("pos").textContent = window.scrollY + "px";
+  calculateVisibleElements();   // expensive!
+  fetchMoreContent();           // network call on every pixel!
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Debounce — Wait Until They Stop</h3>
+      <p style="margin-bottom:1rem;"><strong>Debounce</strong> delays execution until the user has stopped triggering the event for a given period. Perfect for search inputs — you don't want to fire an API call on every keystroke, only when the user pauses.</p>
+      <div class="code-block">
+        <div class="code-header">debounce.js — implement from scratch</div>
+        <pre><code>function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);          // cancel any pending call
+    timer = setTimeout(() => {
+      fn.apply(this, args);       // call after delay
+    }, delay);
+  };
+}
+
+// Usage — search input
+const searchInput = document.getElementById("search");
+
+const handleSearch = debounce((event) => {
+  console.log("Searching for:", event.target.value);
+  // fetch(`/api/search?q=${event.target.value}`)
+}, 400);  // wait 400ms after last keystroke
+
+searchInput.addEventListener("input", handleSearch);
+
+// Without debounce: 10 API calls typing "javascript"
+// With debounce:    1 API call after typing stops</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Throttle — Limit to Once Per Interval</h3>
+      <p style="margin-bottom:1rem;"><strong>Throttle</strong> ensures a function runs at most once per time interval, even if the event fires constantly. Perfect for scroll and resize handlers — you want them to run, but not on every single pixel.</p>
+      <div class="code-block">
+        <div class="code-header">throttle.js — implement from scratch</div>
+        <pre><code>function throttle(fn, limit) {
+  let inThrottle = false;
+  return function(...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);       // call immediately
+      inThrottle = true;
+      setTimeout(() => {
+        inThrottle = false;       // allow next call after limit
+      }, limit);
+    }
+  };
+}
+
+// Usage — scroll handler
+const handleScroll = throttle(() => {
+  console.log("Scroll position:", window.scrollY);
+  updateStickyHeader();    // DOM work — safe to do every 100ms
+}, 100);  // max once every 100ms
+
+window.addEventListener("scroll", handleScroll);
+
+// Without throttle: 100 calls/sec while scrolling
+// With throttle:    10 calls/sec (100ms interval)</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Which to Use?</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">Use Debounce when…</div>
+          <p>You only care about the final value after the user stops. Search inputs, form validation on blur, auto-save after the user stops typing, window resize layout recalculation.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Use Throttle when…</div>
+          <p>You want regular updates during a continuous action. Scroll position tracking, infinite scroll trigger, progress bars during upload, resize-based animations.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Lazy Loading — Load Only What's Needed</h3>
+      <p style="margin-bottom:1rem;">Don't load resources until they're needed. The simplest form is the native <code>loading="lazy"</code> attribute on images — the browser automatically defers loading images outside the viewport.</p>
+      <div class="code-block">
+        <div class="code-header">Lazy loading approaches</div>
+        <pre><code>// 1. Native lazy loading — just add loading="lazy" to img
+// &lt;img src="photo.jpg" loading="lazy" alt="..." /&gt;
+
+// 2. Intersection Observer — load when element enters viewport
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      img.src = img.dataset.src;   // set real src
+      observer.unobserve(img);     // stop watching
+    }
+  });
+}, { threshold: 0.1 });  // trigger when 10% visible
+
+document.querySelectorAll("img[data-src]").forEach(img => {
+  observer.observe(img);
+});
+
+// 3. Avoid layout thrashing — read then write, not interleaved
+// BAD — thrashes (forces reflow on each iteration)
+elements.forEach(el => {
+  const height = el.offsetHeight;       // READ — forces reflow
+  el.style.height = (height * 2) + "px"; // WRITE
+});
+
+// GOOD — batch reads, then batch writes
+const heights = elements.map(el => el.offsetHeight);  // all reads
+elements.forEach((el, i) => {
+  el.style.height = (heights[i] * 2) + "px";          // all writes
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Debounce &amp; Throttle</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+function throttle(fn, limit) {
+  let inThrottle = false;
+  return function(...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => { inThrottle = false; }, limit);
+    }
+  };
+}
+
+// Simulate debounce — only the last call runs
+const debouncedLog = debounce((msg) => {
+  console.log("DEBOUNCED:", msg);
+}, 300);
+
+// Simulate rapid calls (like typing)
+debouncedLog("k");
+debouncedLog("ke");
+debouncedLog("key");
+// Only "DEBOUNCED: key" will log after 300ms
+
+// Simulate throttle
+const throttledLog = throttle((n) => {
+  console.log("THROTTLED call:", n);
+}, 100);
+
+// Fire 5 rapid calls — only the first runs, rest are ignored
+for (let i = 1; i <= 5; i++) {
+  throttledLog(i);
+}
+// Only "THROTTLED call: 1" logs immediately
+
+console.log("Done setting up timers — check output after a moment");'
+>function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+function throttle(fn, limit) {
+  let inThrottle = false;
+  return function(...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => { inThrottle = false; }, limit);
+    }
+  };
+}
+
+// Simulate debounce — only the last call runs
+const debouncedLog = debounce((msg) => {
+  console.log("DEBOUNCED:", msg);
+}, 300);
+
+// Simulate rapid calls (like typing)
+debouncedLog("k");
+debouncedLog("ke");
+debouncedLog("key");
+// Only "DEBOUNCED: key" will log after 300ms
+
+// Simulate throttle
+const throttledLog = throttle((n) => {
+  console.log("THROTTLED call:", n);
+}, 100);
+
+// Fire 5 rapid calls — only the first runs, rest are ignored
+for (let i = 1; i <= 5; i++) {
+  throttledLog(i);
+}
+// Only "THROTTLED call: 1" logs immediately
+
+console.log("Done setting up timers — check output after a moment");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Memory aid:</strong> Debounce = "call me only after you stop." Throttle = "call me at most once per interval." Search box → debounce. Scroll handler → throttle.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/Performance" target="_blank" rel="noopener">Web Performance — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/understanding-throttling-and-debouncing-973131c1ba07" target="_blank" rel="noopener">Throttle vs Debounce — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · DESIGN PATTERNS — MODULE & SINGLETON
+    ══════════════════════════════ -->
+    <section id="patterns-module" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Design Patterns — Module &amp; Singleton</h2>
+      <p class="ch-intro">Design patterns are proven solutions to recurring code organisation problems. They don't have to be complex — at their core, they're just smarter ways to structure your code.</p>
+
+      <h3 class="sub-heading">Why Design Patterns?</h3>
+      <div class="insight-box">
+        <div class="insight-icon">🏗️</div>
+        <div class="insight-content">
+          <p>As code grows, problems emerge: variables pollute the global scope, the same logic is duplicated everywhere, state becomes unpredictable. Design patterns give you a vocabulary and structure to solve these problems before they become debt.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Module Pattern — Private State with Public API</h3>
+      <p style="margin-bottom:1rem;">The Module pattern uses an IIFE (Immediately Invoked Function Expression) to create a private scope. Only what you explicitly return is public. Everything else is hidden.</p>
+      <div class="code-block">
+        <div class="code-header">module-pattern.js</div>
+        <pre><code>// IIFE-based Module Pattern
+const CartModule = (function() {
+  // Private — not accessible outside
+  const _items   = [];
+  let   _discount = 0;
+
+  function _calculateTotal() {
+    const sub = _items.reduce((sum, item) => sum + item.price * item.qty, 0);
+    return sub * (1 - _discount);
+  }
+
+  // Public API — only these are returned
+  return {
+    addItem(item) {
+      _items.push(item);
+      console.log(`Added: ${item.name}`);
+    },
+    removeItem(name) {
+      const idx = _items.findIndex(i => i.name === name);
+      if (idx !== -1) _items.splice(idx, 1);
+    },
+    setDiscount(pct) {
+      _discount = pct / 100;
+    },
+    getTotal() {
+      return _calculateTotal();
+    },
+    getItemCount() {
+      return _items.length;
+    }
+  };
+})();
+
+CartModule.addItem({ name: "Laptop", price: 50000, qty: 1 });
+CartModule.addItem({ name: "Mouse",  price: 800,   qty: 2 });
+CartModule.setDiscount(10);  // 10% off
+
+console.log("Items:", CartModule.getItemCount());  // 2
+console.log("Total:", CartModule.getTotal());      // 46440
+
+// Private state is inaccessible:
+console.log(CartModule._items);    // undefined — good!
+console.log(CartModule._discount); // undefined — good!</code></pre>
+      </div>
+
+      <h3 class="sub-heading">ES6 Module Equivalent</h3>
+      <p style="margin-bottom:1rem;">In real projects, use native ES6 modules (<code>import</code>/<code>export</code>) — the browser enforces module scope automatically. The IIFE pattern is still useful in single-file scripts and legacy environments.</p>
+      <div class="code-block">
+        <div class="code-header">cart.js — ES6 module (requires type="module" on the script tag)</div>
+        <pre><code>// cart.js
+const _items = [];   // private to this module
+
+export function addItem(item) {
+  _items.push(item);
+}
+
+export function getTotal() {
+  return _items.reduce((sum, i) => sum + i.price * i.qty, 0);
+}
+
+// main.js
+// import { addItem, getTotal } from "./cart.js";
+// addItem({ name: "Phone", price: 25000, qty: 1 });
+// console.log(getTotal());  // 25000</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Singleton Pattern — One Instance Only</h3>
+      <p style="margin-bottom:1rem;">A Singleton ensures only one instance of a class ever exists. Perfect for shared resources: a configuration manager, a connection pool, a global event bus.</p>
+      <div class="code-block">
+        <div class="code-header">singleton.js</div>
+        <pre><code>class AppConfig {
+  constructor() {
+    if (AppConfig._instance) {
+      // If instance exists, return it instead of creating new
+      return AppConfig._instance;
+    }
+    // First-time initialisation
+    this.theme    = "light";
+    this.language = "en";
+    this.apiUrl   = "https://api.example.com";
+    AppConfig._instance = this;
+  }
+
+  set(key, value) {
+    this[key] = value;
+  }
+
+  get(key) {
+    return this[key];
+  }
+}
+
+// Both variables point to the exact same object
+const config1 = new AppConfig();
+const config2 = new AppConfig();
+
+config1.set("theme", "dark");
+
+console.log(config2.get("theme"));       // "dark" — same instance!
+console.log(config1 === config2);        // true — literally the same object
+
+// Practical use — a Logger singleton
+class Logger {
+  constructor() {
+    if (Logger._instance) return Logger._instance;
+    this._logs = [];
+    Logger._instance = this;
+  }
+
+  log(message) {
+    const entry = { time: Date.now(), message };
+    this._logs.push(entry);
+    console.log(`[LOG] ${message}`);
+  }
+
+  getLogs() { return [...this._logs]; }
+}
+
+const logA = new Logger();
+const logB = new Logger();
+
+logA.log("App started");
+logB.log("User logged in");
+
+console.log(logA.getLogs().length);   // 2 — both went to the same logger
+console.log(logA === logB);           // true</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Module &amp; Singleton</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Module Pattern
+const Counter = (function() {
+  let _count = 0;  // private
+
+  return {
+    increment() { _count++; },
+    decrement() { _count = Math.max(0, _count - 1); },
+    reset()     { _count = 0; },
+    value()     { return _count; }
+  };
+})();
+
+Counter.increment();
+Counter.increment();
+Counter.increment();
+Counter.decrement();
+console.log("Counter:", Counter.value());  // 2
+console.log("Private _count:", Counter._count);  // undefined — safe!
+
+// Singleton Pattern
+class Settings {
+  constructor() {
+    if (Settings._inst) return Settings._inst;
+    this.data = {};
+    Settings._inst = this;
+  }
+  set(k, v) { this.data[k] = v; }
+  get(k)    { return this.data[k]; }
+}
+
+const s1 = new Settings();
+const s2 = new Settings();
+
+s1.set("lang", "hi");
+console.log("s2 lang:", s2.get("lang"));  // "hi" — same instance
+console.log("Same object?", s1 === s2);   // true'
+>// Module Pattern
+const Counter = (function() {
+  let _count = 0;  // private
+
+  return {
+    increment() { _count++; },
+    decrement() { _count = Math.max(0, _count - 1); },
+    reset()     { _count = 0; },
+    value()     { return _count; }
+  };
+})();
+
+Counter.increment();
+Counter.increment();
+Counter.increment();
+Counter.decrement();
+console.log("Counter:", Counter.value());  // 2
+console.log("Private _count:", Counter._count);  // undefined — safe!
+
+// Singleton Pattern
+class Settings {
+  constructor() {
+    if (Settings._inst) return Settings._inst;
+    this.data = {};
+    Settings._inst = this;
+  }
+  set(k, v) { this.data[k] = v; }
+  get(k)    { return this.data[k]; }
+}
+
+const s1 = new Settings();
+const s2 = new Settings();
+
+s1.set("lang", "hi");
+console.log("s2 lang:", s2.get("lang"));  // "hi" — same instance
+console.log("Same object?", s1 === s2);   // true</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>When to use Singleton:</strong> Configuration objects, loggers, database connection pools, event buses — anywhere you need exactly one shared instance across your app. Don't overuse it — it makes testing harder because of shared global state.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Advanced_JavaScript_objects/Object-oriented_programming" target="_blank" rel="noopener">OOP in JS — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-design-patterns-module-singleton-24e41a86bdc2" target="_blank" rel="noopener">Module &amp; Singleton — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · DESIGN PATTERNS — OBSERVER & FACTORY
+    ══════════════════════════════ -->
+    <section id="patterns-observer" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Design Patterns — Observer &amp; Factory</h2>
+      <p class="ch-intro">Two more essential patterns: Observer lets parts of your app react to events without tight coupling, and Factory makes creating objects cleaner and more flexible.</p>
+
+      <h3 class="sub-heading">Observer / PubSub Pattern</h3>
+      <p style="margin-bottom:1rem;">The Observer pattern lets objects (subscribers) listen for events emitted by another object (the publisher). Parts of your app communicate without directly knowing about each other.</p>
+      <div class="code-block">
+        <div class="code-header">event-emitter.js — Observer / PubSub from scratch</div>
+        <pre><code>class EventEmitter {
+  constructor() {
+    this._listeners = {};  // { eventName: [fn, fn, ...] }
+  }
+
+  // Subscribe to an event
+  on(event, listener) {
+    if (!this._listeners[event]) {
+      this._listeners[event] = [];
+    }
+    this._listeners[event].push(listener);
+    return this;  // enable chaining
+  }
+
+  // Unsubscribe
+  off(event, listener) {
+    if (!this._listeners[event]) return;
+    this._listeners[event] = this._listeners[event]
+      .filter(fn => fn !== listener);
+    return this;
+  }
+
+  // Subscribe once — auto-removes after first call
+  once(event, listener) {
+    const wrapper = (...args) => {
+      listener(...args);
+      this.off(event, wrapper);
+    };
+    return this.on(event, wrapper);
+  }
+
+  // Emit — call all listeners for an event
+  emit(event, ...args) {
+    if (this._listeners[event]) {
+      this._listeners[event].forEach(fn => fn(...args));
+    }
+    return this;
+  }
+}
+
+// Real-world example: a shopping cart event bus
+const cart = new EventEmitter();
+
+cart.on("item:added", (item) => {
+  console.log(`Cart: Added ${item.name} (₹${item.price})`);
+});
+
+cart.on("item:added", (item) => {
+  console.log(`Analytics: tracked add-to-cart for ${item.name}`);
+});
+
+cart.once("checkout", () => {
+  console.log("Payment modal opened (won't open again)");
+});
+
+// Dispatch events
+cart.emit("item:added", { name: "Laptop", price: 50000 });
+cart.emit("item:added", { name: "Mouse",  price: 800   });
+cart.emit("checkout");
+cart.emit("checkout");  // once() listener won't fire again
+
+// Output:
+// Cart: Added Laptop (₹50000)
+// Analytics: tracked add-to-cart for Laptop
+// Cart: Added Mouse (₹800)
+// Analytics: tracked add-to-cart for Mouse
+// Payment modal opened (won't open again)</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Factory Pattern</h3>
+      <p style="margin-bottom:1rem;">A Factory is a function or class that creates objects for you. Instead of <code>new SomeClass()</code> scattered everywhere, you call a factory — it decides what type to create based on the input.</p>
+      <div class="code-block">
+        <div class="code-header">factory-pattern.js</div>
+        <pre><code>// Without factory — callers need to know all class names
+// const shape = new Circle(5);
+// const rect  = new Rectangle(4, 6);
+
+// With factory — one entry point, internal logic hidden
+class Circle {
+  constructor(radius) {
+    this.type   = "circle";
+    this.radius = radius;
+  }
+  area()      { return Math.PI * this.radius ** 2; }
+  perimeter() { return 2 * Math.PI * this.radius; }
+}
+
+class Rectangle {
+  constructor(width, height) {
+    this.type   = "rectangle";
+    this.width  = width;
+    this.height = height;
+  }
+  area()      { return this.width * this.height; }
+  perimeter() { return 2 * (this.width + this.height); }
+}
+
+class Triangle {
+  constructor(a, b, c) {
+    this.type = "triangle";
+    this.a = a; this.b = b; this.c = c;
+  }
+  perimeter() { return this.a + this.b + this.c; }
+  area() {
+    const s = this.perimeter() / 2;
+    return Math.sqrt(s * (s-this.a) * (s-this.b) * (s-this.c));
+  }
+}
+
+// The Factory
+function ShapeFactory(type, ...args) {
+  switch (type) {
+    case "circle":    return new Circle(...args);
+    case "rectangle": return new Rectangle(...args);
+    case "triangle":  return new Triangle(...args);
+    default:          throw new Error(`Unknown shape: ${type}`);
+  }
+}
+
+// Callers only use ShapeFactory — no class names needed
+const c = ShapeFactory("circle", 7);
+const r = ShapeFactory("rectangle", 4, 6);
+const t = ShapeFactory("triangle", 3, 4, 5);
+
+console.log(`Circle   area: ${c.area().toFixed(2)}`);     // 153.94
+console.log(`Rectangle area: ${r.area()}`);               // 24
+console.log(`Triangle  area: ${t.area().toFixed(2)}`);    // 6.00
+console.log(`Triangle  perim: ${t.perimeter()}`);         // 12
+
+// Adding a new shape later only changes the factory — not every caller</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Real-World Pattern Usage</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Observer in the wild</div>
+          <p>Node.js <code>EventEmitter</code>. React's synthetic event system. Vue's reactivity. DOM's <code>addEventListener</code>. Redux store subscriptions. All of these are Observer pattern.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Factory in the wild</div>
+          <p>React's <code>createElement()</code>. Vue's <code>h()</code>. Document.createElement(). Database connection pooling. Logger with different transports. All are Factory pattern at their core.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Observer &amp; Factory</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// EventEmitter — Observer pattern
+class EventEmitter {
+  constructor() { this._ev = {}; }
+  on(e, fn)   { (this._ev[e] = this._ev[e] || []).push(fn); return this; }
+  off(e, fn)  { if (this._ev[e]) this._ev[e] = this._ev[e].filter(f => f !== fn); }
+  emit(e, ...a) { (this._ev[e] || []).forEach(fn => fn(...a)); return this; }
+}
+
+const bus = new EventEmitter();
+
+bus.on("login", user => console.log("Welcome,", user.name));
+bus.on("login", user => console.log("Audit: login by", user.email));
+bus.on("logout", ()   => console.log("User logged out — clearing session"));
+
+bus.emit("login",  { name: "Naman", email: "naman@example.com" });
+bus.emit("logout");
+
+// Factory pattern
+function createAnimal(type, name) {
+  const base = { name };
+  switch(type) {
+    case "dog":  return { ...base, speak() { return name + " says: Woof!"; } };
+    case "cat":  return { ...base, speak() { return name + " says: Meow!"; } };
+    case "bird": return { ...base, speak() { return name + " says: Tweet!"; } };
+    default:     throw new Error("Unknown animal: " + type);
+  }
+}
+
+const animals = [
+  createAnimal("dog",  "Bruno"),
+  createAnimal("cat",  "Whiskers"),
+  createAnimal("bird", "Tweety"),
+];
+
+animals.forEach(a => console.log(a.speak()));'
+>// EventEmitter — Observer pattern
+class EventEmitter {
+  constructor() { this._ev = {}; }
+  on(e, fn)   { (this._ev[e] = this._ev[e] || []).push(fn); return this; }
+  off(e, fn)  { if (this._ev[e]) this._ev[e] = this._ev[e].filter(f => f !== fn); }
+  emit(e, ...a) { (this._ev[e] || []).forEach(fn => fn(...a)); return this; }
+}
+
+const bus = new EventEmitter();
+
+bus.on("login", user => console.log("Welcome,", user.name));
+bus.on("login", user => console.log("Audit: login by", user.email));
+bus.on("logout", ()   => console.log("User logged out — clearing session"));
+
+bus.emit("login",  { name: "Naman", email: "naman@example.com" });
+bus.emit("logout");
+
+// Factory pattern
+function createAnimal(type, name) {
+  const base = { name };
+  switch(type) {
+    case "dog":  return { ...base, speak() { return name + " says: Woof!"; } };
+    case "cat":  return { ...base, speak() { return name + " says: Meow!"; } };
+    case "bird": return { ...base, speak() { return name + " says: Tweet!"; } };
+    default:     throw new Error("Unknown animal: " + type);
+  }
+}
+
+const animals = [
+  createAnimal("dog",  "Bruno"),
+  createAnimal("cat",  "Whiskers"),
+  createAnimal("bird", "Tweety"),
+];
+
+animals.forEach(a => console.log(a.speak()));</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Patterns vs over-engineering:</strong> Don't reach for a design pattern just because it exists. Use Observer when you have multiple parts of an app that need to react to the same event. Use Factory when object creation is getting complex or when you need to hide which class is being instantiated.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Advanced_JavaScript_objects/Object-oriented_programming" target="_blank" rel="noopener">OOP &amp; Patterns — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/javascript-design-patterns-observer-factory-explained-2a7e8c3f1a23" target="_blank" rel="noopener">Observer &amp; Factory — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · BUILD IT: SMART FORM VALIDATOR
+    ══════════════════════════════ -->
+    <section id="smart-form" class="chapter chapter-exercise">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">Build It: Smart Form Validator</h2>
+      <p class="ch-intro">Apply everything from this module: validate a form with regex, show real-time inline feedback, save form state to localStorage, and handle all errors gracefully.</p>
+
+      <div class="exercise-intro-box">
+        <div class="eib-title">What your program must do</div>
+        <div class="eib-steps">
+          <div class="eib-step"><div class="eib-num">1</div><span>Validate name (min 2 chars, letters only), email (regex), phone (10 digits starting 6–9), and PIN (6 digits) — Ch.02</span></div>
+          <div class="eib-step"><div class="eib-num">2</div><span>Show a per-field result: VALID or the specific error message — Ch.01 (throw custom errors)</span></div>
+          <div class="eib-step"><div class="eib-num">3</div><span>Save the form state to localStorage after each valid submission — Ch.03</span></div>
+          <div class="eib-step"><div class="eib-num">4</div><span>Load and display the last saved submission from localStorage on startup — Ch.03</span></div>
+          <div class="eib-step"><div class="eib-num">5</div><span>Wrap all localStorage calls in try/catch — Ch.01</span></div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Ask Yourself Before Starting</h3>
+      <div class="question-card">
+        <div class="q-label">Q1</div>
+        <p>You need to validate multiple fields with different rules. How do you avoid repeating the same try/catch block for each field?</p>
+        <div class="q-hint">Hint: Write a generic <code>validateField(value, regex, errorMsg)</code> function. It throws a <code>ValidationError</code> if the regex fails. Call it for each field inside one try/catch block.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q2</div>
+        <p>Regex for Indian mobile: starts with 6, 7, 8, or 9 — followed by 9 more digits. How do you write that?</p>
+        <div class="q-hint">Hint: <code>/^[6-9]\d{9}$/</code> — anchors ^ and $ ensure the entire string is 10 digits with no extra characters.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q3</div>
+        <p>localStorage only stores strings. How do you store an object (the validated form data)?</p>
+        <div class="q-hint">Hint: <code>localStorage.setItem("lastForm", JSON.stringify(formData))</code> to save, <code>JSON.parse(localStorage.getItem("lastForm"))</code> to load.</div>
+      </div>
+
+      <h3 class="sub-heading">Skeleton — Fill in the ???s</h3>
+      <div class="code-block">
+        <div class="code-header">form-validator.js — complete this</div>
+        <pre><code>// Custom error class
+class ValidationError extends Error {
+  constructor(message, field) {
+    ???(message);
+    this.name  = "ValidationError";
+    this.field = ???;
+  }
+}
+
+// Regex patterns
+const PATTERNS = {
+  name:  /^[a-zA-Z ]{2,}$/,
+  email: ???,                          // basic email pattern
+  phone: /^[6-9]\d{9}$/,
+  pin:   ???                           // exactly 6 digits
+};
+
+// Generic validator — throws if regex fails
+function validateField(name, value, pattern, errorMsg) {
+  if (!pattern.???(value.trim())) {
+    throw new ValidationError(errorMsg, ???);
+  }
+  return value.trim();
+}
+
+// Validate the whole form
+function validateForm(data) {
+  const results = {};
+  const errors  = [];
+
+  const fields = [
+    { key: "name",  label: "Name",  pattern: PATTERNS.name,  msg: "Name must be 2+ letters only" },
+    { key: "email", label: "Email", pattern: PATTERNS.email, msg: "Enter a valid email address" },
+    { key: "phone", label: "Phone", pattern: PATTERNS.phone, msg: "Phone must be 10 digits starting with 6-9" },
+    { key: "pin",   label: "PIN",   pattern: PATTERNS.pin,   msg: "PIN must be exactly 6 digits" },
+  ];
+
+  for (const field of fields) {
+    try {
+      results[field.key] = { value: validateField(field.key, data[field.key] || "", field.pattern, field.msg), status: ???  };
+    } catch (e) {
+      if (e instanceof ValidationError) {
+        results[field.key] = { value: data[field.key], status: "INVALID", error: ??? };
+        errors.push(field.label);
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  return { results, isValid: errors.length === ??? };
+}
+
+// Save to localStorage
+function saveFormData(data) {
+  try {
+    localStorage.setItem("lastForm", ???(data));
+    console.log("Form saved to localStorage");
+  } catch (e) {
+    console.error("Could not save:", e.message);
+  }
+}
+
+// Load from localStorage
+function loadFormData() {
+  try {
+    const raw = localStorage.getItem(???);
+    return raw ? ???(raw) : null;
+  } catch (e) {
+    console.error("Could not load:", e.message);
+    return null;
+  }
+}
+
+// --- Main ---
+const formData = {
+  name:  "Naman Jethliya",
+  email: "naman@example.com",
+  phone: "9876543210",
+  pin:   "400001"
+};
+
+const { results, isValid } = validateForm(formData);
+
+for (const [field, res] of Object.entries(results)) {
+  if (res.status === "VALID") {
+    console.log(`✓ ${field}: ${res.value}`);
+  } else {
+    console.log(`✗ ${field}: ${res.???}`);
+  }
+}
+
+if (isValid) {
+  saveFormData(formData);
+  console.log("Submission saved!");
+} else {
+  console.log("Fix errors before submitting.");
+}
+
+// Load last saved data
+const last = loadFormData();
+if (last) {
+  console.log("Last saved name:", last.???);
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Write Your Solution Here</h3>
+      <p style="margin-bottom:0.75rem;">Build the full validator. Try submitting with invalid data first, then fix each field. After a valid submission, change one field to invalid and try again.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Smart Form Validator</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ── Smart Form Validator ──
+// Write your solution here
+
+class ValidationError extends Error {
+  constructor(message, field) {
+    // TODO: call super, set this.name and this.field
+  }
+}
+
+const PATTERNS = {
+  name:  /^[a-zA-Z ]{2,}$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[6-9]\d{9}$/,
+  pin:   /^\d{6}$/
+};
+
+function validateField(key, value, pattern, errorMsg) {
+  // TODO: if pattern doesnt match, throw ValidationError
+  return value.trim();
+}
+
+function validateForm(data) {
+  // TODO: validate all 4 fields, collect results and errors
+  return { results: {}, isValid: false };
+}
+
+function saveFormData(data) {
+  // TODO: JSON.stringify and save to localStorage
+}
+
+function loadFormData() {
+  // TODO: load and JSON.parse from localStorage
+  return null;
+}
+
+// Test with valid data
+const formData = {
+  name:  "Naman Jethliya",
+  email: "naman@example.com",
+  phone: "9876543210",
+  pin:   "400001"
+};
+
+// TODO: call validateForm, print each field result, save if valid, load and print last saved'
+>// ── Smart Form Validator ──
+// Write your solution here
+
+class ValidationError extends Error {
+  constructor(message, field) {
+    // TODO: call super, set this.name and this.field
+  }
+}
+
+const PATTERNS = {
+  name:  /^[a-zA-Z ]{2,}$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[6-9]\d{9}$/,
+  pin:   /^\d{6}$/
+};
+
+function validateField(key, value, pattern, errorMsg) {
+  // TODO: if pattern doesnt match, throw ValidationError
+  return value.trim();
+}
+
+function validateForm(data) {
+  // TODO: validate all 4 fields, collect results and errors
+  return { results: {}, isValid: false };
+}
+
+function saveFormData(data) {
+  // TODO: JSON.stringify and save to localStorage
+}
+
+function loadFormData() {
+  // TODO: load and JSON.parse from localStorage
+  return null;
+}
+
+// Test with valid data
+const formData = {
+  name:  "Naman Jethliya",
+  email: "naman@example.com",
+  phone: "9876543210",
+  pin:   "400001"
+};
+
+// TODO: call validateForm, print each field result, save if valid, load and print last saved</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <h3 class="sub-heading" style="margin-top:2rem;">Reference Solution</h3>
+      <p style="margin-bottom:0.75rem;color:var(--muted);font-size:0.9rem;">Only look at this after making a genuine attempt.</p>
+      <div class="code-block">
+        <div class="code-header">form-validator.js — full solution</div>
+        <pre><code>class ValidationError extends Error {
+  constructor(message, field) {
+    super(message);
+    this.name  = "ValidationError";
+    this.field = field;
+  }
+}
+
+const PATTERNS = {
+  name:  /^[a-zA-Z ]{2,}$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[6-9]\d{9}$/,
+  pin:   /^\d{6}$/
+};
+
+function validateField(key, value, pattern, errorMsg) {
+  if (!pattern.test((value || "").trim())) {
+    throw new ValidationError(errorMsg, key);
+  }
+  return value.trim();
+}
+
+function validateForm(data) {
+  const results = {};
+  const errors  = [];
+
+  const fields = [
+    { key: "name",  pattern: PATTERNS.name,  msg: "Name must be 2+ letters only" },
+    { key: "email", pattern: PATTERNS.email, msg: "Enter a valid email address" },
+    { key: "phone", pattern: PATTERNS.phone, msg: "Phone must be 10 digits starting with 6-9" },
+    { key: "pin",   pattern: PATTERNS.pin,   msg: "PIN must be exactly 6 digits" },
+  ];
+
+  for (const f of fields) {
+    try {
+      results[f.key] = {
+        value:  validateField(f.key, data[f.key] || "", f.pattern, f.msg),
+        status: "VALID"
+      };
+    } catch (e) {
+      if (e instanceof ValidationError) {
+        results[f.key] = { value: data[f.key], status: "INVALID", error: e.message };
+        errors.push(f.key);
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  return { results, isValid: errors.length === 0 };
+}
+
+function saveFormData(data) {
+  try {
+    localStorage.setItem("lastForm", JSON.stringify(data));
+    console.log("Saved to localStorage");
+  } catch (e) {
+    console.error("Save failed:", e.message);
+  }
+}
+
+function loadFormData() {
+  try {
+    const raw = localStorage.getItem("lastForm");
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    console.error("Load failed:", e.message);
+    return null;
+  }
+}
+
+// ── Run it ──
+const formData = {
+  name:  "Naman Jethliya",
+  email: "naman@example.com",
+  phone: "9876543210",
+  pin:   "400001"
+};
+
+const { results, isValid } = validateForm(formData);
+
+for (const [field, res] of Object.entries(results)) {
+  if (res.status === "VALID") {
+    console.log(`✓ ${field}: ${res.value}`);
+  } else {
+    console.log(`✗ ${field}: ${res.error}`);
+  }
+}
+
+if (isValid) {
+  saveFormData(formData);
+  console.log("Submission accepted and saved!");
+} else {
+  console.log("Fix the errors above before submitting.");
+}
+
+const last = loadFormData();
+if (last) {
+  console.log("Last saved submission by:", last.name);
+}
+
+// ── Now test with invalid data ──
+console.log("\n--- Testing invalid data ---");
+const badData = { name: "X", email: "notvalid", phone: "1234567890", pin: "12345" };
+const { results: bad } = validateForm(badData);
+for (const [field, res] of Object.entries(bad)) {
+  console.log((res.status === "VALID" ? "✓" : "✗") + " " + field + ": " + (res.error || res.value));
+}</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>Extend the challenge:</strong> Add a <code>debounce</code> wrapper so validation only triggers 300ms after the user stops typing (Ch.06). Add a <code>Logger</code> singleton that records every validation attempt (Ch.07). Emit a <code>"form:submitted"</code> event via <code>EventEmitter</code> that other parts of the app can listen to (Ch.08).
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <p>JavaScript Advanced Topics — Student Handbook &nbsp;·&nbsp; Open the console (F12) and experiment while you read.</p>
+  </footer>
+
+  <!-- ============================================================
+       SANDBOX ENGINE
+  ============================================================ -->
+  <script>
+    function formatValue(v) {
+      if (v === undefined) return 'undefined';
+      if (v === null)      return 'null';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+      }
+      return String(v);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    function runSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const code    = sandbox.querySelector('.sandbox-code').value;
+      const output  = sandbox.querySelector('.sandbox-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const orig = {
+        log:   console.log,
+        error: console.error,
+        warn:  console.warn
+      };
+
+      console.log   = (...a) => logs.push({ t: 'log',   text: a.map(formatValue).join(' ') });
+      console.error = (...a) => logs.push({ t: 'error', text: a.map(formatValue).join(' ') });
+      console.warn  = (...a) => logs.push({ t: 'warn',  text: a.map(formatValue).join(' ') });
+
+      try {
+        eval(code); // eslint-disable-line no-eval
+      } catch (e) {
+        logs.push({ t: 'error', text: e.message });
+      } finally {
+        console.log   = orig.log;
+        console.error = orig.error;
+        console.warn  = orig.warn;
+      }
+
+      if (!logs.length) {
+        output.innerHTML = '<div class="sb-empty">// No output — add console.log() to see results.</div>';
+        return;
+      }
+
+      output.innerHTML = logs
+        .map(l => `<div class="sb-line sb-${l.t}">${escapeHtml(l.text)}</div>`)
+        .join('');
+    }
+
+    function resetSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const ta      = sandbox.querySelector('.sandbox-code');
+      ta.value      = ta.dataset.default;
+      sandbox.querySelector('.sandbox-output').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>

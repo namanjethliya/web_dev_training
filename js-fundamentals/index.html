@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn JavaScript from scratch — variables, data types, operators, loops, and more. Interactive sandbox on every chapter." />
+  <title>JavaScript Fundamentals — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">JavaScript<br><span class="hero-accent">Fundamentals</span></h1>
+    <p class="hero-sub">The language of the web — running live in your browser.</p>
+    <p class="hero-desc">Learn the core building blocks of JavaScript: variables, data types, operators, control flow, and loops — with a live sandbox on every chapter so you can run code as you learn.</p>
+    <div class="hero-pills">
+      <span class="pill">9 Chapters</span>
+      <span class="pill">Live Sandboxes</span>
+      <span class="pill">Build It Exercise</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#what-is-js">01 What is JavaScript?</a></li>
+      <li><a href="#first-js">02 Your First JavaScript</a></li>
+      <li><a href="#variables">03 Variables</a></li>
+      <li><a href="#data-types">04 Data Types</a></li>
+      <li><a href="#operators">05 Operators</a></li>
+      <li><a href="#conditionals">06 Conditionals</a></li>
+      <li><a href="#loops">07 Loops</a></li>
+      <li><a href="#coercion">08 Type Coercion</a></li>
+      <li><a href="#report-card">09 Build It: Report Card</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · WHAT IS JAVASCRIPT?
+    ══════════════════════════════ -->
+    <section id="what-is-js" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">What is JavaScript?</h2>
+      <p class="ch-intro">HTML gives a page its content. CSS gives it its look. JavaScript gives it its behaviour — the ability to respond, change, and interact in real time.</p>
+
+      <h3 class="sub-heading">The Three Languages of the Web</h3>
+      <div class="role-diagram">
+        <div class="role-card role-card-html">
+          <div class="role-icon">🏗️</div>
+          <div class="role-name">HTML</div>
+          <div class="role-desc">Structure — the nouns.<br>Headings, paragraphs, images, buttons.</div>
+        </div>
+        <div class="role-card role-card-css">
+          <div class="role-icon">🎨</div>
+          <div class="role-name">CSS</div>
+          <div class="role-desc">Style — the adjectives.<br>Colours, fonts, layout, spacing.</div>
+        </div>
+        <div class="role-card role-card-js">
+          <div class="role-icon">⚡</div>
+          <div class="role-name">JavaScript</div>
+          <div class="role-desc">Behaviour — the verbs.<br>Click, submit, fetch, animate, update.</div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">What JavaScript Can Do</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">React to user actions</div>
+          <p>Run code when a user clicks a button, submits a form, or moves their mouse.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Change the page</div>
+          <p>Add, remove, or modify any HTML element or CSS style after the page loads.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Talk to servers</div>
+          <p>Fetch data from APIs without refreshing the page — the power behind Gmail and Twitter.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Store data locally</div>
+          <p>Save preferences, form data, or session state in the browser's localStorage.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">How the Browser Runs JavaScript</h3>
+      <div class="insight-box">
+        <div class="insight-icon">⚙️</div>
+        <div class="insight-content">
+          <p>When you open a web page, the browser reads your HTML top-to-bottom. When it hits a <code>&lt;script&gt;</code> tag, it hands the code to the <strong>JavaScript engine</strong> — V8 in Chrome, SpiderMonkey in Firefox. The engine compiles your code to machine instructions and runs it. All of this happens in milliseconds.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">JavaScript Runs in Two Places</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">In the Browser (Client-Side)</div>
+          <p>What you're learning now. JS runs on the user's machine. Can read and change the page. Cannot access the filesystem or databases directly.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">On a Server (Node.js)</div>
+          <p>JS can also run outside the browser on a server. Same language, different environment. Covered in Module 8 of this course.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Right now:</strong> Open DevTools (<kbd>F12</kbd> or <kbd>Cmd+Option+J</kbd>) and click the Console tab. Type <code>1 + 1</code> and press Enter. You just ran JavaScript. Everything in this guide you can also try there.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · YOUR FIRST JAVASCRIPT
+    ══════════════════════════════ -->
+    <section id="first-js" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Your First JavaScript</h2>
+      <p class="ch-intro">Three ways to run JavaScript — and why <code>console.log()</code> is the first function every developer learns.</p>
+
+      <h3 class="sub-heading">Where to Write JavaScript</h3>
+      <div class="card-row">
+        <div class="card highlight-card">
+          <div class="card-tag">1. Inline &lt;script&gt; tag</div>
+          <p>Place a <code>&lt;script&gt;</code> tag at the bottom of your HTML body. JS runs when the browser reaches it.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">2. External .js file</div>
+          <p>Link a separate file: <code>&lt;script src="app.js"&gt;&lt;/script&gt;</code>. Recommended for all real projects.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">3. Browser Console</div>
+          <p>Type directly in DevTools Console. Great for experimenting — nothing is saved.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The &lt;script&gt; Tag</h3>
+      <div class="code-block">
+        <div class="code-header">index.html</div>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello&lt;/h1&gt;
+
+  &lt;!-- Put script at the bottom of body so HTML loads first --&gt;
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+
+      <h3 class="sub-heading">console.log() — Your Most Important Tool</h3>
+      <p style="margin-bottom:1rem;"><code>console.log()</code> prints a value to the browser console. Use it to check what a variable holds, confirm that code ran, or debug a problem.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// Print a string
+console.log("Hello, world!");
+
+// Print a number
+console.log(42);
+
+// Print the result of an expression
+console.log(10 + 5);
+
+// Print multiple values at once
+console.log("Result:", 10 + 5);
+
+// Other console methods
+console.warn("This is a warning");
+console.error("This is an error");</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Comments</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// Single-line comment — the browser ignores this line
+
+/*
+  Multi-line comment.
+  Everything between the markers is ignored.
+*/
+
+console.log("This runs"); // inline comment — ignored from here to end of line</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Edit and Run</h3>
+      <p style="margin-bottom:0.75rem;">Edit the code below and click <strong>▶ Run</strong>. Output appears in the panel below.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Edit this code and click Run
+console.log("Hello, world!");
+console.log("My name is ___");
+console.log(10 + 5);
+console.log("Result:", 100 / 4);'>// Edit this code and click Run
+console.log("Hello, world!");
+console.log("My name is ___");
+console.log(10 + 5);
+console.log("Result:", 100 / 4);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Golden rule:</strong> When something isn't working, <code>console.log()</code> the value you're not sure about. Seeing the actual value is always better than guessing.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/console/log_static" target="_blank" rel="noopener">console.log — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/the-console-object-in-javascript-c4c5b9a5a7e6" target="_blank" rel="noopener">Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · VARIABLES
+    ══════════════════════════════ -->
+    <section id="variables" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Variables</h2>
+      <p class="ch-intro">Variables are named containers for storing values. You create them once and refer to them by name throughout your code.</p>
+
+      <h3 class="sub-heading">var, let, and const</h3>
+      <p style="margin-bottom:1rem;">JavaScript has three keywords for declaring variables. In modern JS (ES6+), use <code>const</code> by default and <code>let</code> when you need to reassign. Avoid <code>var</code>.</p>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Keyword</th><th>Reassignable?</th><th>Redeclarable?</th><th>Scope</th><th>Use when…</th></tr>
+        </thead>
+        <tbody>
+          <tr class="vlc-rec">
+            <td><code>const</code></td>
+            <td class="vlc-no">✗ No</td>
+            <td class="vlc-no">✗ No</td>
+            <td>Block</td>
+            <td>Default — use for everything that won't be reassigned</td>
+          </tr>
+          <tr>
+            <td><code>let</code></td>
+            <td class="vlc-yes">✓ Yes</td>
+            <td class="vlc-no">✗ No</td>
+            <td>Block</td>
+            <td>When the value needs to change (counters, loops, toggles)</td>
+          </tr>
+          <tr>
+            <td><code>var</code></td>
+            <td class="vlc-yes">✓ Yes</td>
+            <td class="vlc-yes">✓ Yes</td>
+            <td>Function</td>
+            <td>Avoid — legacy syntax with confusing hoisting behaviour</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Declaring and Using Variables</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// const — value cannot be reassigned
+const name = "Naman";
+const pi   = 3.14159;
+
+// let — value can change
+let score = 0;
+score = 10;      // reassign — OK
+score += 5;      // score is now 15
+
+// Naming rules — use camelCase
+let myAge = 25;            // ✓ camelCase
+let _privateValue = 42;    // ✓ underscore prefix
+// let 2fast = true;       // ✗ cannot start with a number
+// let my-name = "x";      // ✗ hyphens not allowed
+
+// const does NOT mean "deeply immutable"
+const user = { name: "Naman" };
+user.name = "Raj";  // ✓ — changing a property is OK
+// user = {};       // ✗ — reassigning the variable is not OK</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Variables</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const name = "Naman";
+let score = 0;
+
+console.log("Name:", name);
+console.log("Initial score:", score);
+
+score = 10;
+score += 5;
+console.log("Final score:", score);
+
+// Try: change name to your name, click Run
+// Try: uncomment the next line — see the const error
+// name = "Someone Else";'>const name = "Naman";
+let score = 0;
+
+console.log("Name:", name);
+console.log("Initial score:", score);
+
+score = 10;
+score += 5;
+console.log("Final score:", score);
+
+// Try: change name to your name, click Run
+// Try: uncomment the next line — see the const error
+// name = "Someone Else";</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Rule of thumb:</strong> Start with <code>const</code>. If you get an error because you tried to reassign it, switch it to <code>let</code>. This forces you to think about whether a value really needs to change.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const" target="_blank" rel="noopener">const — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank" rel="noopener">let — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var" target="_blank" rel="noopener">var — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-variables-the-difference-between-var-let-and-const-f02f3964ef16" target="_blank" rel="noopener">var vs let vs const — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · DATA TYPES
+    ══════════════════════════════ -->
+    <section id="data-types" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Data Types</h2>
+      <p class="ch-intro">Every value in JavaScript has a type. Understanding types is essential — many bugs come from values being a different type than expected.</p>
+
+      <h3 class="sub-heading">The 7 Primitive Types</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Type</th><th>Example</th><th>typeof result</th><th>Use for</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>number</code></td>
+            <td><code>42</code>, <code>3.14</code>, <code>-7</code></td>
+            <td><code>"number"</code></td>
+            <td>Any numeric value — integers and decimals</td>
+          </tr>
+          <tr>
+            <td><code>string</code></td>
+            <td><code>"hello"</code>, <code>'JS'</code>, <code>`template`</code></td>
+            <td><code>"string"</code></td>
+            <td>Text — wrap in single, double, or backtick quotes</td>
+          </tr>
+          <tr>
+            <td><code>boolean</code></td>
+            <td><code>true</code>, <code>false</code></td>
+            <td><code>"boolean"</code></td>
+            <td>Yes/no, on/off, pass/fail flags</td>
+          </tr>
+          <tr>
+            <td><code>undefined</code></td>
+            <td><code>undefined</code></td>
+            <td><code>"undefined"</code></td>
+            <td>Variable declared but not yet assigned a value</td>
+          </tr>
+          <tr>
+            <td><code>null</code></td>
+            <td><code>null</code></td>
+            <td><code>"object"</code> ⚠️</td>
+            <td>Intentional absence of a value — you set this explicitly</td>
+          </tr>
+          <tr>
+            <td><code>symbol</code></td>
+            <td><code>Symbol("id")</code></td>
+            <td><code>"symbol"</code></td>
+            <td>Unique identifiers (advanced — rarely needed by beginners)</td>
+          </tr>
+          <tr>
+            <td><code>bigint</code></td>
+            <td><code>9007199254740991n</code></td>
+            <td><code>"bigint"</code></td>
+            <td>Integers larger than Number.MAX_SAFE_INTEGER</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p><strong>The famous bug:</strong> <code>typeof null === "object"</code> — this is a well-known mistake in JavaScript that was never fixed for backwards compatibility. <code>null</code> is NOT an object. To check for null, always use <code>value === null</code>, not <code>typeof value</code>.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">undefined vs null</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">undefined</div>
+          <p>A variable that exists but has not been given a value yet. JavaScript sets this automatically.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">let x;
+console.log(x); // undefined</code></pre>
+        </div>
+        <div class="card">
+          <div class="card-tag">null</div>
+          <p>A variable explicitly set to "nothing". You set this on purpose to signal the absence of a value.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">let user = null;
+// "no user logged in"</code></pre>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — typeof on Every Type</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='console.log(typeof 42);           // "number"
+console.log(typeof 3.14);         // "number"
+console.log(typeof "hello");      // "string"
+console.log(typeof true);         // "boolean"
+console.log(typeof undefined);    // "undefined"
+console.log(typeof null);         // "object" ← the famous bug!
+console.log(typeof Symbol("x"));  // "symbol"
+console.log(typeof 9n);           // "bigint"
+
+// Correct way to check for null
+const value = null;
+console.log("Is null?", value === null); // true'>console.log(typeof 42);           // "number"
+console.log(typeof 3.14);         // "number"
+console.log(typeof "hello");      // "string"
+console.log(typeof true);         // "boolean"
+console.log(typeof undefined);    // "undefined"
+console.log(typeof null);         // "object" ← the famous bug!
+console.log(typeof Symbol("x"));  // "symbol"
+console.log(typeof 9n);           // "bigint"
+
+// Correct way to check for null
+const value = null;
+console.log("Is null?", value === null); // true</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Quick check:</strong> Use <code>typeof value</code> to see what type a value is. If you're not sure what's inside a variable, log its <code>typeof</code> — it's often the fastest way to spot a type bug.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures" target="_blank" rel="noopener">Data Structures — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof" target="_blank" rel="noopener">typeof — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-data-types-explained-with-examples-9e8b5e7d5c7a" target="_blank" rel="noopener">Data Types — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · OPERATORS
+    ══════════════════════════════ -->
+    <section id="operators" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Operators</h2>
+      <p class="ch-intro">Operators let you compute values, compare them, and combine conditions. The equality operators (<code>==</code> vs <code>===</code>) are one of JavaScript's most important distinctions.</p>
+
+      <h3 class="sub-heading">Arithmetic Operators</h3>
+      <table class="ref-table">
+        <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>+</code></td><td>Addition / Concatenation</td><td><code>5 + 3</code></td><td><code>8</code></td></tr>
+          <tr><td><code>-</code></td><td>Subtraction</td><td><code>10 - 4</code></td><td><code>6</code></td></tr>
+          <tr><td><code>*</code></td><td>Multiplication</td><td><code>3 * 4</code></td><td><code>12</code></td></tr>
+          <tr><td><code>/</code></td><td>Division</td><td><code>15 / 4</code></td><td><code>3.75</code></td></tr>
+          <tr><td><code>%</code></td><td>Remainder (Modulo)</td><td><code>10 % 3</code></td><td><code>1</code></td></tr>
+          <tr><td><code>**</code></td><td>Exponentiation</td><td><code>2 ** 8</code></td><td><code>256</code></td></tr>
+          <tr><td><code>++</code></td><td>Increment by 1</td><td><code>let x = 5; x++</code></td><td><code>x is 6</code></td></tr>
+          <tr><td><code>--</code></td><td>Decrement by 1</td><td><code>let x = 5; x--</code></td><td><code>x is 4</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">== vs === — The Most Important Distinction</h3>
+      <div class="insight-box">
+        <div class="insight-icon">🔑</div>
+        <div class="insight-content">
+          <p><code>==</code> (loose equality) converts types before comparing — it will say <code>"5" == 5</code> is <code>true</code>. This causes subtle bugs.</p>
+          <p style="margin-top:0.6rem;"><code>===</code> (strict equality) compares value AND type — <code>"5" === 5</code> is <code>false</code>. <strong>Always use <code>===</code>.</strong></p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Comparison &amp; Logical Operators</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Comparison</div>
+          <p><code>===</code> strict equal &nbsp;·&nbsp; <code>!==</code> strict not equal<br>
+          <code>&gt;</code> greater &nbsp;·&nbsp; <code>&lt;</code> less<br>
+          <code>&gt;=</code> greater/equal &nbsp;·&nbsp; <code>&lt;=</code> less/equal</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">&amp;&amp; — AND</div>
+          <p>True only if <em>both</em> sides are true.<br><code>true &amp;&amp; false</code> → <code>false</code><br><code>true &amp;&amp; true</code> → <code>true</code></p>
+        </div>
+        <div class="card">
+          <div class="card-tag">|| — OR</div>
+          <p>True if <em>at least one</em> side is true.<br><code>true || false</code> → <code>true</code><br><code>false || false</code> → <code>false</code></p>
+        </div>
+        <div class="card">
+          <div class="card-tag">! — NOT</div>
+          <p>Flips true↔false.<br><code>!true</code> → <code>false</code><br><code>!false</code> → <code>true</code></p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Ternary Operator</h3>
+      <div class="code-block">
+        <div class="code-header">Syntax: condition ? valueIfTrue : valueIfFalse</div>
+        <pre><code>const age = 20;
+const status = age >= 18 ? "adult" : "minor";
+console.log(status); // "adult"
+
+// Equivalent if/else:
+// if (age >= 18) { status = "adult"; } else { status = "minor"; }
+
+// Nested ternary for multiple grades
+const score = 75;
+const grade = score >= 90 ? "A"
+            : score >= 80 ? "B"
+            : score >= 70 ? "C"
+            : "F";
+console.log(grade); // "C"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Operators</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Arithmetic
+console.log(10 + 3);    // 13
+console.log(10 % 3);    // 1 — remainder
+console.log(2 ** 10);   // 1024
+
+// == vs === (the critical difference)
+console.log("5" == 5);   // true  ← dangerous: type conversion
+console.log("5" === 5);  // false ← correct: strict
+
+// Logical operators
+console.log(true && false);  // false
+console.log(true || false);  // true
+console.log(!true);          // false
+
+// Ternary
+const score = 75;
+const grade = score >= 90 ? "A" : score >= 75 ? "B" : "C";
+console.log("Grade:", grade); // B'>// Arithmetic
+console.log(10 + 3);    // 13
+console.log(10 % 3);    // 1 — remainder
+console.log(2 ** 10);   // 1024
+
+// == vs === (the critical difference)
+console.log("5" == 5);   // true  ← dangerous: type conversion
+console.log("5" === 5);  // false ← correct: strict
+
+// Logical operators
+console.log(true && false);  // false
+console.log(true || false);  // true
+console.log(!true);          // false
+
+// Ternary
+const score = 75;
+const grade = score >= 90 ? "A" : score >= 75 ? "B" : "C";
+console.log("Grade:", grade); // B</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Rule:</strong> Never use <code>==</code> or <code>!=</code>. Always use <code>===</code> and <code>!==</code>. The loose versions cause hard-to-find bugs because of automatic type conversion.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators" target="_blank" rel="noopener">Operators — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/javascript-double-equals-vs-triple-equals-61d4ce5a121a" target="_blank" rel="noopener">== vs === — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · CONDITIONALS
+    ══════════════════════════════ -->
+    <section id="conditionals" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Conditional Statements</h2>
+      <p class="ch-intro">Conditionals let your code make decisions. Run different code based on whether a condition is true or false.</p>
+
+      <h3 class="sub-heading">if / else if / else</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const temperature = 28;
+
+if (temperature > 35) {
+  console.log("It's very hot! Stay indoors.");
+} else if (temperature > 25) {
+  console.log("It's warm. Good weather.");
+} else if (temperature > 15) {
+  console.log("It's mild. Carry a jacket.");
+} else {
+  console.log("It's cold. Bundle up!");
+}
+// Output: "It's warm. Good weather."</code></pre>
+      </div>
+
+      <h3 class="sub-heading">switch</h3>
+      <p style="margin-bottom:0.75rem;">Use <code>switch</code> when comparing one value against many specific options. Cleaner than a long chain of <code>else if</code>.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const day = "Monday";
+
+switch (day) {
+  case "Monday":
+    console.log("Start of the week!");
+    break;              // ← always include break!
+  case "Friday":
+    console.log("Weekend is near!");
+    break;
+  case "Saturday":
+  case "Sunday":        // ← two cases, one block
+    console.log("It's the weekend!");
+    break;
+  default:
+    console.log("Just another weekday.");
+}
+// Output: "Start of the week!"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Conditionals</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Change score and re-run to see different results
+const score = 72;
+
+if (score >= 90) {
+  console.log("Grade: A — Excellent!");
+} else if (score >= 80) {
+  console.log("Grade: B — Good job.");
+} else if (score >= 70) {
+  console.log("Grade: C — Satisfactory.");
+} else if (score >= 60) {
+  console.log("Grade: D — Needs improvement.");
+} else {
+  console.log("Grade: F — Please re-attempt.");
+}
+
+// Try score = 90, 85, 65, 40 — what changes?'>// Change score and re-run to see different results
+const score = 72;
+
+if (score >= 90) {
+  console.log("Grade: A — Excellent!");
+} else if (score >= 80) {
+  console.log("Grade: B — Good job.");
+} else if (score >= 70) {
+  console.log("Grade: C — Satisfactory.");
+} else if (score >= 60) {
+  console.log("Grade: D — Needs improvement.");
+} else {
+  console.log("Grade: F — Please re-attempt.");
+}
+
+// Try score = 90, 85, 65, 40 — what changes?</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Order matters:</strong> Conditions in an if/else chain are checked top-to-bottom. The first true condition wins and the rest are skipped. Always put your most specific conditions at the top.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else" target="_blank" rel="noopener">if/else — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch" target="_blank" rel="noopener">switch — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-conditionals-if-else-switch-ternary-2a64e3a85c0d" target="_blank" rel="noopener">Conditionals — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · LOOPS
+    ══════════════════════════════ -->
+    <section id="loops" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Loops</h2>
+      <p class="ch-intro">Loops repeat a block of code. Instead of writing the same line 100 times, write it once inside a loop and tell it how many times to run.</p>
+
+      <h3 class="sub-heading">for Loop — When you know the count</h3>
+      <div class="code-block">
+        <div class="code-header">Syntax: for (initialise; condition; increment) { }</div>
+        <pre><code>for (let i = 0; i < 5; i++) {
+  console.log("Count:", i);
+}
+// Output: Count: 0 · Count: 1 · Count: 2 · Count: 3 · Count: 4
+
+// Sum of 1 to 10
+let sum = 0;
+for (let i = 1; i <= 10; i++) {
+  sum += i;
+}
+console.log("Sum:", sum); // Sum: 55</code></pre>
+      </div>
+
+      <h3 class="sub-heading">while Loop — When you don't know the count</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>let count = 1;
+
+while (count <= 3) {
+  console.log("while count:", count);
+  count++;   // ← don't forget this — infinite loop if missing!
+}
+// Output: while count: 1 · while count: 2 · while count: 3</code></pre>
+      </div>
+
+      <h3 class="sub-heading">for...of — Loop over an array's values</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const fruits = ["apple", "banana", "mango"];
+
+for (const fruit of fruits) {
+  console.log("Fruit:", fruit);
+}
+// Output: Fruit: apple · Fruit: banana · Fruit: mango</code></pre>
+      </div>
+
+      <h3 class="sub-heading">break and continue</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">break — exit loop early</div>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">for (let i = 0; i < 10; i++) {
+  if (i === 5) break;
+  console.log(i);
+}
+// Logs: 0 1 2 3 4</code></pre>
+        </div>
+        <div class="card">
+          <div class="card-tag">continue — skip this iteration</div>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">for (let i = 0; i < 6; i++) {
+  if (i % 2 === 0) continue;
+  console.log(i);
+}
+// Logs: 1 3 5 (skips evens)</code></pre>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Loops</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// for loop — print 1 to 5
+for (let i = 1; i <= 5; i++) {
+  console.log("Number:", i);
+}
+
+// for...of — loop over subjects
+const subjects = ["Maths", "Science", "English"];
+for (const subject of subjects) {
+  console.log("Subject:", subject);
+}
+
+// Try: add break when i === 3
+// Try: use continue to skip even numbers'>// for loop — print 1 to 5
+for (let i = 1; i <= 5; i++) {
+  console.log("Number:", i);
+}
+
+// for...of — loop over subjects
+const subjects = ["Maths", "Science", "English"];
+for (const subject of subjects) {
+  console.log("Subject:", subject);
+}
+
+// Try: add break when i === 3
+// Try: use continue to skip even numbers</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Which loop?</strong> Use <code>for</code> when you know the count. Use <code>while</code> when the end condition is dynamic. Use <code>for...of</code> to loop over an array's values. Use <code>for...in</code> to loop over an object's keys (covered in Module 3).
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration" target="_blank" rel="noopener">Loops — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of" target="_blank" rel="noopener">for...of — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-loops-for-while-for-of-for-in-8e0dea5c1e3b" target="_blank" rel="noopener">Loops explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · TYPE COERCION
+    ══════════════════════════════ -->
+    <section id="coercion" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Type Coercion</h2>
+      <p class="ch-intro">JavaScript automatically converts types in certain situations. This is called implicit coercion — and it causes some of the language's most surprising bugs.</p>
+
+      <h3 class="sub-heading">Implicit Coercion — The Surprises</h3>
+      <div class="code-block">
+        <div class="code-header">These are all real JavaScript outputs — run them to believe it</div>
+        <pre><code>console.log("5" + 3);      // "53"  — 3 coerced to string, concatenated
+console.log("5" - 3);      // 2     — "5" coerced to number, subtracted
+console.log("5" * "2");    // 10    — both coerced to numbers
+console.log(true + 1);     // 2     — true coerced to 1
+console.log(false + 1);    // 1     — false coerced to 0
+console.log(null + 1);     // 1     — null coerced to 0
+console.log("" + 1);       // "1"   — 1 coerced to string</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Explicit Conversion — The Safe Way</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// To Number
+Number("42");       // 42
+Number("3.14");     // 3.14
+Number("abc");      // NaN — can't convert
+Number("");         // 0
+Number(true);       // 1
+Number(false);      // 0
+parseInt("42px");   // 42 — stops at non-numeric character
+parseFloat("3.14rem"); // 3.14
+
+// To String
+String(42);         // "42"
+String(true);       // "true"
+(42).toString();    // "42"
+
+// To Boolean
+Boolean(0);         // false
+Boolean("");        // false
+Boolean(null);      // false
+Boolean(undefined); // false
+Boolean(NaN);       // false
+Boolean("hello");   // true
+Boolean(42);        // true
+Boolean([]);        // true  ← empty array is TRUTHY — surprising!</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The 6 Falsy Values — Memorise These</h3>
+      <p style="margin-bottom:0.75rem;">In a boolean context (inside an <code>if</code> condition), these 6 values are treated as <code>false</code>. Everything else is truthy.</p>
+      <div class="falsy-list">
+        <span class="falsy-chip">0</span>
+        <span class="falsy-chip">""</span>
+        <span class="falsy-chip">null</span>
+        <span class="falsy-chip">undefined</span>
+        <span class="falsy-chip">NaN</span>
+        <span class="falsy-chip">false</span>
+      </div>
+
+      <h3 class="sub-heading">Try It — Coercion Gotchas</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Implicit coercion surprises
+console.log("5" + 3);    // "53" — not 8!
+console.log("5" - 3);    // 2
+console.log(true + 1);   // 2
+console.log(null + 1);   // 1
+
+// Explicit — safe
+console.log(Number("42"));    // 42
+console.log(Number("abc"));   // NaN
+console.log(Boolean(0));      // false
+console.log(Boolean([]));     // true ← empty array is truthy!
+
+// Falsy in conditions
+if (0)   { console.log("truthy"); } else { console.log("0 is falsy"); }
+if ("")  { console.log("truthy"); } else { console.log("empty string is falsy"); }
+if ([])  { console.log("[] is truthy!"); }
+if (NaN) { console.log("truthy"); } else { console.log("NaN is falsy"); }'>// Implicit coercion surprises
+console.log("5" + 3);    // "53" — not 8!
+console.log("5" - 3);    // 2
+console.log(true + 1);   // 2
+console.log(null + 1);   // 1
+
+// Explicit — safe
+console.log(Number("42"));    // 42
+console.log(Number("abc"));   // NaN
+console.log(Boolean(0));      // false
+console.log(Boolean([]));     // true ← empty array is truthy!
+
+// Falsy in conditions
+if (0)   { console.log("truthy"); } else { console.log("0 is falsy"); }
+if ("")  { console.log("truthy"); } else { console.log("empty string is falsy"); }
+if ([])  { console.log("[] is truthy!"); }
+if (NaN) { console.log("truthy"); } else { console.log("NaN is falsy"); }</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Defence:</strong> Use explicit conversion (<code>Number()</code>, <code>String()</code>, <code>Boolean()</code>) instead of relying on implicit coercion. Use <code>===</code> instead of <code>==</code>. These two habits eliminate most coercion bugs.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Glossary/Type_coercion" target="_blank" rel="noopener">Type Coercion — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/type-coercion-in-javascript-ef5e390d2318" target="_blank" rel="noopener">Coercion explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · BUILD IT: REPORT CARD
+    ══════════════════════════════ -->
+    <section id="report-card" class="chapter chapter-exercise">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">Build It: Report Card Generator</h2>
+      <p class="ch-intro">Apply everything from chapters 2–8. Write a program that takes 5 subject scores, calculates the average, assigns a grade, and prints a formatted report.</p>
+
+      <div class="exercise-intro-box">
+        <div class="eib-title">What your program must do</div>
+        <div class="eib-steps">
+          <div class="eib-step"><div class="eib-num">1</div><span>Declare 5 subject scores using <code>const</code> — Ch.03</span></div>
+          <div class="eib-step"><div class="eib-num">2</div><span>Calculate total and average using arithmetic operators — Ch.05</span></div>
+          <div class="eib-step"><div class="eib-num">3</div><span>Print each subject + score using a <code>for</code> loop — Ch.07</span></div>
+          <div class="eib-step"><div class="eib-num">4</div><span>Assign a grade with <code>if/else if/else</code>: A≥90, B≥80, C≥70, D≥60, F below — Ch.06</span></div>
+          <div class="eib-step"><div class="eib-num">5</div><span>Print a final summary: average, grade, PASS/FAIL — Ch.02</span></div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Ask Yourself Before Starting</h3>
+      <div class="question-card">
+        <div class="q-label">Q1</div>
+        <p>You have 5 separate scores. What's the most efficient way to store them so you can loop over them with one loop?</p>
+        <div class="q-hint">Hint: An array — <code>const scores = [78, 85, 90, 62, 74]</code>. Arrays are covered deeply in Module 3, but you can use one here.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q2</div>
+        <p>How do you calculate the total of all 5 scores using a loop?</p>
+        <div class="q-hint">Hint: Start with <code>let total = 0</code>. Inside a <code>for...of</code> loop, add each score: <code>total += score</code>.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q3</div>
+        <p>The average will likely be a decimal. How do you display it rounded to 2 decimal places?</p>
+        <div class="q-hint">Hint: <code>average.toFixed(2)</code> returns a string with exactly 2 decimal places.</div>
+      </div>
+
+      <h3 class="sub-heading">Skeleton — Fill in the ???s</h3>
+      <div class="code-block">
+        <div class="code-header">report-card.js — complete this</div>
+        <pre><code>const subjects = ["Maths", "Science", "English", "History", "Computer"];
+const scores   = [78, 85, 90, 62, 74];   // change to your marks
+
+// 1. Calculate total
+let total = ???;
+for (const score of scores) {
+  total ??? score;   // add each score
+}
+
+// 2. Average
+const average = total / ???;
+
+// 3. Print each subject + score
+for (let i = 0; i < subjects.???; i++) {
+  console.log(subjects[i] + ": " + scores[i]);
+}
+
+// 4. Assign grade
+let grade;
+if (average >= ???) {
+  grade = "A";
+} else if (average >= 80) {
+  grade = "???";
+} else if (average >= 70) {
+  grade = "C";
+} else if (??? >= 60) {
+  grade = "D";
+} else {
+  grade = "F";
+}
+
+// 5. Print summary
+const passed = average >= ???;
+console.log("---");
+console.log("Average: " + average.???(2));
+console.log("Grade:   " + grade);
+console.log(passed ? "Result: PASS ✓" : "Result: FAIL ✗");</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Write Your Solution Here</h3>
+      <p style="margin-bottom:0.75rem;">Write your solution from scratch, or use the skeleton above as a guide. Change the scores and verify the grade updates correctly.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Report Card Generator</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ── Report Card Generator ──
+// Write your solution here
+
+const subjects = ["Maths", "Science", "English", "History", "Computer"];
+const scores   = [78, 85, 90, 62, 74];
+
+// Step 1: Calculate total
+let total = 0;
+// TODO: loop through scores and add each to total
+
+// Step 2: Calculate average
+// const average = ???
+
+// Step 3: Print each subject and score
+// TODO: loop with index
+
+// Step 4: Assign grade (A/B/C/D/F)
+// TODO: if/else if chain
+
+// Step 5: Print summary
+// TODO: average.toFixed(2), grade, PASS/FAIL'>// ── Report Card Generator ──
+// Write your solution here
+
+const subjects = ["Maths", "Science", "English", "History", "Computer"];
+const scores   = [78, 85, 90, 62, 74];
+
+// Step 1: Calculate total
+let total = 0;
+// TODO: loop through scores and add each to total
+
+// Step 2: Calculate average
+// const average = ???
+
+// Step 3: Print each subject and score
+// TODO: loop with index
+
+// Step 4: Assign grade (A/B/C/D/F)
+// TODO: if/else if chain
+
+// Step 5: Print summary
+// TODO: average.toFixed(2), grade, PASS/FAIL</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <h3 class="sub-heading" style="margin-top:2rem;">Reference Solution</h3>
+      <p style="margin-bottom:0.75rem;color:var(--muted);font-size:0.9rem;">Only look at this after making a genuine attempt.</p>
+      <div class="code-block">
+        <div class="code-header">report-card.js — full solution</div>
+        <pre><code>const subjects = ["Maths", "Science", "English", "History", "Computer"];
+const scores   = [78, 85, 90, 62, 74];
+
+// Total + average
+let total = 0;
+for (const score of scores) {
+  total += score;
+}
+const average = total / scores.length;
+
+// Print each subject
+for (let i = 0; i < subjects.length; i++) {
+  console.log(subjects[i] + ": " + scores[i]);
+}
+
+// Assign grade
+let grade;
+if      (average >= 90) { grade = "A"; }
+else if (average >= 80) { grade = "B"; }
+else if (average >= 70) { grade = "C"; }
+else if (average >= 60) { grade = "D"; }
+else                    { grade = "F"; }
+
+// Summary
+const passed = average >= 60;
+console.log("---");
+console.log("Average: " + average.toFixed(2));
+console.log("Grade:   " + grade);
+console.log(passed ? "Result: PASS ✓" : "Result: FAIL ✗");</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>When you're done:</strong> Try setting all scores to 95 — you should get A + PASS. Try all 40s — you should get F + FAIL. If both work correctly, your logic is solid.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <p>JavaScript Fundamentals — Student Handbook &nbsp;·&nbsp; Open the console (F12) and experiment while you read.</p>
+  </footer>
+
+  <!-- ============================================================
+       SANDBOX ENGINE
+  ============================================================ -->
+  <script>
+    function formatValue(v) {
+      if (v === undefined) return 'undefined';
+      if (v === null)      return 'null';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+      }
+      return String(v);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    function runSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const code    = sandbox.querySelector('.sandbox-code').value;
+      const output  = sandbox.querySelector('.sandbox-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const orig = {
+        log:   console.log,
+        error: console.error,
+        warn:  console.warn
+      };
+
+      console.log   = (...a) => logs.push({ t: 'log',   text: a.map(formatValue).join(' ') });
+      console.error = (...a) => logs.push({ t: 'error', text: a.map(formatValue).join(' ') });
+      console.warn  = (...a) => logs.push({ t: 'warn',  text: a.map(formatValue).join(' ') });
+
+      try {
+        eval(code); // eslint-disable-line no-eval
+      } catch (e) {
+        logs.push({ t: 'error', text: e.message });
+      } finally {
+        console.log   = orig.log;
+        console.error = orig.error;
+        console.warn  = orig.warn;
+      }
+
+      if (!logs.length) {
+        output.innerHTML = '<div class="sb-empty">// No output — add console.log() to see results.</div>';
+        return;
+      }
+
+      output.innerHTML = logs
+        .map(l => `<div class="sb-line sb-${l.t}">${escapeHtml(l.text)}</div>`)
+        .join('');
+    }
+
+    function resetSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const ta      = sandbox.querySelector('.sandbox-code');
+      ta.value      = ta.dataset.default;
+      sandbox.querySelector('.sandbox-output').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>

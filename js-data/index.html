@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Master JavaScript data structures — arrays, objects, Sets, Maps, destructuring, template literals and the methods to transform them." />
+  <title>JavaScript Data Structures — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">JavaScript<br><span class="hero-accent">Data Structures</span></h1>
+    <p class="hero-sub">Arrays, Objects, and the tools to work with them.</p>
+    <p class="hero-desc">Master the data structures that hold your application's information — arrays, objects, Sets, and Maps — and the powerful methods to transform, filter, and search them.</p>
+    <div class="hero-pills">
+      <span class="pill">12 Chapters</span>
+      <span class="pill">Live Sandboxes</span>
+      <span class="pill">MDN References</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#arrays-basics">01 Arrays — Basics</a></li>
+      <li><a href="#array-mutating">02 Mutating Methods</a></li>
+      <li><a href="#array-nonmutating">03 Non-Mutating Methods</a></li>
+      <li><a href="#array-iteration">04 Array Iteration</a></li>
+      <li><a href="#objects-basics">05 Objects — Basics</a></li>
+      <li><a href="#object-methods">06 Object Methods</a></li>
+      <li><a href="#destructuring">07 Destructuring</a></li>
+      <li><a href="#template-literals">08 Template Literals</a></li>
+      <li><a href="#string-methods">09 String Methods</a></li>
+      <li><a href="#set">10 Set</a></li>
+      <li><a href="#map">11 Map</a></li>
+      <li><a href="#grade-book">12 Build It: Grade Book</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · ARRAYS — BASICS
+    ══════════════════════════════ -->
+    <section id="arrays-basics" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">Arrays — Basics</h2>
+      <p class="ch-intro">An array is an ordered list of values. It is the most common data structure in JavaScript — used to hold collections of items like scores, names, products, or API results.</p>
+
+      <h3 class="sub-heading">Creating an Array</h3>
+      <p style="margin-bottom:1rem;">Use square brackets <code>[]</code> to create an array. Items are separated by commas. Arrays can hold any type — including a mix of types — and they are zero-indexed: the first item is at index <code>0</code>.</p>
+      <div class="code-block">
+        <div class="code-header">Creating arrays</div>
+        <pre><code>// Array literal — always prefer this
+const fruits   = ["apple", "banana", "mango"];
+const scores   = [78, 85, 90, 62];
+const mixed    = [42, "hello", true, null];
+
+// Empty array — fill it later
+const cart = [];
+
+// Array constructor — rarely used
+const blank = new Array(3);  // [empty × 3]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Accessing Elements</h3>
+      <div class="code-block">
+        <div class="code-header">Index access — zero-based</div>
+        <pre><code>const fruits = ["apple", "banana", "mango"];
+
+console.log(fruits[0]);  // "apple"   ← first
+console.log(fruits[1]);  // "banana"
+console.log(fruits[2]);  // "mango"   ← last
+console.log(fruits[3]);  // undefined ← out of bounds
+
+// Access from the end
+console.log(fruits[fruits.length - 1]);  // "mango"
+console.log(fruits.at(-1));              // "mango" ← ES2022</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Array Length</h3>
+      <div class="code-block">
+        <div class="code-header">The .length property</div>
+        <pre><code>const scores = [78, 85, 90, 62, 74];
+
+console.log(scores.length);     // 5
+console.log(scores.length - 1); // 4 — index of the last element
+
+// length updates automatically as items are added/removed
+scores.push(95);
+console.log(scores.length);     // 6</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Multidimensional Arrays</h3>
+      <div class="code-block">
+        <div class="code-header">Arrays inside arrays</div>
+        <pre><code>// 2D array — a grid / matrix
+const matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+
+console.log(matrix[0]);     // [1, 2, 3]  ← row 0
+console.log(matrix[1][2]);  // 6          ← row 1, column 2
+
+// Practical: list of students with scores
+const students = [
+  ["Naman",  [85, 90, 78]],
+  ["Priya",  [92, 88, 95]],
+  ["Rahul",  [70, 75, 80]]
+];
+
+console.log(students[1][0]);     // "Priya"
+console.log(students[1][1][2]);  // 95 ← Priya's third score</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>Mental model:</strong> Think of an array as a numbered shelf. Position 0 holds the first item, position 1 holds the second, and so on. <code>fruits[0]</code> means "reach into the shelf at slot 0". <code>fruits.length</code> tells you how many slots are filled.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener">Array — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-arrays-a-beginners-guide-d12b3a4a5c7f" target="_blank" rel="noopener">Arrays guide — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · ARRAY METHODS — MUTATING
+    ══════════════════════════════ -->
+    <section id="array-mutating" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Array Methods — Mutating</h2>
+      <p class="ch-intro">Mutating methods <strong>change the original array</strong> in place. You need to know which methods mutate and which don't — it prevents hard-to-find bugs.</p>
+
+      <h3 class="sub-heading">Quick Reference — Mutating Methods</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>What it does</th><th>Example</th><th>Returns</th><th>MDN</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>push(x)</code></td>
+            <td>Add x to the <em>end</em></td>
+            <td><code>arr.push(4)</code></td>
+            <td>New length</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>pop()</code></td>
+            <td>Remove from the <em>end</em></td>
+            <td><code>arr.pop()</code></td>
+            <td>Removed item</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>unshift(x)</code></td>
+            <td>Add x to the <em>start</em></td>
+            <td><code>arr.unshift(0)</code></td>
+            <td>New length</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>shift()</code></td>
+            <td>Remove from the <em>start</em></td>
+            <td><code>arr.shift()</code></td>
+            <td>Removed item</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>splice(i,n,...)</code></td>
+            <td>Remove/insert at index i</td>
+            <td><code>arr.splice(1,1,"x")</code></td>
+            <td>Removed items</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>reverse()</code></td>
+            <td>Reverse order in-place</td>
+            <td><code>arr.reverse()</code></td>
+            <td>The array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>sort(fn)</code></td>
+            <td>Sort in-place (default: lexicographic)</td>
+            <td><code>arr.sort((a,b)=>a-b)</code></td>
+            <td>The array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>fill(v,s,e)</code></td>
+            <td>Fill slots with value v</td>
+            <td><code>arr.fill(0,0,3)</code></td>
+            <td>The array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">push / pop — End of Array</h3>
+      <div class="code-block">
+        <div class="code-header">Stack behaviour — Last In, First Out</div>
+        <pre><code>const stack = ["a", "b", "c"];
+
+// push — add to end
+stack.push("d");
+console.log(stack);           // ["a", "b", "c", "d"]
+console.log(stack.push("e")); // 5 ← returns new length
+
+// pop — remove from end
+const last = stack.pop();
+console.log(last);  // "e"
+console.log(stack); // ["a", "b", "c", "d"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">unshift / shift — Start of Array</h3>
+      <div class="code-block">
+        <div class="code-header">Queue behaviour — First In, First Out</div>
+        <pre><code>const queue = ["b", "c", "d"];
+
+// unshift — add to front
+queue.unshift("a");
+console.log(queue);  // ["a", "b", "c", "d"]
+
+// shift — remove from front
+const first = queue.shift();
+console.log(first);  // "a"
+console.log(queue);  // ["b", "c", "d"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">splice — Remove, Insert, or Replace</h3>
+      <div class="code-block">
+        <div class="code-header">splice(startIndex, deleteCount, ...itemsToInsert)</div>
+        <pre><code>const arr = ["a", "b", "c", "d", "e"];
+
+// Remove 2 items starting at index 1
+const removed = arr.splice(1, 2);
+console.log(removed); // ["b", "c"]
+console.log(arr);     // ["a", "d", "e"]
+
+// Insert without removing (deleteCount = 0)
+arr.splice(1, 0, "x", "y");
+console.log(arr);     // ["a", "x", "y", "d", "e"]
+
+// Replace: remove 1, insert 1
+arr.splice(2, 1, "Z");
+console.log(arr);     // ["a", "x", "Z", "d", "e"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">sort — The Gotcha</h3>
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p>By default, <code>sort()</code> converts elements to strings and sorts lexicographically. This means <code>[10, 9, 2].sort()</code> gives <code>[10, 2, 9]</code> — not what you want for numbers. Always pass a comparator function for numeric sorts.</p>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header">Correct numeric and string sort</div>
+        <pre><code>// WRONG for numbers
+[10, 9, 2, 100].sort();          // [10, 100, 2, 9] — lexicographic!
+
+// CORRECT for numbers — ascending
+[10, 9, 2, 100].sort((a, b) => a - b);  // [2, 9, 10, 100]
+
+// CORRECT for numbers — descending
+[10, 9, 2, 100].sort((a, b) => b - a);  // [100, 10, 9, 2]
+
+// Strings (default sort works fine for ASCII)
+["banana", "apple", "cherry"].sort();   // ["apple", "banana", "cherry"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Mutating Methods</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const arr = [10, 20, 30, 40, 50];
+console.log("Start:", arr);
+
+arr.push(60);
+console.log("After push(60):", arr);
+
+const popped = arr.pop();
+console.log("Popped:", popped, "| Array:", arr);
+
+arr.unshift(0);
+console.log("After unshift(0):", arr);
+
+arr.shift();
+console.log("After shift():", arr);
+
+// splice: remove 1 item at index 1
+arr.splice(1, 1);
+console.log("After splice(1,1):", arr);
+
+// sort numerically
+const nums = [30, 1, 100, 10, 5];
+nums.sort((a, b) => a - b);
+console.log("Sorted asc:", nums);'>const arr = [10, 20, 30, 40, 50];
+console.log("Start:", arr);
+
+arr.push(60);
+console.log("After push(60):", arr);
+
+const popped = arr.pop();
+console.log("Popped:", popped, "| Array:", arr);
+
+arr.unshift(0);
+console.log("After unshift(0):", arr);
+
+arr.shift();
+console.log("After shift():", arr);
+
+// splice: remove 1 item at index 1
+arr.splice(1, 1);
+console.log("After splice(1,1):", arr);
+
+// sort numerically
+const nums = [30, 1, 100, 10, 5];
+nums.sort((a, b) => a - b);
+console.log("Sorted asc:", nums);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Push/pop vs unshift/shift:</strong> <code>push</code>/<code>pop</code> work at the <em>end</em> (fast — O(1)). <code>unshift</code>/<code>shift</code> work at the <em>start</em> (slower — O(n) because every element shifts). Prefer push/pop for performance-sensitive code.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener">Array — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-array-methods-that-mutate-vs-those-that-dont-b3c4b8a2e9a1" target="_blank" rel="noopener">Mutating vs non-mutating — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · ARRAY METHODS — NON-MUTATING
+    ══════════════════════════════ -->
+    <section id="array-nonmutating" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Array Methods — Non-Mutating</h2>
+      <p class="ch-intro">Non-mutating methods <strong>return a new value</strong> and leave the original array unchanged. These are safer to use — you never accidentally modify the source data.</p>
+
+      <h3 class="sub-heading">Quick Reference — Non-Mutating Methods</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>What it does</th><th>Example</th><th>Returns</th><th>MDN</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>slice(s,e)</code></td>
+            <td>Extract from index s up to (not including) e</td>
+            <td><code>arr.slice(1,3)</code></td>
+            <td>New array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>concat(...)</code></td>
+            <td>Merge arrays together</td>
+            <td><code>a.concat(b, c)</code></td>
+            <td>New array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>includes(v)</code></td>
+            <td>Check if array contains v</td>
+            <td><code>arr.includes("a")</code></td>
+            <td>Boolean</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>indexOf(v)</code></td>
+            <td>Index of first occurrence of v</td>
+            <td><code>arr.indexOf("b")</code></td>
+            <td>Index or -1</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>join(sep)</code></td>
+            <td>Join all elements into a string</td>
+            <td><code>arr.join(", ")</code></td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>flat(depth)</code></td>
+            <td>Flatten nested arrays</td>
+            <td><code>arr.flat()</code></td>
+            <td>New array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>toReversed()</code></td>
+            <td>Reverse without mutating (ES2023)</td>
+            <td><code>arr.toReversed()</code></td>
+            <td>New array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toReversed" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>toSorted(fn)</code></td>
+            <td>Sort without mutating (ES2023)</td>
+            <td><code>arr.toSorted((a,b)=>a-b)</code></td>
+            <td>New array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">slice — Extract a Portion</h3>
+      <div class="code-block">
+        <div class="code-header">slice(startIndex, endIndex) — end is exclusive</div>
+        <pre><code>const fruits = ["apple", "banana", "cherry", "date", "elderberry"];
+
+// slice(1, 3) — from index 1 up to (not including) index 3
+console.log(fruits.slice(1, 3));  // ["banana", "cherry"]
+
+// slice(2) — from index 2 to the end
+console.log(fruits.slice(2));     // ["cherry", "date", "elderberry"]
+
+// Negative index — count from the end
+console.log(fruits.slice(-2));    // ["date", "elderberry"]
+
+// Shallow copy of entire array
+const copy = fruits.slice();
+console.log(copy === fruits);     // false — different reference</code></pre>
+      </div>
+
+      <h3 class="sub-heading">concat and flat</h3>
+      <div class="code-block">
+        <div class="code-header">Merging and flattening</div>
+        <pre><code>// concat — merge arrays
+const a = [1, 2, 3];
+const b = [4, 5, 6];
+const merged = a.concat(b, [7, 8]);
+console.log(merged);  // [1, 2, 3, 4, 5, 6, 7, 8]
+console.log(a);       // [1, 2, 3] — unchanged
+
+// Spread alternative (more common today)
+const also = [...a, ...b];
+
+// flat — collapse nested arrays
+const nested = [1, [2, 3], [4, [5, 6]]];
+console.log(nested.flat());      // [1, 2, 3, 4, [5, 6]] ← depth 1
+console.log(nested.flat(2));     // [1, 2, 3, 4, 5, 6]   ← depth 2
+console.log(nested.flat(Infinity)); // fully flatten any depth</code></pre>
+      </div>
+
+      <h3 class="sub-heading">join — Array to String</h3>
+      <div class="code-block">
+        <div class="code-header">join is the reverse of split</div>
+        <pre><code>const words = ["Hello", "World", "from", "JavaScript"];
+
+console.log(words.join(" "));   // "Hello World from JavaScript"
+console.log(words.join(", "));  // "Hello, World, from, JavaScript"
+console.log(words.join(""));    // "HelloWorldfromJavaScript"
+console.log(words.join("-"));   // "Hello-World-from-JavaScript"
+
+// Common pattern: build a CSV row
+const row = ["Naman", 85, "Pass"];
+console.log(row.join(","));     // "Naman,85,Pass"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Non-Mutating Methods</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const fruits = ["apple", "banana", "cherry", "date", "elderberry"];
+
+// slice
+console.log("slice(1,3):", fruits.slice(1, 3));
+console.log("slice(-2):", fruits.slice(-2));
+
+// includes / indexOf
+console.log("includes cherry:", fruits.includes("cherry"));
+console.log("indexOf date:", fruits.indexOf("date"));
+console.log("indexOf mango:", fruits.indexOf("mango")); // -1
+
+// join
+console.log("join:", fruits.join(" | "));
+
+// concat
+const more = fruits.concat(["fig", "grape"]);
+console.log("concat:", more);
+console.log("original unchanged:", fruits);
+
+// flat
+const nested = [1, [2, 3], [4, [5, 6]]];
+console.log("flat(1):", nested.flat());
+console.log("flat(2):", nested.flat(2));'>const fruits = ["apple", "banana", "cherry", "date", "elderberry"];
+
+// slice
+console.log("slice(1,3):", fruits.slice(1, 3));
+console.log("slice(-2):", fruits.slice(-2));
+
+// includes / indexOf
+console.log("includes cherry:", fruits.includes("cherry"));
+console.log("indexOf date:", fruits.indexOf("date"));
+console.log("indexOf mango:", fruits.indexOf("mango")); // -1
+
+// join
+console.log("join:", fruits.join(" | "));
+
+// concat
+const more = fruits.concat(["fig", "grape"]);
+console.log("concat:", more);
+console.log("original unchanged:", fruits);
+
+// flat
+const nested = [1, [2, 3], [4, [5, 6]]];
+console.log("flat(1):", nested.flat());
+console.log("flat(2):", nested.flat(2));</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>slice vs splice:</strong> The names look similar — remember: <code>slice</code> (non-mutating, returns a portion) vs <code>splice</code> (mutating, changes the array). When in doubt, <code>slice</code> is the safe one.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice" target="_blank" rel="noopener">slice — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat" target="_blank" rel="noopener">flat — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/8-must-know-javascript-array-methods-2c8c49e5b9b3" target="_blank" rel="noopener">Array methods — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · ARRAY ITERATION
+    ══════════════════════════════ -->
+    <section id="array-iteration" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Array Iteration</h2>
+      <p class="ch-intro">The iteration methods — <code>map</code>, <code>filter</code>, <code>reduce</code>, <code>find</code>, <code>some</code>, <code>every</code>, <code>forEach</code> — are among the most powerful tools in JavaScript. They replace most manual loops.</p>
+
+      <h3 class="sub-heading">Quick Reference — Iteration Methods</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>What it does</th><th>Returns</th><th>MDN</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>forEach(fn)</code></td>
+            <td>Run fn for each item — like a for loop, no return value</td>
+            <td><code>undefined</code></td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>map(fn)</code></td>
+            <td>Transform each item — returns a new array of the same length</td>
+            <td>New array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>filter(fn)</code></td>
+            <td>Keep only items where fn returns true</td>
+            <td>New array (shorter)</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>reduce(fn, init)</code></td>
+            <td>Accumulate all items into one value (sum, object, string…)</td>
+            <td>Single value</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>find(fn)</code></td>
+            <td>Return first item where fn returns true</td>
+            <td>Item or undefined</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>findIndex(fn)</code></td>
+            <td>Return index of first match</td>
+            <td>Index or -1</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>some(fn)</code></td>
+            <td>True if at least one item passes fn</td>
+            <td>Boolean</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>every(fn)</code></td>
+            <td>True only if ALL items pass fn</td>
+            <td>Boolean</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">map — Transform Every Item</h3>
+      <div class="code-block">
+        <div class="code-header">map returns a NEW array of the same length</div>
+        <pre><code>const prices = [100, 250, 80, 400];
+
+// Add 18% GST to every price
+const withGST = prices.map(price => price * 1.18);
+console.log(withGST);  // [118, 295, 94.4, 472]
+console.log(prices);   // [100, 250, 80, 400] — unchanged!
+
+// Extract a field from an array of objects
+const students = [
+  { name: "Naman",  score: 85 },
+  { name: "Priya",  score: 92 },
+  { name: "Rahul",  score: 70 }
+];
+const names = students.map(s => s.name);
+console.log(names);  // ["Naman", "Priya", "Rahul"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">filter — Keep Matching Items</h3>
+      <div class="code-block">
+        <div class="code-header">filter returns a NEW array — possibly shorter</div>
+        <pre><code>const scores = [45, 78, 92, 55, 88, 34, 95];
+
+// Keep only passing scores (>= 60)
+const passing = scores.filter(score => score >= 60);
+console.log(passing);  // [78, 92, 88, 95]
+
+// Filter objects — students who passed
+const students = [
+  { name: "Naman", score: 85, passed: true  },
+  { name: "Raj",   score: 42, passed: false },
+  { name: "Priya", score: 91, passed: true  }
+];
+const passers = students.filter(s => s.passed);
+console.log(passers.map(s => s.name)); // ["Naman", "Priya"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">reduce — Collapse to One Value</h3>
+      <div class="code-block">
+        <div class="code-header">reduce(callback(accumulator, currentValue), initialValue)</div>
+        <pre><code>const scores = [78, 85, 90, 62, 74];
+
+// Sum all scores
+const total = scores.reduce((acc, score) => acc + score, 0);
+console.log("Total:", total);    // 389
+console.log("Average:", total / scores.length);  // 77.8
+
+// Max value using reduce
+const max = scores.reduce((best, s) => s > best ? s : best, -Infinity);
+console.log("Max:", max);  // 90
+
+// Count occurrences — reduce to an object
+const votes = ["yes", "no", "yes", "yes", "no"];
+const tally = votes.reduce((acc, vote) => {
+  acc[vote] = (acc[vote] || 0) + 1;
+  return acc;
+}, {});
+console.log(tally);  // { yes: 3, no: 2 }</code></pre>
+      </div>
+
+      <h3 class="sub-heading">find, some, every</h3>
+      <div class="code-block">
+        <div class="code-header">Search and check methods</div>
+        <pre><code>const students = [
+  { name: "Naman", score: 85 },
+  { name: "Raj",   score: 42 },
+  { name: "Priya", score: 91 }
+];
+
+// find — first match or undefined
+const topStudent = students.find(s => s.score >= 90);
+console.log(topStudent);  // { name: "Priya", score: 91 }
+
+const missing = students.find(s => s.score > 100);
+console.log(missing);     // undefined
+
+// some — at least one passes?
+console.log(students.some(s => s.score < 50));  // true (Raj)
+
+// every — all pass?
+console.log(students.every(s => s.score >= 60)); // false (Raj)
+console.log(students.every(s => s.score > 0));   // true</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Chaining Methods</h3>
+      <div class="code-block">
+        <div class="code-header">Each method returns an array — chain them</div>
+        <pre><code>const products = [
+  { name: "Shirt",  price: 800,  inStock: true  },
+  { name: "Jeans",  price: 1500, inStock: true  },
+  { name: "Shoes",  price: 3000, inStock: false },
+  { name: "Cap",    price: 400,  inStock: true  }
+];
+
+// Get names of in-stock items under ₹1000, sorted by price
+const result = products
+  .filter(p => p.inStock && p.price < 1000)
+  .sort((a, b) => a.price - b.price)
+  .map(p => `${p.name} (₹${p.price})`);
+
+console.log(result);  // ["Cap (₹400)", "Shirt (₹800)"]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Iteration Methods</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const numbers = [3, 7, 1, 9, 4, 6, 8, 2, 5];
+
+// map — double every number
+const doubled = numbers.map(n => n * 2);
+console.log("doubled:", doubled);
+
+// filter — keep only even numbers
+const evens = numbers.filter(n => n % 2 === 0);
+console.log("evens:", evens);
+
+// reduce — sum all
+const sum = numbers.reduce((acc, n) => acc + n, 0);
+console.log("sum:", sum);
+
+// find — first > 5
+const firstBig = numbers.find(n => n > 5);
+console.log("first > 5:", firstBig);
+
+// some / every
+console.log("some > 8:", numbers.some(n => n > 8));
+console.log("every > 0:", numbers.every(n => n > 0));
+
+// chain: filter evens, double them, sort
+const chain = numbers.filter(n => n % 2 === 0).map(n => n * 2).sort((a,b) => a-b);
+console.log("chain:", chain);'>const numbers = [3, 7, 1, 9, 4, 6, 8, 2, 5];
+
+// map — double every number
+const doubled = numbers.map(n => n * 2);
+console.log("doubled:", doubled);
+
+// filter — keep only even numbers
+const evens = numbers.filter(n => n % 2 === 0);
+console.log("evens:", evens);
+
+// reduce — sum all
+const sum = numbers.reduce((acc, n) => acc + n, 0);
+console.log("sum:", sum);
+
+// find — first > 5
+const firstBig = numbers.find(n => n > 5);
+console.log("first > 5:", firstBig);
+
+// some / every
+console.log("some > 8:", numbers.some(n => n > 8));
+console.log("every > 0:", numbers.every(n => n > 0));
+
+// chain: filter evens, double them, sort
+const chain = numbers.filter(n => n % 2 === 0).map(n => n * 2).sort((a,b) => a-b);
+console.log("chain:", chain);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Choosing the right method:</strong> Need a new transformed array? → <code>map</code>. Need a subset? → <code>filter</code>. Need one value from all items? → <code>reduce</code>. Need to find one item? → <code>find</code>. Need a yes/no about items? → <code>some</code> or <code>every</code>. Just running side effects? → <code>forEach</code>.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">map — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter" target="_blank" rel="noopener">filter — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank" rel="noopener">reduce — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find" target="_blank" rel="noopener">find — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-map-filter-and-reduce-explained-simply-8f5c1b6e7d9a" target="_blank" rel="noopener">map/filter/reduce — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · OBJECTS — BASICS
+    ══════════════════════════════ -->
+    <section id="objects-basics" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Objects — Basics</h2>
+      <p class="ch-intro">An object is a collection of <strong>key–value pairs</strong>. Where an array uses numbered indexes, an object uses named keys. Objects model real-world entities — users, products, settings.</p>
+
+      <h3 class="sub-heading">Creating an Object</h3>
+      <div class="code-block">
+        <div class="code-header">Object literal — the standard way</div>
+        <pre><code>// Object literal — key: value pairs
+const student = {
+  name:    "Naman",
+  age:     20,
+  course:  "Full Stack",
+  passed:  true
+};
+
+// Empty object
+const settings = {};
+
+// Keys can be strings with spaces — use quotes
+const weirdKeys = {
+  "first name": "Naman",
+  "user-id":    101
+};</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Accessing Properties</h3>
+      <div class="code-block">
+        <div class="code-header">Dot notation vs bracket notation</div>
+        <pre><code>const student = { name: "Naman", age: 20, course: "Full Stack" };
+
+// Dot notation — clean, preferred when key is a known identifier
+console.log(student.name);    // "Naman"
+console.log(student.age);     // 20
+
+// Bracket notation — required when key has spaces, or is dynamic
+console.log(student["name"]); // "Naman"
+
+const key = "course";
+console.log(student[key]);    // "Full Stack" — dynamic lookup!
+
+// Accessing a missing key
+console.log(student.marks);   // undefined — no error</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Adding, Updating, Deleting</h3>
+      <div class="code-block">
+        <div class="code-header">Objects are mutable even when declared with const</div>
+        <pre><code>const user = { name: "Naman", role: "student" };
+
+// Add a new property
+user.email = "naman@example.com";
+
+// Update an existing property
+user.role = "admin";
+
+// Delete a property
+delete user.email;
+
+console.log(user); // { name: "Naman", role: "admin" }
+
+// Check if a key exists
+console.log("name" in user);   // true
+console.log("email" in user);  // false</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Nested Objects</h3>
+      <div class="code-block">
+        <div class="code-header">Objects can contain objects (and arrays)</div>
+        <pre><code>const student = {
+  name: "Naman",
+  address: {
+    city:    "Delhi",
+    pincode: "110001"
+  },
+  scores: [85, 90, 78, 92]
+};
+
+// Access nested properties
+console.log(student.address.city);       // "Delhi"
+console.log(student.address["pincode"]); // "110001"
+console.log(student.scores[2]);          // 78</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Methods — Functions Inside Objects</h3>
+      <div class="code-block">
+        <div class="code-header">A method is an object property whose value is a function</div>
+        <pre><code>const calculator = {
+  result: 0,
+
+  add(n) {
+    this.result += n;
+    return this;  // enables chaining
+  },
+
+  subtract(n) {
+    this.result -= n;
+    return this;
+  },
+
+  getValue() {
+    return this.result;
+  }
+};
+
+calculator.add(10).add(5).subtract(3);
+console.log(calculator.getValue()); // 12
+
+// this — refers to the object the method is called on
+const greeter = {
+  name: "Naman",
+  greet() {
+    console.log("Hello, I am " + this.name);
+  }
+};
+greeter.greet(); // "Hello, I am Naman"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Objects</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const product = {
+  name:  "Laptop",
+  brand: "TechBrand",
+  price: 55000,
+  specs: {
+    ram:     "16GB",
+    storage: "512GB SSD"
+  },
+  tags: ["electronics", "computer", "portable"],
+  describe() {
+    return `${this.brand} ${this.name} — ₹${this.price}`;
+  }
+};
+
+// Access
+console.log(product.name);
+console.log(product.specs.ram);
+console.log(product.tags[1]);
+console.log(product.describe());
+
+// Add / update / delete
+product.inStock = true;
+product.price = 52000;
+delete product.brand;
+
+console.log("In stock:", product.inStock);
+console.log("New price:", product.price);
+console.log("brand in product:", "brand" in product);'>const product = {
+  name:  "Laptop",
+  brand: "TechBrand",
+  price: 55000,
+  specs: {
+    ram:     "16GB",
+    storage: "512GB SSD"
+  },
+  tags: ["electronics", "computer", "portable"],
+  describe() {
+    return `${this.brand} ${this.name} — ₹${this.price}`;
+  }
+};
+
+// Access
+console.log(product.name);
+console.log(product.specs.ram);
+console.log(product.tags[1]);
+console.log(product.describe());
+
+// Add / update / delete
+product.inStock = true;
+product.price = 52000;
+delete product.brand;
+
+console.log("In stock:", product.inStock);
+console.log("New price:", product.price);
+console.log("brand in product:", "brand" in product);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Dot vs bracket:</strong> Use dot notation (<code>obj.key</code>) when you know the key at write-time. Use bracket notation (<code>obj[variable]</code>) when the key is dynamic or stored in a variable. You'll need brackets for keys with spaces or special characters.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="noopener">Object — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-objects-the-complete-guide-3e3a7c2e5c1d" target="_blank" rel="noopener">Objects guide — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · OBJECT METHODS
+    ══════════════════════════════ -->
+    <section id="object-methods" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Object Methods</h2>
+      <p class="ch-intro"><code>Object.keys()</code>, <code>Object.values()</code>, and <code>Object.entries()</code> let you loop over, transform, and merge objects. Combined with spread, they cover most real-world object manipulation.</p>
+
+      <h3 class="sub-heading">Quick Reference</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>What it returns</th><th>Example output</th><th>MDN</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Object.keys(obj)</code></td>
+            <td>Array of own enumerable keys</td>
+            <td><code>["name", "age"]</code></td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>Object.values(obj)</code></td>
+            <td>Array of own enumerable values</td>
+            <td><code>["Naman", 20]</code></td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>Object.entries(obj)</code></td>
+            <td>Array of [key, value] pairs</td>
+            <td><code>[["name","Naman"],["age",20]]</code></td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>Object.assign(target, src)</code></td>
+            <td>Copy src properties onto target</td>
+            <td>Modified target</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>Object.fromEntries(pairs)</code></td>
+            <td>Create object from [key,value] pairs</td>
+            <td><code>{ a: 1, b: 2 }</code></td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>{ ...obj }</code></td>
+            <td>Spread — shallow copy / merge</td>
+            <td>New object</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Object.keys / values / entries</h3>
+      <div class="code-block">
+        <div class="code-header">Iterate over an object's data</div>
+        <pre><code>const student = { name: "Naman", age: 20, score: 85 };
+
+console.log(Object.keys(student));    // ["name", "age", "score"]
+console.log(Object.values(student));  // ["Naman", 20, 85]
+console.log(Object.entries(student)); // [["name","Naman"],["age",20],["score",85]]
+
+// Loop over keys
+for (const key of Object.keys(student)) {
+  console.log(key, ":", student[key]);
+}
+
+// Loop over entries (destructured — see Ch 07)
+for (const [key, value] of Object.entries(student)) {
+  console.log(`${key} → ${value}`);
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Copying and Merging with Spread</h3>
+      <div class="code-block">
+        <div class="code-header">Spread is now preferred over Object.assign</div>
+        <pre><code>const defaults = { theme: "light", lang: "en", fontSize: 16 };
+const userPrefs = { theme: "dark", fontSize: 18 };
+
+// Merge — userPrefs overrides defaults
+const config = { ...defaults, ...userPrefs };
+console.log(config);
+// { theme: "dark", lang: "en", fontSize: 18 }
+
+// Shallow copy — new object, same top-level values
+const copy = { ...defaults };
+copy.lang = "hi";
+console.log(defaults.lang); // "en" — original unchanged
+console.log(copy.lang);     // "hi"
+
+// Add/override one field
+const updated = { ...student, score: 95 };
+console.log(updated); // same as student but score is 95</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Object.fromEntries — Transform Object Values</h3>
+      <div class="code-block">
+        <div class="code-header">entries → transform → fromEntries pattern</div>
+        <pre><code>const prices = { shirt: 800, jeans: 1500, cap: 400 };
+
+// Apply 10% discount to all prices
+const discounted = Object.fromEntries(
+  Object.entries(prices).map(([item, price]) => [item, price * 0.9])
+);
+console.log(discounted);
+// { shirt: 720, jeans: 1350, cap: 360 }</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Object Methods</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const student = { name: "Naman", age: 20, score: 85, course: "FullStack" };
+
+// keys / values / entries
+console.log("keys:",    Object.keys(student));
+console.log("values:",  Object.values(student));
+
+// Loop with entries
+for (const [k, v] of Object.entries(student)) {
+  console.log(`  ${k}: ${v}`);
+}
+
+// Spread — shallow copy and override
+const updated = { ...student, score: 95, batch: "2025" };
+console.log("updated:", updated);
+console.log("original score:", student.score); // still 85
+
+// Merge two objects
+const extras = { linkedin: "naman_js", github: "naman_dev" };
+const full = { ...student, ...extras };
+console.log("merged keys:", Object.keys(full));
+
+// fromEntries — add ₹ sign to all values that are numbers
+const prices = { shirt: 800, jeans: 1500, cap: 400 };
+const labeled = Object.fromEntries(
+  Object.entries(prices).map(([k, v]) => [k, "₹" + v])
+);
+console.log("labeled:", labeled);'>const student = { name: "Naman", age: 20, score: 85, course: "FullStack" };
+
+// keys / values / entries
+console.log("keys:",    Object.keys(student));
+console.log("values:",  Object.values(student));
+
+// Loop with entries
+for (const [k, v] of Object.entries(student)) {
+  console.log(`  ${k}: ${v}`);
+}
+
+// Spread — shallow copy and override
+const updated = { ...student, score: 95, batch: "2025" };
+console.log("updated:", updated);
+console.log("original score:", student.score); // still 85
+
+// Merge two objects
+const extras = { linkedin: "naman_js", github: "naman_dev" };
+const full = { ...student, ...extras };
+console.log("merged keys:", Object.keys(full));
+
+// fromEntries — add ₹ sign to all values that are numbers
+const prices = { shirt: 800, jeans: 1500, cap: 400 };
+const labeled = Object.fromEntries(
+  Object.entries(prices).map(([k, v]) => [k, "₹" + v])
+);
+console.log("labeled:", labeled);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Shallow vs deep copy:</strong> Spread (<code>{ ...obj }</code>) creates a shallow copy — nested objects are still shared by reference. If you need a truly independent deep copy, use <code>structuredClone(obj)</code> (modern browsers) or <code>JSON.parse(JSON.stringify(obj))</code> (works everywhere but loses functions and dates).
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="noopener">Object — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/object-keys-values-and-entries-in-javascript-2c3e5e7d6b8f" target="_blank" rel="noopener">keys/values/entries — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · DESTRUCTURING
+    ══════════════════════════════ -->
+    <section id="destructuring" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Destructuring</h2>
+      <p class="ch-intro">Destructuring is a shorthand syntax to unpack values from arrays or properties from objects into named variables — making your code cleaner and more expressive.</p>
+
+      <h3 class="sub-heading">Array Destructuring</h3>
+      <div class="code-block">
+        <div class="code-header">Unpack by position</div>
+        <pre><code>const scores = [85, 90, 78, 92];
+
+// Old way
+const first  = scores[0];
+const second = scores[1];
+
+// Destructuring — clean and concise
+const [a, b, c, d] = scores;
+console.log(a, b, c, d);  // 85 90 78 92
+
+// Skip elements with commas
+const [top, , third] = scores;
+console.log(top, third);  // 85 78
+
+// Rest — gather remaining items
+const [head, ...rest] = scores;
+console.log(head);  // 85
+console.log(rest);  // [90, 78, 92]
+
+// Default values
+const [x = 0, y = 0, z = 0] = [10, 20];
+console.log(x, y, z);  // 10 20 0</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Object Destructuring</h3>
+      <div class="code-block">
+        <div class="code-header">Unpack by key name</div>
+        <pre><code>const student = { name: "Naman", age: 20, score: 85, course: "FullStack" };
+
+// Extract by name
+const { name, score } = student;
+console.log(name, score);  // "Naman" 85
+
+// Rename while destructuring
+const { name: studentName, score: marks } = student;
+console.log(studentName, marks);  // "Naman" 85
+
+// Default values (if key doesn't exist)
+const { name: n, passed = false } = student;
+console.log(n, passed);  // "Naman" false
+
+// Rest — gather remaining keys
+const { name: nm, ...rest } = student;
+console.log(nm);    // "Naman"
+console.log(rest);  // { age: 20, score: 85, course: "FullStack" }</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Nested Destructuring</h3>
+      <div class="code-block">
+        <div class="code-header">Destructure deeply nested objects and arrays</div>
+        <pre><code>const student = {
+  name: "Naman",
+  address: { city: "Delhi", pincode: "110001" },
+  scores:  [85, 90, 78]
+};
+
+// Destructure nested object
+const { name, address: { city, pincode } } = student;
+console.log(name, city, pincode);  // "Naman" "Delhi" "110001"
+
+// Destructure nested array
+const { scores: [first, second] } = student;
+console.log(first, second);  // 85 90
+
+// Array of objects — destructure in a loop
+const students = [
+  { name: "Naman", score: 85 },
+  { name: "Priya", score: 92 }
+];
+for (const { name, score } of students) {
+  console.log(`${name}: ${score}`);
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Destructuring in Function Parameters</h3>
+      <div class="code-block">
+        <div class="code-header">Destructure directly in the parameter list</div>
+        <pre><code>// Without destructuring
+function greet(student) {
+  console.log("Hello " + student.name + ", score: " + student.score);
+}
+
+// With destructuring — much cleaner
+function greet({ name, score, course = "Unknown" }) {
+  console.log(`Hello ${name}! Score: ${score}. Course: ${course}.`);
+}
+
+greet({ name: "Naman", score: 85, course: "FullStack" });
+greet({ name: "Priya", score: 92 }); // course defaults to "Unknown"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Destructuring</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Array destructuring
+const rgb = [255, 128, 0];
+const [red, green, blue] = rgb;
+console.log("RGB:", red, green, blue);
+
+const [first, ...remaining] = [10, 20, 30, 40];
+console.log("first:", first, "rest:", remaining);
+
+// Object destructuring
+const user = { name: "Naman", age: 20, role: "admin", city: "Delhi" };
+const { name, role, city } = user;
+console.log("name:", name, "role:", role, "city:", city);
+
+// Rename + default
+const { name: userName, premium = false } = user;
+console.log("userName:", userName, "premium:", premium);
+
+// Destructure in function param
+function showUser({ name, age, role = "guest" }) {
+  console.log(`${name} (${age}) — ${role}`);
+}
+showUser(user);
+showUser({ name: "Guest", age: 0 });'>// Array destructuring
+const rgb = [255, 128, 0];
+const [red, green, blue] = rgb;
+console.log("RGB:", red, green, blue);
+
+const [first, ...remaining] = [10, 20, 30, 40];
+console.log("first:", first, "rest:", remaining);
+
+// Object destructuring
+const user = { name: "Naman", age: 20, role: "admin", city: "Delhi" };
+const { name, role, city } = user;
+console.log("name:", name, "role:", role, "city:", city);
+
+// Rename + default
+const { name: userName, premium = false } = user;
+console.log("userName:", userName, "premium:", premium);
+
+// Destructure in function param
+function showUser({ name, age, role = "guest" }) {
+  console.log(`${name} (${age}) — ${role}`);
+}
+showUser(user);
+showUser({ name: "Guest", age: 0 });</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Real-world use:</strong> Destructuring is everywhere in modern JS — React props, API response parsing, function parameters. The pattern <code>const { data, error } = await fetch(...)</code> is something you'll write daily. Learn it well.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank" rel="noopener">Destructuring — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-destructuring-the-complete-guide-f7e3a5b9c2d1" target="_blank" rel="noopener">Destructuring guide — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · TEMPLATE LITERALS
+    ══════════════════════════════ -->
+    <section id="template-literals" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Template Literals</h2>
+      <p class="ch-intro">Template literals use backticks instead of quotes. They allow you to embed expressions directly in strings and write multi-line text without hacks.</p>
+
+      <h3 class="sub-heading">String Interpolation — ${}</h3>
+      <div class="code-block">
+        <div class="code-header">Embed any expression directly in a string</div>
+        <pre><code>const name  = "Naman";
+const score = 85;
+const pass  = score >= 60;
+
+// Old way — concatenation
+console.log("Hello " + name + ", your score is " + score);
+
+// Template literal — clean
+console.log(`Hello ${name}, your score is ${score}`);
+
+// Any expression works inside ${}
+console.log(`Pass: ${pass ? "Yes" : "No"}`);
+console.log(`Double: ${score * 2}`);
+console.log(`Grade: ${score >= 90 ? "A" : score >= 80 ? "B" : "C"}`);
+console.log(`Uppercase: ${name.toUpperCase()}`);</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Multi-Line Strings</h3>
+      <div class="code-block">
+        <div class="code-header">No more \n — line breaks are literal</div>
+        <pre><code>// Old way — backslash n
+const old = "Line 1\nLine 2\nLine 3";
+
+// Template literal — just press Enter
+const modern = `Line 1
+Line 2
+Line 3`;
+
+// Generating HTML (common React/DOM pattern)
+const student = { name: "Naman", score: 85, course: "FullStack" };
+
+const card = `
+  &lt;div class="student-card"&gt;
+    &lt;h2&gt;${student.name}&lt;/h2&gt;
+    &lt;p&gt;Score: ${student.score}&lt;/p&gt;
+    &lt;p&gt;Course: ${student.course}&lt;/p&gt;
+  &lt;/div&gt;
+`;</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Expressions Inside ${}</h3>
+      <div class="code-block">
+        <div class="code-header">Function calls, ternaries, math — all valid</div>
+        <pre><code>const items = ["Shirt", "Jeans", "Cap"];
+const total = 2700;
+const discount = 0.1;
+
+// Function call inside template
+console.log(`Items: ${items.join(", ")}`);
+
+// Arithmetic
+console.log(`Final price: Rs.${(total * (1 - discount)).toFixed(2)}`);
+
+// Conditional
+const stock = 0;
+console.log(`Status: ${stock > 0 ? "In Stock" : "Out of Stock"}`);
+
+// Nested template (template inside template)
+const rows = items.map((item, i) => `${i + 1}. ${item}`).join("\n");
+console.log(`Order summary:\n${rows}`);</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Tagged Templates — Advanced</h3>
+      <div class="code-block">
+        <div class="code-header">A function that processes a template literal</div>
+        <pre><code>// A tag function receives the string parts and interpolated values
+function highlight(strings, ...values) {
+  return strings.reduce((result, str, i) => {
+    const val = values[i] !== undefined ? `[${values[i]}]` : "";
+    return result + str + val;
+  }, "");
+}
+
+const name  = "Naman";
+const score = 92;
+console.log(highlight`Student ${name} scored ${score} marks.`);
+// "Student [Naman] scored [92] marks."
+
+// Real-world tagged templates: styled-components, GraphQL gql, sql</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Template Literals</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const student = { name: "Naman", score: 87, course: "Full Stack" };
+const { name, score, course } = student;
+
+// Basic interpolation
+console.log(`Hello ${name}! You scored ${score}.`);
+
+// Expression
+console.log(`Percentage: ${score.toFixed(1)}%`);
+console.log(`Grade: ${score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : "D"}`);
+
+// Multi-line report
+const report = `
+=== Student Report ===
+Name   : ${name}
+Course : ${course}
+Score  : ${score}/100
+Result : ${score >= 60 ? "PASS" : "FAIL"}
+======================`;
+console.log(report);
+
+// Array inside template
+const subjects = ["Maths", "Science", "English"];
+console.log(`Subjects: ${subjects.join(", ")} (${subjects.length} total)`);'>const student = { name: "Naman", score: 87, course: "Full Stack" };
+const { name, score, course } = student;
+
+// Basic interpolation
+console.log(`Hello ${name}! You scored ${score}.`);
+
+// Expression
+console.log(`Percentage: ${score.toFixed(1)}%`);
+console.log(`Grade: ${score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : "D"}`);
+
+// Multi-line report
+const report = `
+=== Student Report ===
+Name   : ${name}
+Course : ${course}
+Score  : ${score}/100
+Result : ${score >= 60 ? "PASS" : "FAIL"}
+======================`;
+console.log(report);
+
+// Array inside template
+const subjects = ["Maths", "Science", "English"];
+console.log(`Subjects: ${subjects.join(", ")} (${subjects.length} total)`);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Backtick everywhere:</strong> Once you start using template literals, you'll rarely go back to quote concatenation. The rule is simple: if you're embedding a variable or expression into a string, use a template literal. For a plain string with no interpolation, either style is fine.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" target="_blank" rel="noopener">Template Literals — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/template-literals-in-javascript-backticks-explained-2d4e7c9b1a3f" target="_blank" rel="noopener">Template literals — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · STRING METHODS
+    ══════════════════════════════ -->
+    <section id="string-methods" class="chapter">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">String Methods</h2>
+      <p class="ch-intro">Strings in JavaScript are immutable — every method returns a new string, never modifying the original. These methods cover the most common string operations you'll encounter daily.</p>
+
+      <h3 class="sub-heading">Quick Reference — String Methods</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>What it does</th><th>Example</th><th>Returns</th><th>MDN</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>.length</code></td>
+            <td>Number of characters</td>
+            <td><code>"hello".length</code> → 5</td>
+            <td>Number</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/length" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.toUpperCase()</code></td>
+            <td>All characters uppercase</td>
+            <td><code>"hi".toUpperCase()</code> → "HI"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.toLowerCase()</code></td>
+            <td>All characters lowercase</td>
+            <td><code>"HI".toLowerCase()</code> → "hi"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.trim()</code></td>
+            <td>Remove leading/trailing whitespace</td>
+            <td><code>"  hi  ".trim()</code> → "hi"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.split(sep)</code></td>
+            <td>Split into an array at separator</td>
+            <td><code>"a,b".split(",")</code> → ["a","b"]</td>
+            <td>Array</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.includes(str)</code></td>
+            <td>Check if substring is present</td>
+            <td><code>"hello".includes("ell")</code> → true</td>
+            <td>Boolean</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.startsWith(str)</code></td>
+            <td>Check if string starts with str</td>
+            <td><code>"hello".startsWith("he")</code> → true</td>
+            <td>Boolean</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.endsWith(str)</code></td>
+            <td>Check if string ends with str</td>
+            <td><code>"hello".endsWith("lo")</code> → true</td>
+            <td>Boolean</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.replace(a,b)</code></td>
+            <td>Replace first occurrence of a with b</td>
+            <td><code>"aaa".replace("a","x")</code> → "xaa"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.replaceAll(a,b)</code></td>
+            <td>Replace all occurrences</td>
+            <td><code>"aaa".replaceAll("a","x")</code> → "xxx"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replaceAll" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.slice(s,e)</code></td>
+            <td>Extract substring by index</td>
+            <td><code>"hello".slice(1,3)</code> → "el"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.padStart(n,c)</code></td>
+            <td>Pad start until length is n</td>
+            <td><code>"5".padStart(3,"0")</code> → "005"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+          <tr>
+            <td><code>.repeat(n)</code></td>
+            <td>Repeat string n times</td>
+            <td><code>"ab".repeat(3)</code> → "ababab"</td>
+            <td>String</td>
+            <td><a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/repeat" target="_blank" rel="noopener">MDN ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Practical String Patterns</h3>
+      <div class="code-block">
+        <div class="code-header">Real patterns you'll use constantly</div>
+        <pre><code>// Normalise user input — trim and lowercase for comparison
+const input = "  NAMAN  ";
+const clean = input.trim().toLowerCase();
+console.log(clean);  // "naman"
+
+// Capitalise first letter
+const word = "naman";
+const cap = word[0].toUpperCase() + word.slice(1);
+console.log(cap);  // "Naman"
+
+// Split CSV into array and clean each value
+const csv = " apple , banana , cherry ";
+const items = csv.split(",").map(item => item.trim());
+console.log(items);  // ["apple", "banana", "cherry"]
+
+// Zero-pad numbers for display (invoice numbers, timestamps)
+const num = 7;
+console.log(String(num).padStart(4, "0"));  // "0007"
+
+// Check file extension
+const filename = "photo.jpg";
+console.log(filename.endsWith(".jpg") || filename.endsWith(".png")); // true</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — String Methods</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const sentence = "  Hello, JavaScript World!  ";
+
+// length, trim, case
+console.log("length:", sentence.length);
+console.log("trimmed:", sentence.trim());
+console.log("upper:", sentence.trim().toUpperCase());
+console.log("lower:", sentence.trim().toLowerCase());
+
+// includes, startsWith, endsWith
+const clean = sentence.trim();
+console.log("includes JS:", clean.includes("JavaScript"));
+console.log("startsWith Hello:", clean.startsWith("Hello"));
+console.log("endsWith !:", clean.endsWith("!"));
+
+// replace
+console.log("replace:", clean.replace("JavaScript", "JS"));
+
+// split
+const words = clean.split(" ");
+console.log("words:", words);
+console.log("word count:", words.length);
+
+// slice
+console.log("slice(7,17):", clean.slice(7, 17));
+
+// padStart — format numbers
+for (let i = 1; i <= 5; i++) {
+  console.log("Invoice #" + String(i).padStart(4, "0"));
+}'>const sentence = "  Hello, JavaScript World!  ";
+
+// length, trim, case
+console.log("length:", sentence.length);
+console.log("trimmed:", sentence.trim());
+console.log("upper:", sentence.trim().toUpperCase());
+console.log("lower:", sentence.trim().toLowerCase());
+
+// includes, startsWith, endsWith
+const clean = sentence.trim();
+console.log("includes JS:", clean.includes("JavaScript"));
+console.log("startsWith Hello:", clean.startsWith("Hello"));
+console.log("endsWith !:", clean.endsWith("!"));
+
+// replace
+console.log("replace:", clean.replace("JavaScript", "JS"));
+
+// split
+const words = clean.split(" ");
+console.log("words:", words);
+console.log("word count:", words.length);
+
+// slice
+console.log("slice(7,17):", clean.slice(7, 17));
+
+// padStart — format numbers
+for (let i = 1; i <= 5; i++) {
+  console.log("Invoice #" + String(i).padStart(4, "0"));
+}</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Strings are immutable:</strong> Every string method returns a NEW string — you must capture it. <code>str.trim()</code> does NOT modify <code>str</code>. You must write <code>str = str.trim()</code> or <code>const clean = str.trim()</code> to use the result.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" rel="noopener">String — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/10-javascript-string-methods-you-should-know-2d3c4e5b6f7a" target="_blank" rel="noopener">String methods — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         10 · SET
+    ══════════════════════════════ -->
+    <section id="set" class="chapter">
+      <div class="ch-num">10</div>
+      <h2 class="ch-title">Set</h2>
+      <p class="ch-intro">A <code>Set</code> is a collection of <strong>unique values</strong> — it automatically rejects duplicates. This makes it perfect for deduplication, membership checks, and tracking "seen" items.</p>
+
+      <h3 class="sub-heading">Creating and Using a Set</h3>
+      <div class="code-block">
+        <div class="code-header">new Set() — values are always unique</div>
+        <pre><code>// Create from an array — duplicates are removed
+const set = new Set([1, 2, 3, 2, 1, 4]);
+console.log(set);       // Set(4) {1, 2, 3, 4}
+console.log(set.size);  // 4 — not .length!
+
+// Create empty, then add
+const tags = new Set();
+tags.add("javascript");
+tags.add("arrays");
+tags.add("javascript"); // duplicate — ignored
+console.log(tags.size); // 2</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Set Methods and Properties</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method / Property</th><th>What it does</th><th>Example</th><th>Returns</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>new Set(iterable)</code></td><td>Create a Set from an iterable</td><td><code>new Set([1,2,2,3])</code></td><td>Set</td></tr>
+          <tr><td><code>set.add(value)</code></td><td>Add value (ignored if already present)</td><td><code>s.add(4)</code></td><td>The Set (chainable)</td></tr>
+          <tr><td><code>set.has(value)</code></td><td>Check if value is in the Set</td><td><code>s.has(2)</code></td><td>Boolean</td></tr>
+          <tr><td><code>set.delete(value)</code></td><td>Remove a value</td><td><code>s.delete(3)</code></td><td>Boolean (success)</td></tr>
+          <tr><td><code>set.clear()</code></td><td>Remove all values</td><td><code>s.clear()</code></td><td>undefined</td></tr>
+          <tr><td><code>set.size</code></td><td>Number of unique values</td><td><code>s.size</code></td><td>Number</td></tr>
+          <tr><td><code>for...of set</code></td><td>Iterate values in insertion order</td><td><code>for (const v of s)</code></td><td>—</td></tr>
+          <tr><td><code>[...set]</code></td><td>Convert to array</td><td><code>[...s]</code></td><td>Array</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">The #1 Use Case — Deduplication</h3>
+      <div class="code-block">
+        <div class="code-header">Remove duplicates from any array in one line</div>
+        <pre><code>// Remove duplicate numbers
+const nums = [1, 5, 3, 5, 2, 1, 4, 3];
+const unique = [...new Set(nums)];
+console.log(unique);  // [1, 5, 3, 2, 4]
+
+// Remove duplicate strings
+const tags = ["js", "html", "js", "css", "html", "js"];
+const uniqueTags = [...new Set(tags)];
+console.log(uniqueTags);  // ["js", "html", "css"]
+
+// Count unique values
+console.log(new Set(tags).size);  // 3</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Set Operations</h3>
+      <div class="code-block">
+        <div class="code-header">Union, intersection, and difference</div>
+        <pre><code>const setA = new Set([1, 2, 3, 4]);
+const setB = new Set([3, 4, 5, 6]);
+
+// Union — all unique values from both
+const union = new Set([...setA, ...setB]);
+console.log([...union]);  // [1, 2, 3, 4, 5, 6]
+
+// Intersection — only in both
+const intersection = new Set([...setA].filter(x => setB.has(x)));
+console.log([...intersection]);  // [3, 4]
+
+// Difference — in A but not in B
+const difference = new Set([...setA].filter(x => !setB.has(x)));
+console.log([...difference]);  // [1, 2]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Set</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Deduplication
+const votes = ["yes", "no", "yes", "yes", "no", "maybe", "yes"];
+const uniqueVotes = [...new Set(votes)];
+console.log("unique options:", uniqueVotes);
+console.log("total votes:", votes.length);
+console.log("unique vote types:", uniqueVotes.length);
+
+// Set methods
+const visited = new Set();
+visited.add("/home");
+visited.add("/about");
+visited.add("/home");  // duplicate — ignored
+visited.add("/contact");
+
+console.log("size:", visited.size);
+console.log("has /about:", visited.has("/about"));
+console.log("has /shop:", visited.has("/shop"));
+
+visited.delete("/about");
+console.log("after delete:", [...visited]);
+
+// Iterate
+for (const page of visited) {
+  console.log("visited:", page);
+}'>// Deduplication
+const votes = ["yes", "no", "yes", "yes", "no", "maybe", "yes"];
+const uniqueVotes = [...new Set(votes)];
+console.log("unique options:", uniqueVotes);
+console.log("total votes:", votes.length);
+console.log("unique vote types:", uniqueVotes.length);
+
+// Set methods
+const visited = new Set();
+visited.add("/home");
+visited.add("/about");
+visited.add("/home");  // duplicate — ignored
+visited.add("/contact");
+
+console.log("size:", visited.size);
+console.log("has /about:", visited.has("/about"));
+console.log("has /shop:", visited.has("/shop"));
+
+visited.delete("/about");
+console.log("after delete:", [...visited]);
+
+// Iterate
+for (const page of visited) {
+  console.log("visited:", page);
+}</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Set vs Array:</strong> Use an Array when order matters and you need index access. Use a Set when you need uniqueness guaranteed, fast membership checks (<code>has()</code> is O(1) vs array's <code>includes()</code> which is O(n)), or deduplication. A Set has no index — to get a value by position, spread it to an array first.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set" target="_blank" rel="noopener">Set — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-set-the-complete-guide-9e2a3b5c4d6f" target="_blank" rel="noopener">Set guide — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         11 · MAP
+    ══════════════════════════════ -->
+    <section id="map" class="chapter">
+      <div class="ch-num">11</div>
+      <h2 class="ch-title">Map</h2>
+      <p class="ch-intro">A <code>Map</code> is a collection of <strong>key–value pairs</strong> where keys can be any type — not just strings. Unlike plain objects, Maps maintain insertion order and have a built-in <code>size</code> property.</p>
+
+      <h3 class="sub-heading">Creating and Using a Map</h3>
+      <div class="code-block">
+        <div class="code-header">new Map() — keys can be any type</div>
+        <pre><code>// Create empty, then set entries
+const scores = new Map();
+scores.set("Naman", 85);
+scores.set("Priya", 92);
+scores.set("Rahul", 70);
+
+console.log(scores.get("Naman"));  // 85
+console.log(scores.size);          // 3
+
+// Create from an array of [key, value] pairs
+const config = new Map([
+  ["theme",    "dark"],
+  ["lang",     "en"],
+  ["fontSize", 16]
+]);
+
+// Keys can be any type — objects, numbers, functions
+const objKey = { id: 1 };
+const map = new Map();
+map.set(objKey, "user data");
+map.set(42, "numeric key");
+console.log(map.get(objKey));  // "user data"
+console.log(map.get(42));      // "numeric key"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Map Methods and Properties</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method / Property</th><th>What it does</th><th>Example</th><th>Returns</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>map.set(key, val)</code></td><td>Add or update key-value pair</td><td><code>m.set("a", 1)</code></td><td>The Map (chainable)</td></tr>
+          <tr><td><code>map.get(key)</code></td><td>Retrieve value by key</td><td><code>m.get("a")</code></td><td>Value or undefined</td></tr>
+          <tr><td><code>map.has(key)</code></td><td>Check if key exists</td><td><code>m.has("a")</code></td><td>Boolean</td></tr>
+          <tr><td><code>map.delete(key)</code></td><td>Remove a key-value pair</td><td><code>m.delete("a")</code></td><td>Boolean (success)</td></tr>
+          <tr><td><code>map.clear()</code></td><td>Remove all entries</td><td><code>m.clear()</code></td><td>undefined</td></tr>
+          <tr><td><code>map.size</code></td><td>Number of entries</td><td><code>m.size</code></td><td>Number</td></tr>
+          <tr><td><code>map.keys()</code></td><td>Iterator over keys</td><td><code>[...m.keys()]</code></td><td>Iterator</td></tr>
+          <tr><td><code>map.values()</code></td><td>Iterator over values</td><td><code>[...m.values()]</code></td><td>Iterator</td></tr>
+          <tr><td><code>map.entries()</code></td><td>Iterator over [key, value] pairs</td><td><code>for (const [k,v] of m)</code></td><td>Iterator</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Map vs Plain Object</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Use Map when…</div>
+          <p>Keys are not strings (numbers, objects). You need to iterate in insertion order. You frequently add/remove keys. You need a quick <code>.size</code>. Data is stored as key-value but is not "an entity".</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Use plain Object when…</div>
+          <p>Keys are strings or symbols. You're modelling an entity (user, product, config). You need JSON serialisation. You use property access syntax (<code>obj.key</code>).</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Iterating a Map</h3>
+      <div class="code-block">
+        <div class="code-header">Maps are iterable in insertion order</div>
+        <pre><code>const scores = new Map([
+  ["Naman", 85],
+  ["Priya", 92],
+  ["Rahul", 70]
+]);
+
+// for...of with destructuring
+for (const [name, score] of scores) {
+  console.log(`${name}: ${score}`);
+}
+
+// keys, values
+console.log([...scores.keys()]);    // ["Naman", "Priya", "Rahul"]
+console.log([...scores.values()]); // [85, 92, 70]
+
+// Convert Map to plain object
+const obj = Object.fromEntries(scores);
+console.log(obj);  // { Naman: 85, Priya: 92, Rahul: 70 }
+
+// Convert plain object to Map
+const settings = { theme: "dark", lang: "en" };
+const mapFromObj = new Map(Object.entries(settings));
+console.log(mapFromObj.get("theme"));  // "dark"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Map</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Build a word frequency counter using Map
+const text = "the quick brown fox jumps over the lazy dog the fox";
+const words = text.split(" ");
+
+const freq = new Map();
+for (const word of words) {
+  freq.set(word, (freq.get(word) || 0) + 1);
+}
+
+console.log("Word frequencies:");
+for (const [word, count] of freq) {
+  console.log(`  "${word}" x${count}`);
+}
+
+// Find the most frequent word
+let topWord = "";
+let topCount = 0;
+for (const [word, count] of freq) {
+  if (count > topCount) { topWord = word; topCount = count; }
+}
+console.log(`Most frequent: "${topWord}" (${topCount}x)`);
+
+// size, has, get, delete
+console.log("unique words:", freq.size);
+console.log("has fox:", freq.has("fox"));
+freq.delete("the");
+console.log("size after delete the:", freq.size);'>// Build a word frequency counter using Map
+const text = "the quick brown fox jumps over the lazy dog the fox";
+const words = text.split(" ");
+
+const freq = new Map();
+for (const word of words) {
+  freq.set(word, (freq.get(word) || 0) + 1);
+}
+
+console.log("Word frequencies:");
+for (const [word, count] of freq) {
+  console.log(`  "${word}" x${count}`);
+}
+
+// Find the most frequent word
+let topWord = "";
+let topCount = 0;
+for (const [word, count] of freq) {
+  if (count > topCount) { topWord = word; topCount = count; }
+}
+console.log(`Most frequent: "${topWord}" (${topCount}x)`);
+
+// size, has, get, delete
+console.log("unique words:", freq.size);
+console.log("has fox:", freq.has("fox"));
+freq.delete("the");
+console.log("size after delete the:", freq.size);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Map vs Object for dictionaries:</strong> Both work, but Map is faster for frequent insertions/deletions and automatically handles non-string keys. For static config objects (<code>{ theme: "dark" }</code>), use a plain object. For dynamic key-value stores that grow and shrink at runtime, use a Map.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank" rel="noopener">Map — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-map-vs-object-when-to-use-which-4e2c3a5b6d7f" target="_blank" rel="noopener">Map vs Object — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         12 · BUILD IT: GRADE BOOK
+    ══════════════════════════════ -->
+    <section id="grade-book" class="chapter chapter-exercise">
+      <div class="ch-num">12</div>
+      <h2 class="ch-title">Build It: Student Grade Book</h2>
+      <p class="ch-intro">Apply everything from this module. Build a grade book that takes an array of student objects, computes statistics, and prints a formatted class summary using arrays, objects, destructuring, template literals, and map/filter/reduce.</p>
+
+      <div class="exercise-intro-box">
+        <div class="eib-title">What your program must do</div>
+        <div class="eib-steps">
+          <div class="eib-step"><div class="eib-num">1</div><span>Define an array of student objects with <code>name</code>, <code>scores</code> (array of 3 subject marks), and <code>id</code> — Ch.05</span></div>
+          <div class="eib-step"><div class="eib-num">2</div><span>Use <code>.map()</code> to compute each student's average score — Ch.04</span></div>
+          <div class="eib-step"><div class="eib-num">3</div><span>Use <code>.filter()</code> to find students who passed (average &gt;= 60) — Ch.04</span></div>
+          <div class="eib-step"><div class="eib-num">4</div><span>Use <code>.reduce()</code> to calculate the class average — Ch.04</span></div>
+          <div class="eib-step"><div class="eib-num">5</div><span>Use destructuring to unpack each student's name and scores — Ch.07</span></div>
+          <div class="eib-step"><div class="eib-num">6</div><span>Use template literals to print a formatted per-student report and class summary — Ch.08</span></div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Ask Yourself Before Starting</h3>
+      <div class="question-card">
+        <div class="q-label">Q1</div>
+        <p>How do you compute the average of a student's <code>scores</code> array (3 numbers) in one expression?</p>
+        <div class="q-hint">Hint: <code>scores.reduce((a,b) =&gt; a+b, 0) / scores.length</code> — reduce to a sum, then divide by length.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q2</div>
+        <p>The outer <code>.map()</code> over students gives you each student. How do you also include their computed average in the returned object?</p>
+        <div class="q-hint">Hint: Spread the student and add a new field: <code>return { ...student, avg: computedAvg }</code>.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q3</div>
+        <p>How do you assign a letter grade (A/B/C/D/F) inside a template literal without writing a separate if/else block?</p>
+        <div class="q-hint">Hint: Use a nested ternary inside <code>${}</code>: <code>${avg &gt;= 90 ? "A" : avg &gt;= 80 ? "B" : avg &gt;= 70 ? "C" : avg &gt;= 60 ? "D" : "F"}</code></div>
+      </div>
+
+      <h3 class="sub-heading">Skeleton — Fill in the ???s</h3>
+      <div class="code-block">
+        <div class="code-header">grade-book.js — complete this</div>
+        <pre><code>const students = [
+  { id: 1, name: "Naman",  scores: [85, 90, 78] },
+  { id: 2, name: "Priya",  scores: [92, 88, 95] },
+  { id: 3, name: "Rahul",  scores: [55, 62, 48] },
+  { id: 4, name: "Ayesha", scores: [77, 83, 79] },
+  { id: 5, name: "Dev",    scores: [40, 35, 50]  }
+];
+
+// Step 1: Add avg field using map
+const graded = students.???(({ name, scores, id }) =&gt; {
+  const avg = scores.???((a, b) =&gt; a + b, 0) / scores.???;
+  return { id, name, scores, avg: ???.toFixed(1) };
+});
+
+// Step 2: Print each student report
+graded.forEach(({ id, name, scores, avg }) =&gt; {
+  const grade = avg &gt;= 90 ? "A" : avg &gt;= 80 ? "B" : avg &gt;= 70 ? "C" : avg &gt;= 60 ? "D" : "F";
+  console.log(`[${id}] ${name} | Scores: ${scores.???(" / ")} | Avg: ${avg} | Grade: ${grade}`);
+});
+
+// Step 3: Filter passing students (avg &gt;= 60)
+const passing = graded.???(s =&gt; parseFloat(s.avg) &gt;= 60);
+
+// Step 4: Class average
+const classAvg = graded.???((sum, s) =&gt; sum + parseFloat(s.avg), 0) / graded.???;
+
+// Step 5: Summary
+console.log(`
+=== Class Summary ===
+Total   : ${students.???}
+Passed  : ${passing.???}
+Failed  : ${students.??? - passing.???}
+Avg     : ${classAvg.???(1)}
+====================`);</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Write Your Solution Here</h3>
+      <p style="margin-bottom:0.75rem;">Build the grade book from scratch (or use the skeleton). Try changing scores — verify the stats update.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Grade Book</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ── Student Grade Book ──
+const students = [
+  { id: 1, name: "Naman",  scores: [85, 90, 78] },
+  { id: 2, name: "Priya",  scores: [92, 88, 95] },
+  { id: 3, name: "Rahul",  scores: [55, 62, 48] },
+  { id: 4, name: "Ayesha", scores: [77, 83, 79] },
+  { id: 5, name: "Dev",    scores: [40, 35, 50]  }
+];
+
+// Step 1: map() — add avg to each student
+// const graded = students.map(({ id, name, scores }) => { ... });
+
+// Step 2: forEach — print each student report with grade
+// graded.forEach(({ id, name, scores, avg }) => { ... });
+
+// Step 3: filter() — passing students (avg >= 60)
+// const passing = graded.filter(s => ...);
+
+// Step 4: reduce() — class average
+// const classAvg = graded.reduce(...) / graded.length;
+
+// Step 5: Template literal summary
+// console.log(`=== Class Summary === ...`);'>// ── Student Grade Book ──
+const students = [
+  { id: 1, name: "Naman",  scores: [85, 90, 78] },
+  { id: 2, name: "Priya",  scores: [92, 88, 95] },
+  { id: 3, name: "Rahul",  scores: [55, 62, 48] },
+  { id: 4, name: "Ayesha", scores: [77, 83, 79] },
+  { id: 5, name: "Dev",    scores: [40, 35, 50]  }
+];
+
+// Step 1: map() — add avg to each student
+// const graded = students.map(({ id, name, scores }) => { ... });
+
+// Step 2: forEach — print each student report with grade
+// graded.forEach(({ id, name, scores, avg }) => { ... });
+
+// Step 3: filter() — passing students (avg >= 60)
+// const passing = graded.filter(s => ...);
+
+// Step 4: reduce() — class average
+// const classAvg = graded.reduce(...) / graded.length;
+
+// Step 5: Template literal summary
+// console.log(`=== Class Summary === ...`);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <h3 class="sub-heading" style="margin-top:2rem;">Reference Solution</h3>
+      <p style="margin-bottom:0.75rem;color:var(--muted);font-size:0.9rem;">Only look at this after making a genuine attempt.</p>
+      <div class="code-block">
+        <div class="code-header">grade-book.js — full solution</div>
+        <pre><code>const students = [
+  { id: 1, name: "Naman",  scores: [85, 90, 78] },
+  { id: 2, name: "Priya",  scores: [92, 88, 95] },
+  { id: 3, name: "Rahul",  scores: [55, 62, 48] },
+  { id: 4, name: "Ayesha", scores: [77, 83, 79] },
+  { id: 5, name: "Dev",    scores: [40, 35, 50]  }
+];
+
+// Step 1: Add avg using map + reduce
+const graded = students.map(({ id, name, scores }) =&gt; {
+  const avg = scores.reduce((a, b) =&gt; a + b, 0) / scores.length;
+  return { id, name, scores, avg: +avg.toFixed(1) };
+});
+
+// Step 2: Print each student's report
+console.log("=== Student Reports ===");
+graded.forEach(({ id, name, scores, avg }) =&gt; {
+  const grade = avg &gt;= 90 ? "A" : avg &gt;= 80 ? "B" : avg &gt;= 70 ? "C" : avg &gt;= 60 ? "D" : "F";
+  const pass  = avg &gt;= 60 ? "PASS" : "FAIL";
+  console.log(
+    `[${String(id).padStart(2,"0")}] ${name.padEnd(8)} ` +
+    `| Scores: ${scores.join(" / ")} ` +
+    `| Avg: ${avg.toFixed(1)} ` +
+    `| ${grade} — ${pass}`
+  );
+});
+
+// Step 3: Filter passing and failing
+const passing = graded.filter(s =&gt; s.avg &gt;= 60);
+const failing = graded.filter(s =&gt; s.avg &lt;  60);
+
+// Step 4: Class average via reduce
+const classAvg = graded.reduce((sum, s) =&gt; sum + s.avg, 0) / graded.length;
+
+// Step 5: Top student
+const top = graded.reduce((best, s) =&gt; s.avg &gt; best.avg ? s : best, graded[0]);
+
+// Summary
+console.log(`
+=== Class Summary ===
+Total students : ${students.length}
+Passed         : ${passing.length} (${passing.map(s =&gt; s.name).join(", ")})
+Failed         : ${failing.length} (${failing.map(s =&gt; s.name).join(", ")})
+Class average  : ${classAvg.toFixed(1)}
+Top student    : ${top.name} (${top.avg})
+====================`);</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>Extension challenges:</strong> (1) Sort <code>graded</code> by avg descending and print a leaderboard with rank numbers. (2) Use a <code>Map</code> to count how many students got each grade (A, B, C, D, F). (3) Use <code>Object.entries</code> on the grade counts to print a grade distribution table.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <p>JavaScript Data Structures — Student Handbook &nbsp;·&nbsp; Open the console (F12) and experiment while you read.</p>
+  </footer>
+
+  <!-- ============================================================
+       SANDBOX ENGINE
+  ============================================================ -->
+  <script>
+    function formatValue(v) {
+      if (v === undefined) return 'undefined';
+      if (v === null)      return 'null';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+      }
+      return String(v);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    function runSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const code    = sandbox.querySelector('.sandbox-code').value;
+      const output  = sandbox.querySelector('.sandbox-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const orig = {
+        log:   console.log,
+        error: console.error,
+        warn:  console.warn
+      };
+
+      console.log   = (...a) => logs.push({ t: 'log',   text: a.map(formatValue).join(' ') });
+      console.error = (...a) => logs.push({ t: 'error', text: a.map(formatValue).join(' ') });
+      console.warn  = (...a) => logs.push({ t: 'warn',  text: a.map(formatValue).join(' ') });
+
+      try {
+        eval(code); // eslint-disable-line no-eval
+      } catch (e) {
+        logs.push({ t: 'error', text: e.message });
+      } finally {
+        console.log   = orig.log;
+        console.error = orig.error;
+        console.warn  = orig.warn;
+      }
+
+      if (!logs.length) {
+        output.innerHTML = '<div class="sb-empty">// No output — add console.log() to see results.</div>';
+        return;
+      }
+
+      output.innerHTML = logs
+        .map(l => `<div class="sb-line sb-${l.t}">${escapeHtml(l.text)}</div>`)
+        .join('');
+    }
+
+    function resetSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const ta      = sandbox.querySelector('.sandbox-code');
+      ta.value      = ta.dataset.default;
+      sandbox.querySelector('.sandbox-output').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>
+

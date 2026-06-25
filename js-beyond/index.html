@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Node.js, React, WebSockets — JavaScript everywhere. Explore the full-stack JavaScript ecosystem in this final module." />
+  <title>JavaScript Beyond the Browser — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Path cards (Ch 08) ── */
+    .path-section { margin: 2rem 0; }
+    .path-section-title {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .path-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .path-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      box-shadow: var(--shadow);
+    }
+    .path-card.path-frontend { border-top: 4px solid #61dafb; }
+    .path-card.path-backend  { border-top: 4px solid #68d391; }
+    .path-card.path-fullstack{ border-top: 4px solid var(--accent); }
+    .path-card.path-mobile   { border-top: 4px solid #f687b3; }
+    .path-card-label {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .path-card.path-frontend .path-card-label { color: #0891b2; }
+    .path-card.path-backend  .path-card-label { color: #16a34a; }
+    .path-card.path-fullstack .path-card-label { color: #c9b500; }
+    .path-card.path-mobile   .path-card-label { color: #db2777; }
+    .path-card-goal {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+    .path-card-stack {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .path-card-stack li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 3px 0;
+      font-family: var(--font-head);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .path-card-stack li::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .path-card.path-frontend .path-card-stack li::before { background: #61dafb; }
+    .path-card.path-backend  .path-card-stack li::before { background: #68d391; }
+    .path-card.path-fullstack .path-card-stack li::before { background: var(--accent); }
+    .path-card.path-mobile   .path-card-stack li::before { background: #f687b3; }
+
+    /* ── Annotated terminal block ── */
+    .terminal-block {
+      background: #0d1117;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1.25rem 0;
+      box-shadow: var(--shadow);
+      border: 1.5px solid rgba(255,255,255,0.07);
+    }
+    .terminal-header {
+      background: rgba(255,255,255,0.04);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .terminal-header-badge {
+      background: rgba(255,165,0,0.2);
+      color: #fbbf24;
+      font-family: var(--font-head);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(251,191,36,0.25);
+    }
+    .terminal-block pre { padding: 1.25rem 1.5rem; overflow-x: auto; }
+    .terminal-block code {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.75;
+      color: #e2e8f0;
+      white-space: pre;
+    }
+    .terminal-block code .prompt  { color: #68d391; }
+    .terminal-block code .comment { color: #6b7280; font-style: italic; }
+    .terminal-block code .output  { color: #a5f3fc; }
+
+    /* ── Comparison table accent ── */
+    .fw-table thead th:nth-child(2) { background: rgba(97,218,251,0.15); }
+    .fw-table thead th:nth-child(3) { background: rgba(221,0,49,0.15); }
+    .fw-table thead th:nth-child(4) { background: rgba(65,184,131,0.15); }
+
+    /* ── Congrats box (Ch 08) ── */
+    .congrats-box {
+      background: linear-gradient(135deg, var(--dark) 0%, #0d1a3a 100%);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      margin-top: 2rem;
+      text-align: center;
+      color: #fff;
+    }
+    .congrats-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--dark);
+      font-family: var(--font-head);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+    }
+    .congrats-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .congrats-title span { color: var(--accent); }
+    .congrats-body {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.72);
+      max-width: 560px;
+      margin: 0 auto 1.25rem;
+    }
+    .congrats-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(247,223,30,0.2);
+    }
+    .congrats-stat-item {
+      text-align: center;
+    }
+    .congrats-stat-num {
+      font-family: var(--font-head);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+    }
+    .congrats-stat-label {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ── Responsive extras ── */
+    @media (max-width: 640px) {
+      .path-row { grid-template-columns: 1fr; }
+      .congrats-stats { gap: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">JavaScript<br><span class="hero-accent">Beyond the Browser</span></h1>
+    <p class="hero-sub">Node.js, React, WebSockets — JavaScript everywhere.</p>
+    <p class="hero-desc">JavaScript isn't just for browsers anymore. Explore Node.js on the server, frontend frameworks like React, real-time apps with WebSockets, and chart your path to full-stack development.</p>
+    <div class="hero-pills">
+      <span class="pill">8 Chapters</span>
+      <span class="pill">What's Next</span>
+      <span class="pill">Full-Stack Roadmap</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#beyond-browser">01 Beyond the Browser</a></li>
+      <li><a href="#react">02 React</a></li>
+      <li><a href="#angular-vue">03 Angular &amp; Vue</a></li>
+      <li><a href="#websockets">04 WebSockets</a></li>
+      <li><a href="#nodejs-intro">05 What is Node.js?</a></li>
+      <li><a href="#nodejs-server">06 HTTP Server</a></li>
+      <li><a href="#nodejs-fs">07 fs &amp; npm</a></li>
+      <li><a href="#whats-next">08 What to Learn Next</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · BEYOND THE BROWSER
+    ══════════════════════════════ -->
+    <section id="beyond-browser" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">Beyond the Browser</h2>
+      <p class="ch-intro">The same language you used to make buttons click and forms validate is now running servers, powering mobile apps, building desktop software, and driving machine learning models. JavaScript is everywhere — and that's by design.</p>
+
+      <h3 class="sub-heading">One Language, Every Platform</h3>
+      <p style="margin-bottom:1rem;">When Brendan Eich created JavaScript in 1995, it was strictly a browser language. In 2009, Ryan Dahl extracted the V8 JavaScript engine from Chrome and ran it as a standalone program called Node.js. That moment changed everything. Suddenly, the same language that ran in a browser could also run a web server, read files from disk, or talk directly to a database.</p>
+
+      <div class="role-diagram">
+        <div class="role-card role-card-html">
+          <div class="role-icon">🌐</div>
+          <div class="role-name">Browser</div>
+          <div class="role-desc">DOM, events, fetch — what you've been learning. Runs on the user's machine.</div>
+        </div>
+        <div class="role-card role-card-css">
+          <div class="role-icon">⚙️</div>
+          <div class="role-name">Server</div>
+          <div class="role-desc">Node.js — handles HTTP requests, reads databases, runs business logic.</div>
+        </div>
+        <div class="role-card role-card-js">
+          <div class="role-icon">📱</div>
+          <div class="role-name">Mobile &amp; Desktop</div>
+          <div class="role-desc">React Native for iOS/Android. Electron for desktop apps like VS Code.</div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">What JavaScript Can Build</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">Web Apps (Frontend)</div>
+          <p>React, Vue, Angular — frameworks that manage complex UIs with components, state, and routing.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Servers (Backend)</div>
+          <p>Node.js + Express — handle HTTP requests, connect to databases, expose REST APIs.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Real-Time Apps</div>
+          <p>WebSockets + Socket.io — live chat, collaborative editors, live dashboards, multiplayer games.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Desktop Apps</div>
+          <p>Electron — VS Code, Slack, Figma, and Discord are all built with JavaScript running in Electron.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Mobile Apps</div>
+          <p>React Native — write once in JavaScript, compile to native iOS and Android apps.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Automation &amp; CLI Tools</div>
+          <p>Node.js scripts, build tools (Webpack, Vite), test runners (Jest), and linters (ESLint).</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The V8 Engine — The Shared Core</h3>
+      <div class="insight-box">
+        <div class="insight-icon">⚙️</div>
+        <div class="insight-content">
+          <p>Whether your JavaScript runs in Chrome or in Node.js, it passes through the <strong>V8 engine</strong> — Google's open-source JavaScript and WebAssembly engine written in C++. V8 compiles JavaScript to native machine code at runtime, which is why JS is fast enough to run production servers. The same engine, the same language — just a different host environment surrounding it.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">What Changes Between Environments</h3>
+      <div class="card-row">
+        <div class="card highlight-card">
+          <div class="card-tag">In a Browser</div>
+          <p>Has access to: <code>window</code>, <code>document</code>, <code>localStorage</code>, <code>fetch</code>, <code>navigator</code>, DOM APIs. Cannot access: the filesystem, OS processes, raw network sockets.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">In Node.js</div>
+          <p>Has access to: filesystem (<code>fs</code>), <code>http</code> module, <code>process</code>, native OS access. Cannot access: <code>window</code>, <code>document</code>, or any DOM — there is no browser here.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>The mental model:</strong> Think of JavaScript as a universal language and <em>the environment</em> as the toolbox that changes. The core language — variables, functions, loops, arrays, objects, promises — is identical everywhere. Only the available APIs differ.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · FRONTEND FRAMEWORKS — REACT
+    ══════════════════════════════ -->
+    <section id="react" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Frontend Frameworks — React</h2>
+      <p class="ch-intro">React is the most widely used JavaScript library for building user interfaces. Created by Facebook in 2013, it introduced a component-based model that changed how developers think about building UIs.</p>
+
+      <h3 class="sub-heading">Why React Exists — The Problem It Solves</h3>
+      <p style="margin-bottom:1rem;">Before React, updating a webpage meant manually reaching into the DOM and changing specific elements. As applications grew in complexity — hundreds of elements, user state, async data — this became unmanageable. A single user action might need to update a notification badge, a list item, a form field, and a sidebar counter simultaneously. Tracking all of that manually was fragile and error-prone.</p>
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <p>React's core idea: <strong>describe what the UI should look like given the current state — React figures out what needs to change.</strong> Instead of saying "find this element and change its text", you say "if <code>isLoggedIn</code> is true, show this; otherwise show that." React re-renders only what changed.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Components — The Building Block</h3>
+      <p style="margin-bottom:0.75rem;">A React application is a tree of components. Each component is a self-contained piece of UI — it manages its own data, renders its own HTML-like output, and handles its own events. You compose components together like Lego bricks.</p>
+      <div class="code-block">
+        <div class="code-header">JSX — React's templating syntax (not runnable in a plain browser)</div>
+        <pre><code>// A simple React component — a function that returns JSX
+function Greeting({ name }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h2&gt;Hello, {name}!&lt;/h2&gt;
+      &lt;p&gt;Welcome back.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Using the component in another component
+function App() {
+  return (
+    &lt;main&gt;
+      &lt;Greeting name="Naman" /&gt;
+      &lt;Greeting name="Priya" /&gt;
+      &lt;Greeting name="Rahul" /&gt;
+    &lt;/main&gt;
+  );
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">JSX — JavaScript + HTML Syntax</h3>
+      <p style="margin-bottom:0.75rem;">JSX looks like HTML inside JavaScript. It is not valid JavaScript on its own — a build tool (like Vite or Create React App) transpiles it to regular function calls before the browser sees it. You write this:</p>
+      <div class="code-block">
+        <div class="code-header">What you write (JSX)</div>
+        <pre><code>const element = &lt;h1 className="title"&gt;Hello World&lt;/h1&gt;;</code></pre>
+      </div>
+      <p style="margin-bottom:0.75rem; margin-top:0.75rem;">The build tool compiles it to this:</p>
+      <div class="code-block">
+        <div class="code-header">What the browser actually runs</div>
+        <pre><code>const element = React.createElement("h1", { className: "title" }, "Hello World");</code></pre>
+      </div>
+
+      <h3 class="sub-heading">State — Data That Changes Over Time</h3>
+      <p style="margin-bottom:0.75rem;">State is the dynamic data inside a component. When state changes, React automatically re-renders the component with the new data. The <code>useState</code> hook is how you declare state in a functional component.</p>
+      <div class="code-block">
+        <div class="code-header">Counter component with useState</div>
+        <pre><code>import { useState } from 'react';
+
+function Counter() {
+  // [currentValue, setterFunction] = useState(initialValue)
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+        Increment
+      &lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount(0)}&gt;
+        Reset
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Every time the button is clicked:
+// 1. setCount() updates the state
+// 2. React re-renders Counter with the new count value
+// 3. The UI updates — automatically</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The React Ecosystem</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">React Router</div>
+          <p>Client-side routing — move between "pages" without refreshing. <code>/home</code>, <code>/profile</code>, <code>/settings</code> all render different components.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">State Management</div>
+          <p>Redux, Zustand, Jotai — libraries for sharing state across many components that don't have a direct parent-child relationship.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Next.js</div>
+          <p>React framework with server-side rendering, file-based routing, and API routes built in. The standard choice for production React apps.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Component Libraries</div>
+          <p>Shadcn, Material UI, Chakra UI — pre-built, styled components you can drop into your project. Buttons, modals, forms, tables.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Learning path for React:</strong> You need solid JavaScript fundamentals first — this whole course. Then: understand the DOM (Module 4), async/promises (Module 5), and array methods like <code>map()</code> and <code>filter()</code> (Module 3). Then React will make sense. Jumping in without those foundations is the most common source of confusion.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://react.dev" target="_blank" rel="noopener" style="background:#087ea4;">React Docs ↗</a>
+        <a class="ref-link ref-link-medium" href="https://react.dev/learn/thinking-in-react" target="_blank" rel="noopener" style="background:#087ea4;">Thinking in React ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · ANGULAR & VUE
+    ══════════════════════════════ -->
+    <section id="angular-vue" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Frontend Frameworks — Angular &amp; Vue</h2>
+      <p class="ch-intro">React isn't the only option. Angular and Vue are two other major frameworks, each with a distinct philosophy. Understanding the differences helps you choose the right tool for the job — or evaluate what a team is already using.</p>
+
+      <h3 class="sub-heading">Angular — The Full Framework</h3>
+      <p style="margin-bottom:1rem;">Angular is a complete, opinionated framework created and maintained by Google. Where React is a library (you bring your own router, state manager, and tooling), Angular ships everything: routing, HTTP client, forms, animations, testing, and a CLI — all in one package.</p>
+
+      <div class="card-row">
+        <div class="card highlight-card">
+          <div class="card-tag">TypeScript First</div>
+          <p>Angular is written in TypeScript and expects you to use it. Every component, service, and module is typed. This catches errors at compile time rather than in production.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">Dependency Injection</div>
+          <p>Angular has a built-in dependency injection system — a pattern where services (like an API client) are provided to components automatically, rather than imported manually.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">Built for Scale</div>
+          <p>Angular's strict conventions make it easier to onboard developers onto large codebases. Google, Microsoft, and large enterprises favour it for this reason.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Angular component — app.component.ts (TypeScript)</div>
+        <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',          // used as &lt;app-root&gt; in HTML
+  template: `
+    &lt;h1&gt;Hello, {{ name }}!&lt;/h1&gt;
+    &lt;button (click)="greet()"&gt;Greet&lt;/button&gt;
+  `
+})
+export class AppComponent {
+  name: string = 'Naman';        // typed property
+
+  greet(): void {
+    alert('Hello, ' + this.name);
+  }
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Vue — The Progressive Framework</h3>
+      <p style="margin-bottom:1rem;">Vue was created by Evan You (a former Google engineer who worked on Angular) in 2014. Vue's defining characteristic is that it is <em>progressive</em> — you can add it to an existing HTML page with a single script tag, or build a full SPA with its CLI. You don't have to go all-in from day one.</p>
+
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">Gentle Learning Curve</div>
+          <p>Vue's template syntax is closest to plain HTML. Coming from HTML/CSS, the jump to Vue is smaller than the jump to React or Angular.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Single File Components</div>
+          <p>A <code>.vue</code> file keeps template, script, and styles together in one file — a pattern many developers find clean and self-contained.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Composition API</div>
+          <p>Vue 3 introduced the Composition API, inspired by React hooks. It lets you organise logic by feature rather than by lifecycle — making larger components easier to maintain.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Vue 3 Single File Component — Counter.vue</div>
+        <pre><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;p&gt;Count: {{ count }}&lt;/p&gt;
+    &lt;button @click="increment"&gt;+1&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from 'vue';
+
+const count = ref(0);            // reactive variable
+
+function increment() {
+  count.value++;
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+button {
+  background: #42b883;           /* Vue's signature green */
+  color: white;
+}
+&lt;/style&gt;</code></pre>
+      </div>
+
+      <h3 class="sub-heading">React vs Angular vs Vue — Side by Side</h3>
+      <table class="ref-table fw-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>React</th>
+            <th>Angular</th>
+            <th>Vue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Type</strong></td>
+            <td>Library</td>
+            <td>Full Framework</td>
+            <td>Progressive Framework</td>
+          </tr>
+          <tr>
+            <td><strong>Language</strong></td>
+            <td>JavaScript / JSX</td>
+            <td>TypeScript (required)</td>
+            <td>JavaScript / TypeScript</td>
+          </tr>
+          <tr>
+            <td><strong>Learning Curve</strong></td>
+            <td>Medium</td>
+            <td>Steep</td>
+            <td>Gentle</td>
+          </tr>
+          <tr>
+            <td><strong>Maintained by</strong></td>
+            <td>Meta (Facebook)</td>
+            <td>Google</td>
+            <td>Community / Evan You</td>
+          </tr>
+          <tr>
+            <td><strong>Best for</strong></td>
+            <td>SPAs, large ecosystems</td>
+            <td>Enterprise, large teams</td>
+            <td>Quick start, gradual adoption</td>
+          </tr>
+          <tr>
+            <td><strong>Data binding</strong></td>
+            <td>One-way</td>
+            <td>Two-way</td>
+            <td>Both</td>
+          </tr>
+          <tr>
+            <td><strong>Market share</strong></td>
+            <td>Largest</td>
+            <td>Medium</td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td><strong>Starter command</strong></td>
+            <td><code>npm create vite@latest</code></td>
+            <td><code>ng new my-app</code></td>
+            <td><code>npm create vue@latest</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tip-box">
+        <strong>Which one should you learn?</strong> React has the largest job market and ecosystem — it's the safest first choice. Learn React first, understand its patterns, then glancing at Vue or Angular will feel familiar. All three share the same core ideas: components, state, one-way data flow.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Official Docs:</span>
+        <a class="ref-link" href="https://react.dev" target="_blank" rel="noopener" style="background:#087ea4;color:#fff;">React ↗</a>
+        <a class="ref-link" href="https://angular.dev" target="_blank" rel="noopener" style="background:#c3002f;color:#fff;">Angular ↗</a>
+        <a class="ref-link" href="https://vuejs.org" target="_blank" rel="noopener" style="background:#42b883;color:#fff;">Vue ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · WEBSOCKETS
+    ══════════════════════════════ -->
+    <section id="websockets" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">WebSockets — Real-Time Communication</h2>
+      <p class="ch-intro">HTTP was designed for a request-response model: the browser asks, the server answers, the connection closes. WebSockets break this model — they open a persistent, two-way channel so data can flow in both directions at any time, with no polling required.</p>
+
+      <h3 class="sub-heading">HTTP vs WebSocket</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">HTTP Request/Response</div>
+          <p>Browser sends a request. Server responds. Connection closes. To get new data, the browser must ask again. For live data, you'd have to poll every few seconds — wasteful and slow.</p>
+          <p style="margin-top:0.5rem;font-family:var(--font-mono);font-size:0.8rem;color:var(--muted);">Browser → Server (request)<br>Server → Browser (response)<br>Connection closed.</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">WebSocket Persistent Connection</div>
+          <p>One handshake to open the connection. Both sides can now send data freely, at any time, in either direction. The connection stays open until either side closes it.</p>
+          <p style="margin-top:0.5rem;font-family:var(--font-mono);font-size:0.8rem;color:var(--muted);">Browser ↔ Server (always open)<br>Server can push data anytime.<br>Browser can send anytime.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The ws:// Protocol</h3>
+      <div class="insight-box">
+        <div class="insight-icon">🔌</div>
+        <div class="insight-content">
+          <p>WebSocket connections use the <code>ws://</code> protocol (or <code>wss://</code> for secure/encrypted connections, the WebSocket equivalent of HTTPS). The connection starts as an HTTP request with a special <code>Upgrade: websocket</code> header. The server accepts the upgrade, the protocol switches, and from that point on — it's a persistent TCP channel.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">What You Can Build with WebSockets</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Live Chat Apps</div>
+          <p>Messages appear on all connected clients instantly, without anyone refreshing. WhatsApp Web uses WebSockets.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Live Dashboards</div>
+          <p>Stock price tickers, server monitoring panels, sports scoreboards — data pushed from server to all clients the moment it changes.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Collaborative Tools</div>
+          <p>Google Docs-style real-time editing — changes from one user propagate to all other users in milliseconds.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Multiplayer Games</div>
+          <p>Browser-based games need sub-100ms updates. WebSockets make this possible by eliminating per-request overhead.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">WebSocket Client Code — Browser Side</h3>
+      <p style="margin-bottom:0.75rem;">The browser's built-in <code>WebSocket</code> API is straightforward. You open a connection, listen for events, and send/receive messages.</p>
+      <div class="code-block">
+        <div class="code-header">WebSocket client — browser JavaScript</div>
+        <pre><code>// 1. Open a connection to the WebSocket server
+const socket = new WebSocket('wss://example.com/chat');
+
+// 2. Connection opened — fire and forget messages
+socket.addEventListener('open', (event) => {
+  console.log('Connected to server');
+  socket.send('Hello Server!');           // send a string
+  socket.send(JSON.stringify({            // or send JSON
+    type: 'join',
+    room: 'general',
+    user: 'Naman'
+  }));
+});
+
+// 3. Receive messages from the server
+socket.addEventListener('message', (event) => {
+  const data = JSON.parse(event.data);    // parse incoming JSON
+  console.log('Message from server:', data);
+  // update the UI with the new message
+});
+
+// 4. Handle errors
+socket.addEventListener('error', (event) => {
+  console.error('WebSocket error:', event);
+});
+
+// 5. Connection closed
+socket.addEventListener('close', (event) => {
+  console.log('Disconnected. Code:', event.code);
+});
+
+// 6. Close from the client side
+// socket.close();</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Socket.io — WebSockets Made Easy</h3>
+      <p style="margin-bottom:0.75rem;">The raw WebSocket API works, but managing rooms, reconnections, broadcasting, and fallbacks is complex. Socket.io is a popular library that wraps WebSockets and adds these features out of the box.</p>
+      <div class="card-row">
+        <div class="card highlight-card">
+          <div class="card-tag">What Socket.io adds</div>
+          <p>Automatic reconnection on disconnect. Named events instead of raw strings. Rooms and namespaces for grouping connections. Fallback to HTTP long-polling for environments where WebSockets are blocked. Works in the browser and Node.js.</p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">Socket.io syntax</div>
+          <pre style="margin-top:0.5rem;"><code style="font-family:var(--font-mono);font-size:0.78rem;color:#e2e8f0;">// Client
+const socket = io('http://localhost:3000');
+socket.emit('chat', { text: 'Hello' });
+socket.on('chat', (msg) => {
+  console.log(msg.text);
+});</code></pre>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — WebSocket Concept in Pure JS</h3>
+      <p style="margin-bottom:0.75rem;">We can't open a real WebSocket here (no server running), but here's how the event-driven message pattern works. The same pattern applies when real socket events arrive.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — event simulation</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Simulating what happens when socket messages arrive
+// (same code pattern you would use with a real socket)
+
+function handleMessage(event) {
+  // In real code: event.data contains the raw string
+  const data = JSON.parse(event.data);
+  console.log("Received:", data.type, "from", data.user);
+  console.log("Message:", data.text);
+}
+
+// Simulate incoming messages
+const fakeMessages = [
+  { data: JSON.stringify({ type: "chat", user: "Priya",  text: "Hey everyone!" }) },
+  { data: JSON.stringify({ type: "chat", user: "Rahul",  text: "Whats up?" }) },
+  { data: JSON.stringify({ type: "join", user: "Ananya", text: "just joined" }) },
+];
+
+console.log("--- Messages arriving ---");
+fakeMessages.forEach(handleMessage);
+
+// The real code just replaces:
+//   fakeMessages.forEach(handleMessage)
+// with:
+//   socket.addEventListener("message", handleMessage)'>// Simulating what happens when socket messages arrive
+// (same code pattern you would use with a real socket)
+
+function handleMessage(event) {
+  // In real code: event.data contains the raw string
+  const data = JSON.parse(event.data);
+  console.log("Received:", data.type, "from", data.user);
+  console.log("Message:", data.text);
+}
+
+// Simulate incoming messages
+const fakeMessages = [
+  { data: JSON.stringify({ type: "chat", user: "Priya",  text: "Hey everyone!" }) },
+  { data: JSON.stringify({ type: "chat", user: "Rahul",  text: "Whats up?" }) },
+  { data: JSON.stringify({ type: "join", user: "Ananya", text: "just joined" }) },
+];
+
+console.log("--- Messages arriving ---");
+fakeMessages.forEach(handleMessage);
+
+// The real code just replaces:
+//   fakeMessages.forEach(handleMessage)
+// with:
+//   socket.addEventListener("message", handleMessage)</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>When to use WebSockets:</strong> If your feature requires data to update without the user refreshing — and updates need to be near-instant — WebSockets are the right tool. If updates happen less than once a minute, a regular <code>fetch</code> on a timer is simpler and sufficient.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener">WebSocket API — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://socket.io/docs/v4/" target="_blank" rel="noopener" style="background:#010101;">Socket.io Docs ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · WHAT IS NODE.JS?
+    ══════════════════════════════ -->
+    <section id="nodejs-intro" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">What is Node.js?</h2>
+      <p class="ch-intro">Node.js is a JavaScript runtime built on Chrome's V8 engine. It lets you run JavaScript outside of a browser — on your machine, on a server, anywhere. Same language, completely different superpowers.</p>
+
+      <h3 class="sub-heading">How Node.js Works</h3>
+      <div class="insight-box">
+        <div class="insight-icon">🔧</div>
+        <div class="insight-content">
+          <p>Node.js takes the V8 engine (which only understands JavaScript) and wraps it with a C++ layer that provides access to the operating system: the filesystem, network sockets, timers, processes, and more. It also implements the <strong>event loop</strong> — a mechanism that handles thousands of concurrent operations without blocking, using non-blocking I/O.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Event-Driven, Non-Blocking I/O</h3>
+      <p style="margin-bottom:0.75rem;">This is the phrase you'll see in every Node.js description. It means Node doesn't sit and wait for slow operations (reading a file, making a network request). It kicks off the operation, registers a callback, and moves on to handle other work. When the operation completes, the callback runs.</p>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Traditional (Blocking)</div>
+          <p>Thread 1: Read file... (waiting) ... (waiting) ... done. Only then can it handle the next request. You need one thread per concurrent user.</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">Node.js (Non-Blocking)</div>
+          <p>Read file → register callback → handle next request → handle next → ... → file ready → callback runs. One thread handles thousands of concurrent operations.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Browser JS vs Node.js — What's Different</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Feature</th><th>Browser JS</th><th>Node.js</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DOM access</strong></td>
+            <td>Yes — <code>document</code>, <code>window</code></td>
+            <td>No — there is no DOM</td>
+          </tr>
+          <tr>
+            <td><strong>Filesystem</strong></td>
+            <td>No (sandboxed)</td>
+            <td>Yes — <code>fs</code> module</td>
+          </tr>
+          <tr>
+            <td><strong>HTTP server</strong></td>
+            <td>No</td>
+            <td>Yes — <code>http</code> module</td>
+          </tr>
+          <tr>
+            <td><strong>Modules</strong></td>
+            <td>ES Modules (<code>import/export</code>)</td>
+            <td>CommonJS (<code>require</code>) or ES Modules</td>
+          </tr>
+          <tr>
+            <td><strong>Package manager</strong></td>
+            <td>N/A (bundled by build tools)</td>
+            <td>npm / yarn / pnpm</td>
+          </tr>
+          <tr>
+            <td><strong>Run with</strong></td>
+            <td><code>&lt;script&gt;</code> tag in HTML</td>
+            <td><code>node filename.js</code> in terminal</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">npm — The Node Package Manager</h3>
+      <p style="margin-bottom:0.75rem;">npm ships with Node.js and gives you access to over 2 million open-source packages. Need to parse dates? Validate emails? Connect to MongoDB? There's a package for that.</p>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Terminal</span>
+          terminal — run these commands after installing Node.js
+        </div>
+        <pre><code><span class="prompt">$</span> node --version          <span class="comment"># check your Node version</span>
+<span class="output">v20.11.0</span>
+
+<span class="prompt">$</span> npm --version            <span class="comment"># npm ships with Node</span>
+<span class="output">10.2.4</span>
+
+<span class="prompt">$</span> mkdir my-project && cd my-project
+
+<span class="prompt">$</span> npm init -y              <span class="comment"># create package.json with defaults</span>
+<span class="output">Wrote to /my-project/package.json</span>
+
+<span class="prompt">$</span> npm install lodash       <span class="comment"># install a package</span>
+<span class="output">added 1 package in 0.5s</span>
+
+<span class="prompt">$</span> npm install -D nodemon   <span class="comment"># -D = devDependency (only for development)</span>
+<span class="output">added 1 package in 0.3s</span></code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">package.json — your project's manifest</div>
+        <pre><code>{
+  "name": "my-project",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node index.js",          // npm start
+    "dev":   "nodemon index.js"        // npm run dev (auto-restarts on change)
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"              // installed packages go here
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"               // dev-only tools go here
+  }
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Pure JS That Runs in Both Environments</h3>
+      <p style="margin-bottom:0.75rem;">The core language is identical in both environments. This sandbox uses your browser's JS engine — the same code would produce the same output if you ran it with <code>node</code>.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — runs in browser AND Node.js</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// This code runs identically in the browser AND in Node.js
+// No browser APIs (document, window) — just pure JavaScript
+
+const packages = [
+  { name: "express",  downloads: 32000000 },
+  { name: "react",    downloads: 22000000 },
+  { name: "lodash",   downloads: 50000000 },
+  { name: "axios",    downloads: 18000000 },
+];
+
+// Sort by downloads descending
+const sorted = packages.sort((a, b) => b.downloads - a.downloads);
+
+console.log("Top npm packages by weekly downloads:");
+sorted.forEach((pkg, i) => {
+  const formatted = (pkg.downloads / 1_000_000).toFixed(0) + "M";
+  console.log(`${i + 1}. ${pkg.name.padEnd(12)} ${formatted}/week`);
+});
+
+// JSON works identically in both environments
+const json = JSON.stringify({ status: "ok", count: packages.length });
+console.log("\nJSON output:", json);'>// This code runs identically in the browser AND in Node.js
+// No browser APIs (document, window) — just pure JavaScript
+
+const packages = [
+  { name: "express",  downloads: 32000000 },
+  { name: "react",    downloads: 22000000 },
+  { name: "lodash",   downloads: 50000000 },
+  { name: "axios",    downloads: 18000000 },
+];
+
+// Sort by downloads descending
+const sorted = packages.sort((a, b) => b.downloads - a.downloads);
+
+console.log("Top npm packages by weekly downloads:");
+sorted.forEach((pkg, i) => {
+  const formatted = (pkg.downloads / 1_000_000).toFixed(0) + "M";
+  console.log(`${i + 1}. ${pkg.name.padEnd(12)} ${formatted}/week`);
+});
+
+// JSON works identically in both environments
+const json = JSON.stringify({ status: "ok", count: packages.length });
+console.log("\nJSON output:", json);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Install Node.js:</strong> Download from <strong>nodejs.org</strong> — choose the LTS (Long Term Support) version. After installing, open a terminal and type <code>node --version</code> to confirm it works. Then try <code>node</code> to open an interactive REPL where you can type JS directly.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link" href="https://nodejs.org/en/docs" target="_blank" rel="noopener" style="background:#417e38;color:#fff;">Node.js Docs ↗</a>
+        <a class="ref-link" href="https://docs.npmjs.com" target="_blank" rel="noopener" style="background:#cb3837;color:#fff;">npm Docs ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · NODE.JS — HTTP SERVER
+    ══════════════════════════════ -->
+    <section id="nodejs-server" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Node.js — Creating an HTTP Server</h2>
+      <p class="ch-intro">Node.js ships with a built-in <code>http</code> module. With it, you can create a web server that listens for incoming requests and sends back responses — no Apache, no Nginx required.</p>
+
+      <div class="insight-box">
+        <div class="insight-icon">🖥️</div>
+        <div class="insight-content">
+          <p>The code in this chapter <strong>requires Node.js installed on your machine</strong> — it cannot run in a browser. Save the code to a file (e.g. <code>server.js</code>) and run it from your terminal with <code>node server.js</code>. Then open <code>http://localhost:3000</code> in your browser.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">A Minimal HTTP Server</h3>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Run in Terminal</span>
+          server.js → node server.js
+        </div>
+        <pre><code><span class="comment">// server.js — run with: node server.js</span>
+const http = require('http');      <span class="comment">// 1. import Node's built-in http module</span>
+
+const PORT = 3000;
+
+<span class="comment">// 2. Create the server — callback runs on every request</span>
+const server = http.createServer((req, res) => {
+
+  <span class="comment">// 3. Log what the client asked for</span>
+  console.log(`${req.method} ${req.url}`);
+
+  <span class="comment">// 4. Set the response status and headers</span>
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+
+  <span class="comment">// 5. Send the response body and close the connection</span>
+  res.end('Hello from Node.js!\n');
+});
+
+<span class="comment">// 6. Start listening</span>
+server.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});</code></pre>
+      </div>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Terminal Output</span>
+          what you see after running node server.js
+        </div>
+        <pre><code><span class="prompt">$</span> node server.js
+<span class="output">Server running at http://localhost:3000</span>
+<span class="output">GET /</span>             <span class="comment">← logged when you visit localhost:3000</span>
+<span class="output">GET /favicon.ico</span>  <span class="comment">← browser automatically requests the favicon</span></code></pre>
+      </div>
+
+      <h3 class="sub-heading">Routing — Handling Different URLs</h3>
+      <p style="margin-bottom:0.75rem;">By inspecting <code>req.url</code> and <code>req.method</code>, you can respond differently to different requests — this is routing.</p>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Run in Terminal</span>
+          server-routes.js → node server-routes.js
+        </div>
+        <pre><code><span class="comment">// server-routes.js</span>
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  const { url, method } = req;
+
+  <span class="comment">// Route: GET /</span>
+  if (url === '/' && method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end('&lt;h1&gt;Home Page&lt;/h1&gt;');
+
+  <span class="comment">// Route: GET /about</span>
+  } else if (url === '/about' && method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ name: 'My App', version: '1.0' }));
+
+  <span class="comment">// 404 for everything else</span>
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('404 Not Found');
+  }
+});
+
+server.listen(3000, () => console.log('Server on port 3000'));</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The Request and Response Objects</h3>
+      <div class="card-row">
+        <div class="card highlight-card">
+          <div class="card-tag">req — IncomingMessage</div>
+          <p>
+            <code>req.url</code> — the requested path (<code>/about</code>)<br>
+            <code>req.method</code> — HTTP verb (<code>GET</code>, <code>POST</code>)<br>
+            <code>req.headers</code> — all HTTP headers as an object<br>
+            <code>req.on('data', cb)</code> — stream the request body
+          </p>
+        </div>
+        <div class="card highlight-card">
+          <div class="card-tag">res — ServerResponse</div>
+          <p>
+            <code>res.writeHead(status, headers)</code> — set status + headers<br>
+            <code>res.setHeader(name, value)</code> — set a single header<br>
+            <code>res.write(chunk)</code> — send partial body<br>
+            <code>res.end(data)</code> — send final body and close
+          </p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Why You'll Use Express Instead</h3>
+      <p style="margin-bottom:0.75rem;">The raw <code>http</code> module works, but manually parsing URLs, handling query strings, parsing JSON bodies, and setting correct headers for every route gets tedious fast. Express is a minimal framework that adds exactly this convenience layer — covered in Chapter 07.</p>
+
+      <div class="tip-box">
+        <strong>Anatomy of a server:</strong> Every web server does the same three things — (1) listen on a port, (2) receive a request, (3) send a response. Whether it's Node's raw <code>http</code>, Express, Fastify, Koa, or any other framework — they all implement these three steps. Once you understand the raw version, every framework becomes easy to read.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link" href="https://nodejs.org/en/docs" target="_blank" rel="noopener" style="background:#417e38;color:#fff;">Node.js Docs ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs" target="_blank" rel="noopener">Express on MDN ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · NODE.JS — FS & NPM
+    ══════════════════════════════ -->
+    <section id="nodejs-fs" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Node.js — File System &amp; Express</h2>
+      <p class="ch-intro">Two of the most-used capabilities in Node.js: reading and writing files with the <code>fs</code> module, and building web servers far more elegantly with Express.js.</p>
+
+      <h3 class="sub-heading">The fs Module — Reading Files</h3>
+      <p style="margin-bottom:0.75rem;">The <code>fs</code> (file system) module gives Node.js access to the host machine's filesystem. You can read, write, delete, rename, and watch files and directories.</p>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Run in Terminal</span>
+          read-file.js → node read-file.js
+        </div>
+        <pre><code><span class="comment">// read-file.js — requires a file called "data.txt" to exist</span>
+const fs = require('fs');
+
+<span class="comment">// Async (non-blocking) — preferred</span>
+fs.readFile('data.txt', 'utf8', (err, data) => {
+  if (err) {
+    console.error('Error reading file:', err.message);
+    return;
+  }
+  console.log('File contents:', data);
+});
+
+console.log('This runs BEFORE the file is read!');
+<span class="comment">// Node doesn't wait — it reads asynchronously and runs the callback later</span>
+
+<span class="comment">// Sync (blocking) — use only in scripts, never in a server</span>
+try {
+  const contents = fs.readFileSync('data.txt', 'utf8');
+  console.log('Sync read:', contents);
+} catch (err) {
+  console.error(err.message);
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Writing Files</h3>
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Run in Terminal</span>
+          write-file.js → node write-file.js
+        </div>
+        <pre><code><span class="comment">// write-file.js</span>
+const fs = require('fs');
+
+<span class="comment">// Write (overwrites the file if it exists)</span>
+fs.writeFile('output.txt', 'Hello from Node.js!\n', (err) => {
+  if (err) throw err;
+  console.log('File written successfully');
+});
+
+<span class="comment">// Append (adds to end without overwriting)</span>
+fs.appendFile('output.txt', 'Another line.\n', (err) => {
+  if (err) throw err;
+  console.log('Line appended');
+});
+
+<span class="comment">// Modern async/await style with fs.promises</span>
+const fsPromises = require('fs').promises;
+
+async function writeData() {
+  await fsPromises.writeFile('result.json', JSON.stringify({ ok: true }));
+  const data = await fsPromises.readFile('result.json', 'utf8');
+  console.log('Read back:', data);
+}
+
+writeData();</code></pre>
+      </div>
+
+      <h3 class="sub-heading">require vs import — Two Module Systems</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">CommonJS — require (classic Node)</div>
+          <pre style="margin-top:0.5rem;"><code style="font-family:var(--font-mono);font-size:0.78rem;color:var(--text);">const fs  = require('fs');
+const path = require('path');
+const express = require('express');
+
+// Export your own code:
+module.exports = { myFunction };</code></pre>
+          <p style="margin-top:0.5rem;">Default in Node.js. File extension: <code>.js</code></p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">ES Modules — import (modern)</div>
+          <pre style="margin-top:0.5rem;"><code style="font-family:var(--font-mono);font-size:0.78rem;color:var(--text);">import fs from 'fs';
+import path from 'path';
+import express from 'express';
+
+// Export your own code:
+export { myFunction };</code></pre>
+          <p style="margin-top:0.5rem;">Use <code>"type": "module"</code> in package.json or <code>.mjs</code> extension.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Express.js — The Most Popular Node Framework</h3>
+      <p style="margin-bottom:0.75rem;">Express is a minimal, unopinionated Node.js framework. It wraps the raw <code>http</code> module and adds routing, middleware, easier request/response handling, and a plugin ecosystem. It's been the de facto Node.js web framework for over a decade.</p>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Terminal</span>
+          set up Express in a new project
+        </div>
+        <pre><code><span class="prompt">$</span> mkdir express-app && cd express-app
+<span class="prompt">$</span> npm init -y
+<span class="prompt">$</span> npm install express</code></pre>
+      </div>
+
+      <div class="terminal-block">
+        <div class="terminal-header">
+          <span class="terminal-header-badge">Run in Terminal</span>
+          app.js → node app.js
+        </div>
+        <pre><code><span class="comment">// app.js — a complete Express server</span>
+const express = require('express');
+const app = express();
+
+<span class="comment">// Middleware: parse incoming JSON request bodies</span>
+app.use(express.json());
+
+<span class="comment">// Route: GET /</span>
+app.get('/', (req, res) => {
+  res.send('Hello from Express!');
+});
+
+<span class="comment">// Route: GET /users</span>
+app.get('/users', (req, res) => {
+  const users = [
+    { id: 1, name: 'Naman' },
+    { id: 2, name: 'Priya' },
+  ];
+  res.json(users);            <span class="comment">// automatically sets Content-Type: application/json</span>
+});
+
+<span class="comment">// Route: POST /users — receive JSON body</span>
+app.post('/users', (req, res) => {
+  const { name } = req.body;
+  console.log('New user:', name);
+  res.status(201).json({ id: 3, name });
+});
+
+<span class="comment">// Route params: GET /users/42</span>
+app.get('/users/:id', (req, res) => {
+  const { id } = req.params;
+  res.json({ id: Number(id), name: 'User ' + id });
+});
+
+<span class="comment">// 404 handler — must be last</span>
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
+app.listen(3000, () => {
+  console.log('Express server running on http://localhost:3000');
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">What Express Adds Over Raw http</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Clean Routing</div>
+          <p><code>app.get('/users/:id', handler)</code> instead of a chain of if/else on <code>req.url</code>. Route parameters extracted automatically.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Middleware</div>
+          <p>Functions that run before your route handler — for logging, authentication, JSON parsing, CORS headers. Stack them with <code>app.use()</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">res.json()</div>
+          <p>Serialises an object to JSON and sets the correct <code>Content-Type</code> header automatically. One line instead of four.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Ecosystem</div>
+          <p>Thousands of Express middleware packages: Passport (auth), Multer (file upload), Helmet (security), morgan (logging), CORS, rate limiting.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — File-Like Operations in Pure JS</h3>
+      <p style="margin-bottom:0.75rem;">We can't touch the real filesystem here, but the JSON parsing and data manipulation patterns used in file-based Node scripts work identically in both environments.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — JSON data manipulation (works in Node too)</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// In Node.js, you would read this from a file:
+// const raw = fs.readFileSync("users.json", "utf8");
+// Here we simulate it as a string — same parsing logic
+
+const raw = `[
+  { "id": 1, "name": "Naman",  "role": "admin" },
+  { "id": 2, "name": "Priya",  "role": "user"  },
+  { "id": 3, "name": "Rahul",  "role": "user"  },
+  { "id": 4, "name": "Ananya", "role": "admin" }
+]`;
+
+const users = JSON.parse(raw);
+
+// Find admins
+const admins = users.filter(u => u.role === "admin");
+console.log("Admins:", admins.map(u => u.name).join(", "));
+
+// Add a new user
+users.push({ id: 5, name: "Vikram", role: "user" });
+
+// Serialize back to JSON (what you would write back to the file)
+const updated = JSON.stringify(users, null, 2);
+console.log("\nUpdated JSON (first 120 chars):");
+console.log(updated.slice(0, 120) + "...");
+console.log("\nTotal users:", users.length);'>// In Node.js, you would read this from a file:
+// const raw = fs.readFileSync("users.json", "utf8");
+// Here we simulate it as a string — same parsing logic
+
+const raw = `[
+  { "id": 1, "name": "Naman",  "role": "admin" },
+  { "id": 2, "name": "Priya",  "role": "user"  },
+  { "id": 3, "name": "Rahul",  "role": "user"  },
+  { "id": 4, "name": "Ananya", "role": "admin" }
+]`;
+
+const users = JSON.parse(raw);
+
+// Find admins
+const admins = users.filter(u => u.role === "admin");
+console.log("Admins:", admins.map(u => u.name).join(", "));
+
+// Add a new user
+users.push({ id: 5, name: "Vikram", role: "user" });
+
+// Serialize back to JSON (what you would write back to the file)
+const updated = JSON.stringify(users, null, 2);
+console.log("\nUpdated JSON (first 120 chars):");
+console.log(updated.slice(0, 120) + "...");
+console.log("\nTotal users:", users.length);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>npm scripts are your workflow:</strong> Add commands to the <code>"scripts"</code> section of <code>package.json</code>. Run <code>npm start</code> to launch your server, <code>npm run dev</code> to launch with auto-restart (nodemon), <code>npm test</code> to run tests. These become the standard entry points every developer on your team uses.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link" href="https://nodejs.org/en/docs" target="_blank" rel="noopener" style="background:#417e38;color:#fff;">Node.js Docs ↗</a>
+        <a class="ref-link" href="https://expressjs.com" target="_blank" rel="noopener" style="background:#000;color:#fff;">Express.js ↗</a>
+        <a class="ref-link" href="https://docs.npmjs.com" target="_blank" rel="noopener" style="background:#cb3837;color:#fff;">npm Docs ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs" target="_blank" rel="noopener">Express on MDN ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · WHAT TO LEARN NEXT
+    ══════════════════════════════ -->
+    <section id="whats-next" class="chapter chapter-exercise">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">What to Learn Next</h2>
+      <p class="ch-intro">You've covered the full JavaScript curriculum — from variables and loops to Node.js servers and real-time communication. What you learn next depends entirely on what you want to build. Here's a clear map.</p>
+
+      <h3 class="sub-heading">Choose Your Path</h3>
+      <p style="margin-bottom:1.5rem;color:var(--muted);">Each path below lists technologies in the order you should learn them. Start at the top and work down. Don't skip levels — each one builds on the last.</p>
+
+      <div class="path-row">
+
+        <div class="path-card path-frontend">
+          <div class="path-card-label">Frontend Path</div>
+          <div class="path-card-goal">Build beautiful web apps</div>
+          <ul class="path-card-stack">
+            <li>HTML &amp; CSS (Modules 1–2) ✓</li>
+            <li>JavaScript Fundamentals ✓</li>
+            <li>DOM &amp; Events (Module 4)</li>
+            <li>Async JS &amp; Fetch (Module 5)</li>
+            <li>React — components &amp; hooks</li>
+            <li>React Router</li>
+            <li>Next.js — production React</li>
+            <li>Tailwind CSS for styling</li>
+            <li>Deploy on Vercel / Netlify</li>
+          </ul>
+        </div>
+
+        <div class="path-card path-backend">
+          <div class="path-card-label">Backend Path</div>
+          <div class="path-card-goal">Build APIs &amp; servers</div>
+          <ul class="path-card-stack">
+            <li>JavaScript Fundamentals ✓</li>
+            <li>Node.js — this module ✓</li>
+            <li>Express.js — routing &amp; middleware</li>
+            <li>REST API design</li>
+            <li>SQL — PostgreSQL / MySQL</li>
+            <li>MongoDB (NoSQL)</li>
+            <li>Authentication — JWT / sessions</li>
+            <li>Environment variables &amp; .env</li>
+            <li>Deploy on Railway / Render</li>
+          </ul>
+        </div>
+
+        <div class="path-card path-fullstack">
+          <div class="path-card-label">Full-Stack Path</div>
+          <div class="path-card-goal">Build complete products</div>
+          <ul class="path-card-stack">
+            <li>Complete Frontend Path first</li>
+            <li>Complete Backend Path</li>
+            <li>MERN Stack (MongoDB, Express, React, Node)</li>
+            <li>REST API + React frontend</li>
+            <li>Authentication end-to-end</li>
+            <li>Next.js with API routes</li>
+            <li>Prisma ORM</li>
+            <li>Docker basics</li>
+            <li>Deploy full-stack on AWS / GCP</li>
+          </ul>
+        </div>
+
+        <div class="path-card path-mobile">
+          <div class="path-card-label">Mobile Path</div>
+          <div class="path-card-goal">Build iOS &amp; Android apps</div>
+          <ul class="path-card-stack">
+            <li>JavaScript Fundamentals ✓</li>
+            <li>React — strongly recommended first</li>
+            <li>React Native — core components</li>
+            <li>Expo — toolchain for RN</li>
+            <li>React Navigation</li>
+            <li>AsyncStorage / MMKV</li>
+            <li>Native APIs (camera, location)</li>
+            <li>App Store / Play Store publish</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <h3 class="sub-heading">If You Want to Build X, Learn Y</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>I want to build…</th><th>Primary tools</th><th>Start here</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A portfolio website</td>
+            <td>HTML, CSS, vanilla JS</td>
+            <td>You already know enough — build it now</td>
+          </tr>
+          <tr>
+            <td>A web app with a UI (todo, dashboard)</td>
+            <td>React + Next.js</td>
+            <td>Learn DOM/events → async → React</td>
+          </tr>
+          <tr>
+            <td>A REST API for a mobile app</td>
+            <td>Node.js + Express + PostgreSQL</td>
+            <td>Express, then a database module</td>
+          </tr>
+          <tr>
+            <td>A live chat or real-time app</td>
+            <td>Socket.io + Node + React</td>
+            <td>WebSockets chapter → Socket.io docs</td>
+          </tr>
+          <tr>
+            <td>An iOS/Android app</td>
+            <td>React Native + Expo</td>
+            <td>Learn React first, then React Native</td>
+          </tr>
+          <tr>
+            <td>A full product with auth, DB, and UI</td>
+            <td>MERN Stack or Next.js + Prisma</td>
+            <td>Complete both Frontend and Backend paths</td>
+          </tr>
+          <tr>
+            <td>A desktop app</td>
+            <td>Electron + React</td>
+            <td>Learn React first, then Electron docs</td>
+          </tr>
+          <tr>
+            <td>A developer tool / CLI script</td>
+            <td>Node.js + Commander.js</td>
+            <td>Node.js modules → process.argv → CLI libraries</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Important Skills That Apply to Every Path</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Git &amp; GitHub</div>
+          <p>Version control is non-negotiable. Learn <code>git init</code>, <code>commit</code>, <code>push</code>, <code>pull</code>, branches, and pull requests. GitHub is the portfolio every employer checks.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">TypeScript</div>
+          <p>A typed superset of JavaScript. Add types to catch bugs before they run. Used in Angular natively, increasingly in React and Node. Learn it after JavaScript is solid.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Testing</div>
+          <p>Jest for unit tests. Playwright or Cypress for end-to-end browser tests. Writing tests is what separates junior from senior developers.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Developer Tools</div>
+          <p>Browser DevTools (you already know these), Postman/Insomnia for testing APIs, VS Code extensions, ESLint + Prettier for code quality.</p>
+        </div>
+      </div>
+
+      <div class="congrats-box">
+        <div class="congrats-badge">Curriculum Complete</div>
+        <div class="congrats-title">You finished the JavaScript curriculum.<br><span>That's genuinely something to be proud of.</span></div>
+        <p class="congrats-body">
+          You started from zero — variables, types, operators — and you've worked through functions, arrays, objects, DOM manipulation, asynchronous JavaScript, and now the full JavaScript ecosystem. Most people who start a programming curriculum don't finish it. You did.
+        </p>
+        <p class="congrats-body">
+          The journey from here is about building things. Every concept you learned becomes stronger the moment you apply it to a real project. Pick one thing from the paths above, start small, break things, look things up, and keep going. That's all there is to it.
+        </p>
+        <div class="congrats-stats">
+          <div class="congrats-stat-item">
+            <span class="congrats-stat-num">8</span>
+            <span class="congrats-stat-label">Modules completed</span>
+          </div>
+          <div class="congrats-stat-item">
+            <span class="congrats-stat-num">38</span>
+            <span class="congrats-stat-label">Topics covered</span>
+          </div>
+          <div class="congrats-stat-item">
+            <span class="congrats-stat-num">1</span>
+            <span class="congrats-stat-label">Language mastered</span>
+          </div>
+          <div class="congrats-stat-item">
+            <span class="congrats-stat-num">∞</span>
+            <span class="congrats-stat-label">Things you can build</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box" style="margin-top:2rem;">
+        <strong>What to do right now:</strong> Close this guide, open your editor, and start building something — anything. A to-do list, a weather app using a free API, a personal blog, a simple calculator. The fastest way to cement everything you've learned is to hit a real problem and figure your way through it. You have the foundation. Go use it.
+      </div>
+
+      <div class="ref-links" style="margin-top:1.5rem;">
+        <span class="ref-links-label">Keep building:</span>
+        <a class="ref-link" href="https://react.dev" target="_blank" rel="noopener" style="background:#087ea4;color:#fff;">React ↗</a>
+        <a class="ref-link" href="https://nodejs.org/en/docs" target="_blank" rel="noopener" style="background:#417e38;color:#fff;">Node.js ↗</a>
+        <a class="ref-link" href="https://expressjs.com" target="_blank" rel="noopener" style="background:#000;color:#fff;">Express ↗</a>
+        <a class="ref-link" href="https://vuejs.org" target="_blank" rel="noopener" style="background:#42b883;color:#fff;">Vue ↗</a>
+        <a class="ref-link" href="https://angular.dev" target="_blank" rel="noopener" style="background:#c3002f;color:#fff;">Angular ↗</a>
+        <a class="ref-link" href="https://socket.io/docs/v4/" target="_blank" rel="noopener" style="background:#010101;color:#fff;">Socket.io ↗</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <p>JavaScript Beyond the Browser — Student Handbook &nbsp;·&nbsp; Final module of the JS curriculum. Keep building.</p>
+  </footer>
+
+  <!-- ============================================================
+       SANDBOX ENGINE
+  ============================================================ -->
+  <script>
+    function formatValue(v) {
+      if (v === undefined) return 'undefined';
+      if (v === null)      return 'null';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+      }
+      return String(v);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    function runSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const code    = sandbox.querySelector('.sandbox-code').value;
+      const output  = sandbox.querySelector('.sandbox-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const orig = {
+        log:   console.log,
+        error: console.error,
+        warn:  console.warn
+      };
+
+      console.log   = (...a) => logs.push({ t: 'log',   text: a.map(formatValue).join(' ') });
+      console.error = (...a) => logs.push({ t: 'error', text: a.map(formatValue).join(' ') });
+      console.warn  = (...a) => logs.push({ t: 'warn',  text: a.map(formatValue).join(' ') });
+
+      try {
+        eval(code); // eslint-disable-line no-eval
+      } catch (e) {
+        logs.push({ t: 'error', text: e.message });
+      } finally {
+        console.log   = orig.log;
+        console.error = orig.error;
+        console.warn  = orig.warn;
+      }
+
+      if (!logs.length) {
+        output.innerHTML = '<div class="sb-empty">// No output — add console.log() to see results.</div>';
+        return;
+      }
+
+      output.innerHTML = logs
+        .map(l => `<div class="sb-line sb-${l.t}">${escapeHtml(l.text)}</div>`)
+        .join('');
+    }
+
+    function resetSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const ta      = sandbox.querySelector('.sandbox-code');
+      ta.value      = ta.dataset.default;
+      sandbox.querySelector('.sandbox-output').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>

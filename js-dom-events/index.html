@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn DOM manipulation and event handling — select, modify, create, and react to every element on your page. Interactive sandboxes throughout." />
+  <title>JavaScript DOM & Events — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">JavaScript<br><span class="hero-accent">DOM &amp; Events</span></h1>
+    <p class="hero-sub">Make your pages interactive — read, change, and react to everything.</p>
+    <p class="hero-desc">The DOM is JavaScript's window into your HTML. Learn to select elements, change content and styles, create new elements, and respond to every user action.</p>
+    <div class="hero-pills">
+      <span class="pill">11 Chapters</span>
+      <span class="pill">Live DOM Demos</span>
+      <span class="pill">Interactive Exercise</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#what-is-dom">01 What is the DOM?</a></li>
+      <li><a href="#selecting">02 Selecting Elements</a></li>
+      <li><a href="#reading-modifying">03 Reading &amp; Modifying Content</a></li>
+      <li><a href="#styles-classes">04 Modifying Styles &amp; Classes</a></li>
+      <li><a href="#attributes">05 Element Attributes</a></li>
+      <li><a href="#creating">06 Creating &amp; Inserting Elements</a></li>
+      <li><a href="#removing">07 Removing Elements</a></li>
+      <li><a href="#event-listeners">08 Event Listeners</a></li>
+      <li><a href="#event-object">09 The Event Object</a></li>
+      <li><a href="#bubbling">10 Event Bubbling &amp; Delegation</a></li>
+      <li><a href="#todo-list">11 Build It: Interactive To-Do List</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · WHAT IS THE DOM?
+    ══════════════════════════════ -->
+    <section id="what-is-dom" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">What is the DOM?</h2>
+      <p class="ch-intro">The DOM (Document Object Model) is the browser's live, JavaScript-accessible representation of your HTML page. It is a tree of objects — every element, attribute, and piece of text is a node.</p>
+
+      <h3 class="sub-heading">The Browser's Mental Model</h3>
+      <p style="margin-bottom:1rem;">When your browser loads an HTML file, it reads the markup and builds a tree of objects in memory. JavaScript can read and change this tree at any time — and the page updates instantly to reflect the change.</p>
+
+      <div class="insight-box">
+        <div class="insight-icon">🌳</div>
+        <div class="insight-content">
+          <p><strong>HTML is static text. The DOM is a live tree.</strong> When JavaScript changes <code>element.textContent</code>, it changes the DOM node — the original HTML file on disk is untouched. Reload the page and it resets.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The DOM Tree — Visual Diagram</h3>
+      <p style="margin-bottom:1rem;">For a page with this HTML:</p>
+      <div class="code-block">
+        <div class="code-header">example.html</div>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1 id="title"&gt;Hello&lt;/h1&gt;
+    &lt;p class="intro"&gt;Welcome!&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Item 1&lt;/li&gt;
+      &lt;li&gt;Item 2&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+
+      <p style="margin:1rem 0 0.75rem;">The browser builds this tree:</p>
+      <div class="role-diagram" style="flex-direction:column;align-items:center;gap:0.25rem;padding:1.5rem;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;width:100%;">
+          <!-- window -->
+          <div class="role-card role-card-js" style="width:auto;min-width:140px;text-align:center;padding:0.6rem 1.2rem;">
+            <div class="role-icon" style="font-size:1rem;">🌐</div>
+            <div class="role-name" style="font-size:0.85rem;">window</div>
+            <div class="role-desc" style="font-size:0.7rem;">Global object — top of the hierarchy</div>
+          </div>
+          <div style="width:2px;height:20px;background:var(--border);"></div>
+          <!-- document -->
+          <div class="role-card role-card-js" style="width:auto;min-width:140px;text-align:center;padding:0.6rem 1.2rem;">
+            <div class="role-icon" style="font-size:1rem;">📄</div>
+            <div class="role-name" style="font-size:0.85rem;">document</div>
+            <div class="role-desc" style="font-size:0.7rem;">Represents the whole HTML document</div>
+          </div>
+          <div style="width:2px;height:20px;background:var(--border);"></div>
+          <!-- html -->
+          <div class="role-card role-card-html" style="width:auto;min-width:140px;text-align:center;padding:0.5rem 1rem;">
+            <div class="role-name" style="font-size:0.8rem;">&lt;html&gt;</div>
+          </div>
+          <div style="display:flex;gap:4rem;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;">
+              <div style="width:2px;height:16px;background:var(--border);"></div>
+              <div class="role-card role-card-html" style="width:auto;min-width:100px;text-align:center;padding:0.4rem 0.8rem;">
+                <div class="role-name" style="font-size:0.75rem;">&lt;head&gt;</div>
+              </div>
+              <div style="width:2px;height:16px;background:var(--border);"></div>
+              <div class="role-card" style="width:auto;min-width:100px;text-align:center;padding:0.35rem 0.6rem;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;">
+                <div style="font-size:0.7rem;font-family:var(--font-mono);">&lt;title&gt;</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;">
+              <div style="width:2px;height:16px;background:var(--border);"></div>
+              <div class="role-card role-card-html" style="width:auto;min-width:100px;text-align:center;padding:0.4rem 0.8rem;">
+                <div class="role-name" style="font-size:0.75rem;">&lt;body&gt;</div>
+              </div>
+              <div style="display:flex;gap:1.5rem;align-items:flex-start;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0.2rem;">
+                  <div style="width:2px;height:14px;background:var(--border);"></div>
+                  <div class="role-card" style="width:auto;min-width:80px;text-align:center;padding:0.3rem 0.5rem;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;">
+                    <div style="font-size:0.7rem;font-family:var(--font-mono);">&lt;h1&gt;</div>
+                    <div style="font-size:0.6rem;color:var(--muted);">"Hello"</div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0.2rem;">
+                  <div style="width:2px;height:14px;background:var(--border);"></div>
+                  <div class="role-card" style="width:auto;min-width:80px;text-align:center;padding:0.3rem 0.5rem;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;">
+                    <div style="font-size:0.7rem;font-family:var(--font-mono);">&lt;p&gt;</div>
+                    <div style="font-size:0.6rem;color:var(--muted);">"Welcome!"</div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0.2rem;">
+                  <div style="width:2px;height:14px;background:var(--border);"></div>
+                  <div class="role-card" style="width:auto;min-width:80px;text-align:center;padding:0.3rem 0.5rem;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;">
+                    <div style="font-size:0.7rem;font-family:var(--font-mono);">&lt;ul&gt;</div>
+                    <div style="display:flex;gap:0.4rem;justify-content:center;margin-top:0.2rem;">
+                      <div style="font-size:0.6rem;color:var(--muted);font-family:var(--font-mono);">&lt;li&gt;</div>
+                      <div style="font-size:0.6rem;color:var(--muted);font-family:var(--font-mono);">&lt;li&gt;</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The Window / Document / Element Hierarchy</h3>
+      <div class="card-row">
+        <div class="card role-card-js" style="border:1px solid var(--js-border, #f0d060);">
+          <div class="card-tag">window</div>
+          <p>The global object in the browser. Everything lives on <code>window</code>. <code>window.document</code>, <code>window.location</code>, <code>window.alert()</code>. You can omit "window." — <code>document</code> and <code>alert()</code> work directly.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">document</div>
+          <p>Represents the entire loaded HTML page. It's your entry point into the DOM. Use <code>document.querySelector()</code>, <code>document.createElement()</code>, etc. to interact with the page.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Element</div>
+          <p>Each HTML tag — <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;button&gt;</code> — is an Element node. Elements have properties like <code>.textContent</code>, <code>.style</code>, <code>.classList</code>, and methods like <code>.addEventListener()</code>.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Node Types</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Node Type</th><th>Example</th><th>How to get it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Element Node</td>
+            <td><code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;button&gt;</code></td>
+            <td><code>document.querySelector()</code></td>
+          </tr>
+          <tr>
+            <td>Text Node</td>
+            <td>The text "Hello" inside an <code>&lt;h1&gt;</code></td>
+            <td><code>element.firstChild</code> (when it's text)</td>
+          </tr>
+          <tr>
+            <td>Document Node</td>
+            <td>The root <code>document</code> object</td>
+            <td><code>document</code> global</td>
+          </tr>
+          <tr>
+            <td>Attribute Node</td>
+            <td><code>class="btn"</code>, <code>id="title"</code></td>
+            <td><code>element.getAttribute()</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tip-box">
+        <strong>Key insight:</strong> The DOM is a live representation. When you run <code>document.querySelector('h1').textContent = 'Goodbye'</code>, the <code>&lt;h1&gt;</code> on screen changes immediately — no page reload needed. This is the entire power of JavaScript on the web.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction" target="_blank" rel="noopener">DOM Introduction — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/whats-the-difference-between-the-html-dom-and-the-virtual-dom-7f8c9af06543" target="_blank" rel="noopener">Understanding the DOM — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · SELECTING ELEMENTS
+    ══════════════════════════════ -->
+    <section id="selecting" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Selecting Elements</h2>
+      <p class="ch-intro">Before you can change anything on a page, you need to <em>select</em> the element. JavaScript gives you several methods — each with its own strengths.</p>
+
+      <h3 class="sub-heading">The Four Core Selection Methods</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>Returns</th><th>Selector type</th><th>Live?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>getElementById(id)</code></td>
+            <td>Single element or <code>null</code></td>
+            <td>ID string only</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><code>querySelector(sel)</code></td>
+            <td>First match or <code>null</code></td>
+            <td>Any CSS selector</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><code>querySelectorAll(sel)</code></td>
+            <td>Static NodeList (array-like)</td>
+            <td>Any CSS selector</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><code>getElementsByClassName(c)</code></td>
+            <td>Live HTMLCollection</td>
+            <td>Class name(s)</td>
+            <td>Yes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">getElementById — The Fastest, Most Specific</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// IDs must be unique on the page — getElementById is the fastest selector
+const title = document.getElementById('title');
+
+console.log(title);           // the element node
+console.log(title.tagName);   // "H1"
+console.log(title.id);        // "title"
+
+// If no element has that ID, returns null
+const missing = document.getElementById('does-not-exist');
+console.log(missing);         // null</code></pre>
+      </div>
+
+      <h3 class="sub-heading">querySelector — The Modern Standard</h3>
+      <p style="margin-bottom:0.75rem;"><code>querySelector</code> accepts any valid CSS selector. It returns the <strong>first</strong> matching element, or <code>null</code> if nothing matches. This is the method you'll use most often.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// Select by tag
+const h1 = document.querySelector('h1');
+
+// Select by class
+const intro = document.querySelector('.hero-sub');
+
+// Select by ID (same as getElementById, but with # prefix)
+const title = document.querySelector('#title');
+
+// Select by attribute
+const link = document.querySelector('a[href="#selecting"]');
+
+// Select with combinators — just like CSS
+const firstBtn = document.querySelector('.sandbox .sandbox-run');
+
+// Chain: search WITHIN an element
+const nav = document.querySelector('nav');
+const firstLink = nav.querySelector('a');  // first &lt;a&gt; inside the nav</code></pre>
+      </div>
+
+      <h3 class="sub-heading">querySelectorAll — Multiple Elements</h3>
+      <p style="margin-bottom:0.75rem;"><code>querySelectorAll</code> returns a <strong>NodeList</strong> of all matching elements. It looks like an array and you can loop over it, but it's not a true array — use <code>Array.from()</code> to get array methods like <code>.map()</code>.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// Get ALL paragraphs
+const allPs = document.querySelectorAll('p');
+console.log(allPs.length); // number of &lt;p&gt; elements
+
+// Loop with forEach — NodeList supports this natively
+allPs.forEach(p => {
+  console.log(p.textContent.slice(0, 40));
+});
+
+// Convert to array for full array methods
+const pArray = Array.from(allPs);
+const texts = pArray.map(p => p.textContent);
+
+// Select all items with a specific class
+const pills = document.querySelectorAll('.pill');
+pills.forEach(pill => {
+  console.log(pill.textContent); // "11 Chapters", "Live DOM Demos", ...
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">When to Use Which</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">getElementById</div>
+          <p>When you have a unique ID and need that one specific element. Marginally faster than <code>querySelector</code> — useful in performance-critical loops.</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">querySelector ← use this most</div>
+          <p>The Swiss army knife. Accepts any CSS selector. Consistent, readable, and handles all your single-element needs.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">querySelectorAll</div>
+          <p>When you need to select multiple elements and iterate over them — a list of items, all buttons in a section, etc.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Live Page Selectors</h3>
+      <p style="margin-bottom:0.75rem;">These sandboxes run in the page context — they select <em>real elements on this guide page</em>. Run the code and watch what gets logged.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — selecting elements on this page</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Select the main page title
+const title = document.querySelector(".hero-title");
+console.log("Title tag:", title.tagName);
+console.log("Title text:", title.textContent.trim());
+
+// Select all nav links
+const navLinks = document.querySelectorAll(".toc-list a");
+console.log("Nav links count:", navLinks.length);
+
+// Log each pill text
+const pills = document.querySelectorAll(".pill");
+pills.forEach((pill, i) => {
+  console.log(`Pill ${i + 1}:`, pill.textContent);
+});
+
+// getElementById on the chapter section
+const section = document.getElementById("selecting");
+console.log("This chapter id:", section.id);'>// Select the main page title
+const title = document.querySelector(".hero-title");
+console.log("Title tag:", title.tagName);
+console.log("Title text:", title.textContent.trim());
+
+// Select all nav links
+const navLinks = document.querySelectorAll(".toc-list a");
+console.log("Nav links count:", navLinks.length);
+
+// Log each pill text
+const pills = document.querySelectorAll(".pill");
+pills.forEach((pill, i) => {
+  console.log(`Pill ${i + 1}:`, pill.textContent);
+});
+
+// getElementById on the chapter section
+const section = document.getElementById("selecting");
+console.log("This chapter id:", section.id);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Always check for null:</strong> <code>querySelector</code> returns <code>null</code> if nothing matches. If you try to access a property on <code>null</code>, you get a TypeError. Always verify: <code>if (el) { el.textContent = '...'; }</code>
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector" target="_blank" rel="noopener">querySelector — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll" target="_blank" rel="noopener">querySelectorAll — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-dom-selecting-elements-the-complete-guide-6f2e0b3c0d9e" target="_blank" rel="noopener">DOM Selection Guide — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · READING & MODIFYING CONTENT
+    ══════════════════════════════ -->
+    <section id="reading-modifying" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Reading &amp; Modifying Content</h2>
+      <p class="ch-intro">Once you've selected an element, you can read or change its text, HTML, or both. Three properties handle this — and their differences matter.</p>
+
+      <h3 class="sub-heading">textContent vs innerHTML vs innerText</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Property</th><th>Reads</th><th>Writes</th><th>Parses HTML tags?</th><th>Use when…</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>textContent</code></td>
+            <td>All text, including hidden</td>
+            <td>Sets text — escapes HTML</td>
+            <td>No — tags shown as text</td>
+            <td>Reading or setting plain text (safest)</td>
+          </tr>
+          <tr>
+            <td><code>innerHTML</code></td>
+            <td>HTML markup + text</td>
+            <td>Parses and renders HTML</td>
+            <td>Yes</td>
+            <td>Inserting HTML from a trusted source</td>
+          </tr>
+          <tr>
+            <td><code>innerText</code></td>
+            <td>Visible text only</td>
+            <td>Sets visible text</td>
+            <td>No</td>
+            <td>When you need layout-aware text (slower)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">textContent — Safe and Simple</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const heading = document.querySelector('h1');
+
+// Read the text
+console.log(heading.textContent); // "JavaScript DOM & Events"
+
+// Write text — if you write HTML tags, they show as literal text
+heading.textContent = 'New Heading';
+
+// Safe: user input can't inject HTML this way
+const userInput = '&lt;img src=x onerror=alert(1)&gt;';
+heading.textContent = userInput; // shows the literal string — not an image</code></pre>
+      </div>
+
+      <h3 class="sub-heading">innerHTML — Powerful but Dangerous</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const card = document.querySelector('.card');
+
+// Read the HTML inside
+console.log(card.innerHTML);
+
+// Write HTML — the browser parses and renders it
+card.innerHTML = '&lt;strong&gt;Bold text&lt;/strong&gt; and &lt;em&gt;italic&lt;/em&gt;';
+
+// Completely replace content with a structured block
+card.innerHTML = `
+  &lt;h3&gt;Updated Card&lt;/h3&gt;
+  &lt;p&gt;This content was set via innerHTML.&lt;/p&gt;
+`;</code></pre>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p><strong>XSS Security Warning:</strong> Never set <code>innerHTML</code> to a string that contains user input. An attacker can inject malicious scripts: <code>element.innerHTML = userInput</code> where <code>userInput = "&lt;img src=x onerror=alert('hacked')&gt;"</code> executes JavaScript. Always use <code>textContent</code> for user data, or sanitise HTML with a library like DOMPurify.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">innerText — Layout-Aware</h3>
+      <div class="code-block">
+        <div class="code-header">app.js — textContent vs innerText difference</div>
+        <pre><code>// Given: &lt;p&gt;Hello &lt;span style="display:none"&gt;hidden&lt;/span&gt; World&lt;/p&gt;
+const p = document.querySelector('p');
+
+console.log(p.textContent); // "Hello hidden World" — includes hidden text
+console.log(p.innerText);   // "Hello  World" — only visible text
+
+// innerText is slower because it forces a layout calculation
+// For most use cases, prefer textContent</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Modify This Page's Content Live</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — change real page content</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Read the hero subtitle
+const sub = document.querySelector(".hero-sub");
+console.log("Current sub:", sub.textContent);
+
+// Change it with textContent (safe)
+sub.textContent = "DOM manipulation is powerful!";
+console.log("After change:", sub.textContent);
+
+// Change the footer text
+const footer = document.querySelector(".site-footer p");
+console.log("Footer before:", footer.textContent.trim());
+footer.textContent = "Modified by JavaScript! 🎉";
+
+// Use innerHTML to insert a bold tag into the hero description
+const desc = document.querySelector(".hero-desc");
+const firstWord = "The DOM";
+desc.innerHTML = desc.innerHTML.replace(firstWord,
+  `<strong style="color:var(--accent)">${firstWord}</strong>`);
+
+console.log("Done! Look at the top of the page.");'>// Read the hero subtitle
+const sub = document.querySelector(".hero-sub");
+console.log("Current sub:", sub.textContent);
+
+// Change it with textContent (safe)
+sub.textContent = "DOM manipulation is powerful!";
+console.log("After change:", sub.textContent);
+
+// Change the footer text
+const footer = document.querySelector(".site-footer p");
+console.log("Footer before:", footer.textContent.trim());
+footer.textContent = "Modified by JavaScript! 🎉";
+
+// Use innerHTML to insert a bold tag into the hero description
+const desc = document.querySelector(".hero-desc");
+const firstWord = "The DOM";
+desc.innerHTML = desc.innerHTML.replace(firstWord,
+  `<strong style="color:var(--accent)">${firstWord}</strong>`);
+
+console.log("Done! Look at the top of the page.");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Rule of thumb:</strong> Use <code>textContent</code> by default. Switch to <code>innerHTML</code> only when you need to insert actual HTML markup — and only from a source you control. Reload the page to reset all changes.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML" target="_blank" rel="noopener">innerHTML — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent" target="_blank" rel="noopener">textContent — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/dom-manipulation-textcontent-vs-innertext-vs-innerhtml-3b9e3d7c5e8a" target="_blank" rel="noopener">textContent vs innerHTML — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · MODIFYING STYLES & CLASSES
+    ══════════════════════════════ -->
+    <section id="styles-classes" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Modifying Styles &amp; Classes</h2>
+      <p class="ch-intro">JavaScript can change an element's appearance in two ways: by directly setting inline styles, or by adding/removing CSS classes. Classes are almost always the better approach.</p>
+
+      <h3 class="sub-heading">element.style — Inline Styles</h3>
+      <p style="margin-bottom:0.75rem;">The <code>style</code> property maps to the element's inline style attribute. CSS property names use camelCase in JavaScript: <code>background-color</code> becomes <code>backgroundColor</code>.</p>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const box = document.querySelector('.card');
+
+// Set a single style property
+box.style.color = 'red';
+box.style.backgroundColor = '#fff3cd';  // camelCase!
+box.style.fontSize = '1.2rem';
+box.style.border = '2px solid orange';
+
+// Read a style (only returns inline styles — not stylesheet styles)
+console.log(box.style.color); // "red"
+
+// Remove an inline style by setting it to empty string
+box.style.color = '';   // browser reverts to stylesheet value
+
+// Set multiple styles at once with cssText
+box.style.cssText = 'color: blue; font-size: 1.1rem; font-weight: bold;';</code></pre>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p><code>element.style</code> only reads <strong>inline</strong> styles. If a color is set in a stylesheet, <code>element.style.color</code> returns <code>""</code>. To read computed styles (all applied CSS), use <code>window.getComputedStyle(element).color</code>.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">classList — The Better Way</h3>
+      <p style="margin-bottom:0.75rem;">Instead of setting individual styles, toggle CSS classes. This keeps styling in CSS where it belongs, and makes your JS cleaner and more maintainable.</p>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>Effect</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>classList.add(cls)</code></td><td>Add a class</td><td><code>el.classList.add('active')</code></td></tr>
+          <tr><td><code>classList.remove(cls)</code></td><td>Remove a class</td><td><code>el.classList.remove('hidden')</code></td></tr>
+          <tr><td><code>classList.toggle(cls)</code></td><td>Add if absent, remove if present</td><td><code>el.classList.toggle('open')</code></td></tr>
+          <tr><td><code>classList.contains(cls)</code></td><td>Returns true/false</td><td><code>el.classList.contains('active')</code></td></tr>
+          <tr><td><code>classList.replace(old, new)</code></td><td>Swap one class for another</td><td><code>el.classList.replace('btn-red', 'btn-green')</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const btn = document.querySelector('.sandbox-run');
+
+// Add a class
+btn.classList.add('active');
+console.log(btn.className); // "sandbox-run active"
+
+// Check if class exists
+console.log(btn.classList.contains('active')); // true
+
+// Toggle — great for show/hide, dark mode, menus
+btn.classList.toggle('active'); // removes 'active'
+btn.classList.toggle('active'); // adds 'active' back
+
+// Remove
+btn.classList.remove('active');
+console.log(btn.classList.contains('active')); // false
+
+// Add multiple classes at once
+btn.classList.add('highlighted', 'large');</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Style This Page Live</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — live style changes</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Change the hero title color with inline style
+const title = document.querySelector(".hero-title");
+title.style.color = "crimson";
+console.log("Title color set to crimson");
+
+// Change background of the hero area
+const header = document.querySelector(".site-header");
+header.style.background = "linear-gradient(135deg, #1a1a2e, #16213e)";
+console.log("Header background changed");
+
+// Toggle a class on the first chapter number
+const chNum = document.querySelector(".ch-num");
+console.log("Before classes:", chNum.className);
+chNum.style.background = "crimson";
+chNum.style.borderRadius = "50%";
+chNum.style.color = "white";
+console.log("Chapter number styled!");
+
+// Check computed style (reads from CSS, not just inline)
+const computed = window.getComputedStyle(title);
+console.log("Computed font-family:", computed.fontFamily.slice(0, 40));
+
+console.log("Reload the page to reset all changes.");'>// Change the hero title color with inline style
+const title = document.querySelector(".hero-title");
+title.style.color = "crimson";
+console.log("Title color set to crimson");
+
+// Change background of the hero area
+const header = document.querySelector(".site-header");
+header.style.background = "linear-gradient(135deg, #1a1a2e, #16213e)";
+console.log("Header background changed");
+
+// Toggle a class on the first chapter number
+const chNum = document.querySelector(".ch-num");
+console.log("Before classes:", chNum.className);
+chNum.style.background = "crimson";
+chNum.style.borderRadius = "50%";
+chNum.style.color = "white";
+console.log("Chapter number styled!");
+
+// Check computed style (reads from CSS, not just inline)
+const computed = window.getComputedStyle(title);
+console.log("Computed font-family:", computed.fontFamily.slice(0, 40));
+
+console.log("Reload the page to reset all changes.");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Best practice:</strong> Prefer <code>classList</code> over <code>element.style</code>. Define your visual states in CSS (<code>.active</code>, <code>.hidden</code>, <code>.error</code>) and toggle those classes in JS. This separates concerns and makes both CSS and JS easier to maintain.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/classList" target="_blank" rel="noopener">classList — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style" target="_blank" rel="noopener">element.style — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-classlist-the-complete-guide-b9d7f5f5b4c1" target="_blank" rel="noopener">classList Guide — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · ELEMENT ATTRIBUTES
+    ══════════════════════════════ -->
+    <section id="attributes" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Element Attributes</h2>
+      <p class="ch-intro">Attributes like <code>href</code>, <code>src</code>, <code>disabled</code>, and <code>data-*</code> are part of HTML elements. JavaScript lets you read, set, and remove them programmatically.</p>
+
+      <h3 class="sub-heading">getAttribute / setAttribute / removeAttribute</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const link = document.querySelector('a');
+
+// Read an attribute
+console.log(link.getAttribute('href'));       // e.g. "#selecting"
+console.log(link.getAttribute('class'));      // class string
+
+// Set an attribute
+link.setAttribute('href', 'https://mdn.io');
+link.setAttribute('target', '_blank');
+
+// Check if attribute exists
+console.log(link.hasAttribute('disabled'));   // false
+
+// Remove an attribute
+link.removeAttribute('target');
+
+// Some attributes are also direct DOM properties (faster to use these)
+const img = document.querySelector('img');
+// img.src = 'new.png';      // same as setAttribute('src', 'new.png')
+// img.alt = 'description';
+const btn = document.querySelector('button');
+btn.disabled = true;          // same as setAttribute('disabled', '')
+btn.disabled = false;         // same as removeAttribute('disabled')</code></pre>
+      </div>
+
+      <h3 class="sub-heading">dataset — Custom data-* Attributes</h3>
+      <p style="margin-bottom:0.75rem;">The <code>data-*</code> convention lets you store custom data directly on HTML elements. Access all <code>data-*</code> attributes through the <code>dataset</code> property — camelCase automatically.</p>
+      <div class="code-block">
+        <div class="code-header">HTML + JS — data-* attributes</div>
+        <pre><code>&lt;!-- In HTML --&gt;
+&lt;button
+  data-user-id="42"
+  data-action="delete"
+  data-confirm="Are you sure?"
+&gt;Delete&lt;/button&gt;</code></pre>
+      </div>
+      <div class="code-block" style="margin-top:0.5rem;">
+        <div class="code-header">app.js</div>
+        <pre><code>const btn = document.querySelector('button');
+
+// Read: data-user-id → dataset.userId  (kebab → camelCase)
+console.log(btn.dataset.userId);    // "42"
+console.log(btn.dataset.action);    // "delete"
+console.log(btn.dataset.confirm);   // "Are you sure?"
+
+// Set a new data attribute
+btn.dataset.role = 'admin';
+// This adds data-role="admin" to the element
+
+// Delete a data attribute
+delete btn.dataset.action;
+
+// Useful pattern: tag items with an ID for event handling
+// &lt;li data-id="5"&gt;Task&lt;/li&gt;
+// In click handler: const id = event.target.dataset.id;</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Reading Real Attributes</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — attributes on this page</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Read attributes of the first nav link
+const firstLink = document.querySelector(".toc-list a");
+console.log("href:", firstLink.getAttribute("href"));
+console.log("text:", firstLink.textContent);
+
+// Read all links on the page
+const allLinks = document.querySelectorAll("a");
+console.log("Total links:", allLinks.length);
+
+// Read the textarea data-default attribute
+const firstTextarea = document.querySelector(".sandbox-code");
+const defaultCode = firstTextarea.getAttribute("data-default");
+console.log("Sandbox default starts with:", defaultCode.slice(0, 60) + "...");
+
+// Access via dataset
+console.log("dataset.default starts with:",
+  firstTextarea.dataset.default.slice(0, 60) + "...");
+
+// Set an attribute on the page title
+const h1 = document.querySelector(".hero-title");
+h1.setAttribute("title", "This is the page heading");
+console.log("Hover over the title now — tooltip added!");
+console.log("title attr:", h1.getAttribute("title"));'>// Read attributes of the first nav link
+const firstLink = document.querySelector(".toc-list a");
+console.log("href:", firstLink.getAttribute("href"));
+console.log("text:", firstLink.textContent);
+
+// Read all links on the page
+const allLinks = document.querySelectorAll("a");
+console.log("Total links:", allLinks.length);
+
+// Read the textarea data-default attribute
+const firstTextarea = document.querySelector(".sandbox-code");
+const defaultCode = firstTextarea.getAttribute("data-default");
+console.log("Sandbox default starts with:", defaultCode.slice(0, 60) + "...");
+
+// Access via dataset
+console.log("dataset.default starts with:",
+  firstTextarea.dataset.default.slice(0, 60) + "...");
+
+// Set an attribute on the page title
+const h1 = document.querySelector(".hero-title");
+h1.setAttribute("title", "This is the page heading");
+console.log("Hover over the title now — tooltip added!");
+console.log("title attr:", h1.getAttribute("title"));</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>data-* pattern:</strong> Instead of tracking items in a separate JS object, store IDs and state directly on the DOM elements using <code>data-*</code> attributes. When a user clicks a button, <code>event.target.dataset.id</code> gives you the ID immediately — no extra lookup needed.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute" target="_blank" rel="noopener">getAttribute — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_are_browser_developer_tools" target="_blank" rel="noopener">dataset (data-*) — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/html-data-attributes-complete-guide-3c8f7e1b9d6a" target="_blank" rel="noopener">data-* attributes — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · CREATING & INSERTING ELEMENTS
+    ══════════════════════════════ -->
+    <section id="creating" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Creating &amp; Inserting Elements</h2>
+      <p class="ch-intro">You can build new HTML elements entirely in JavaScript and insert them anywhere in the DOM — no page reload needed.</p>
+
+      <h3 class="sub-heading">createElement + appendChild — The Classic Pattern</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// 1. Create a new element
+const newParagraph = document.createElement('p');
+
+// 2. Set its content and attributes
+newParagraph.textContent = 'This paragraph was created by JavaScript!';
+newParagraph.classList.add('dynamic-text');
+newParagraph.style.color = 'teal';
+
+// 3. Insert it into the DOM — appendChild adds as the LAST child
+const container = document.querySelector('.main-content');
+container.appendChild(newParagraph);
+
+// Build a complete card programmatically
+const card = document.createElement('div');
+card.className = 'card';
+
+const heading = document.createElement('h3');
+heading.textContent = 'New Card';
+
+const para = document.createElement('p');
+para.textContent = 'Built entirely in JavaScript.';
+
+card.appendChild(heading);
+card.appendChild(para);
+container.appendChild(card);</code></pre>
+      </div>
+
+      <h3 class="sub-heading">insertAdjacentHTML — Fastest for HTML Strings</h3>
+      <p style="margin-bottom:0.75rem;"><code>insertAdjacentHTML(position, htmlString)</code> parses an HTML string and inserts it at a specific position relative to the element. Four positions:</p>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Position string</th><th>Where it inserts</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>'beforebegin'</code></td><td>Before the element itself (as a sibling before)</td></tr>
+          <tr><td><code>'afterbegin'</code></td><td>Inside the element, before its first child</td></tr>
+          <tr><td><code>'beforeend'</code></td><td>Inside the element, after its last child (like appendChild)</td></tr>
+          <tr><td><code>'afterend'</code></td><td>After the element itself (as a sibling after)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const list = document.querySelector('ul');
+
+// Add to end (most common)
+list.insertAdjacentHTML('beforeend', '&lt;li&gt;New last item&lt;/li&gt;');
+
+// Add to beginning
+list.insertAdjacentHTML('afterbegin', '&lt;li&gt;New first item&lt;/li&gt;');
+
+// Insert after the list
+list.insertAdjacentHTML('afterend', '&lt;p&gt;This is after the list.&lt;/p&gt;');</code></pre>
+      </div>
+
+      <h3 class="sub-heading">insertBefore and cloneNode</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// insertBefore(newNode, referenceNode)
+const parent = document.querySelector('.toc-list');
+const newItem = document.createElement('li');
+newItem.textContent = 'Prepended item';
+const firstItem = parent.firstElementChild;
+parent.insertBefore(newItem, firstItem); // inserts before first child
+
+// cloneNode — copy an existing element
+const originalCard = document.querySelector('.card');
+const clone = originalCard.cloneNode(true); // true = deep clone (includes children)
+clone.querySelector('.card-tag').textContent = 'Cloned Card';
+originalCard.parentNode.appendChild(clone);</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Create Elements on This Page</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — create and insert elements</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Create a new pill badge and add it to the hero pills
+const pillsContainer = document.querySelector(".hero-pills");
+
+const newPill = document.createElement("span");
+newPill.className = "pill";
+newPill.textContent = "Dynamically Added!";
+newPill.style.background = "linear-gradient(135deg, #10b981, #059669)";
+newPill.style.color = "white";
+
+pillsContainer.appendChild(newPill);
+console.log("New pill added! Count now:", pillsContainer.children.length);
+
+// Create a tip box after this sandbox
+const thisSandbox = document.querySelector("#creating .sandbox");
+thisSandbox.insertAdjacentHTML("afterend",
+  `<div class="tip-box" style="border-color:#10b981;">
+     <strong>Created live!</strong> This tip box was injected by JavaScript using insertAdjacentHTML.
+   </div>`
+);
+console.log("New tip box inserted after sandbox!");
+
+// Clone the first card-row card
+const firstCard = document.querySelector("#creating .card");
+if (firstCard) {
+  const clone = firstCard.cloneNode(true);
+  clone.style.border = "2px solid var(--accent)";
+  clone.querySelector(".card-tag").textContent = "Cloned Card ✓";
+  firstCard.parentNode.appendChild(clone);
+  console.log("Card cloned and appended!");
+}'>// Create a new pill badge and add it to the hero pills
+const pillsContainer = document.querySelector(".hero-pills");
+
+const newPill = document.createElement("span");
+newPill.className = "pill";
+newPill.textContent = "Dynamically Added!";
+newPill.style.background = "linear-gradient(135deg, #10b981, #059669)";
+newPill.style.color = "white";
+
+pillsContainer.appendChild(newPill);
+console.log("New pill added! Count now:", pillsContainer.children.length);
+
+// Create a tip box after this sandbox
+const thisSandbox = document.querySelector("#creating .sandbox");
+thisSandbox.insertAdjacentHTML("afterend",
+  `<div class="tip-box" style="border-color:#10b981;">
+     <strong>Created live!</strong> This tip box was injected by JavaScript using insertAdjacentHTML.
+   </div>`
+);
+console.log("New tip box inserted after sandbox!");
+
+// Clone the first card-row card
+const firstCard = document.querySelector("#creating .card");
+if (firstCard) {
+  const clone = firstCard.cloneNode(true);
+  clone.style.border = "2px solid var(--accent)";
+  clone.querySelector(".card-tag").textContent = "Cloned Card ✓";
+  firstCard.parentNode.appendChild(clone);
+  console.log("Card cloned and appended!");
+}</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Performance tip:</strong> When creating many elements in a loop, build a <code>DocumentFragment</code> first and append all elements to it, then append the fragment to the DOM once. This causes only a single reflow instead of one per element.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement" target="_blank" rel="noopener">createElement — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML" target="_blank" rel="noopener">insertAdjacentHTML — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-dom-create-and-insert-elements-6a8b4c2e3d5f" target="_blank" rel="noopener">Creating DOM elements — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · REMOVING ELEMENTS
+    ══════════════════════════════ -->
+    <section id="removing" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Removing Elements</h2>
+      <p class="ch-intro">Once you can create elements, you need to know how to remove them too. Three methods cover all scenarios.</p>
+
+      <h3 class="sub-heading">The Three Removal Methods</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>Called on</th><th>Effect</th><th>Returns</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>element.remove()</code></td>
+            <td>The element itself</td>
+            <td>Removes element from DOM</td>
+            <td>undefined</td>
+          </tr>
+          <tr>
+            <td><code>parent.removeChild(child)</code></td>
+            <td>The parent element</td>
+            <td>Removes child from parent</td>
+            <td>The removed child node</td>
+          </tr>
+          <tr>
+            <td><code>element.replaceWith(…)</code></td>
+            <td>The element to replace</td>
+            <td>Replaces element with new node(s)</td>
+            <td>undefined</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">element.remove() — The Modern Way</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// The cleanest way — call .remove() directly on the element
+const notification = document.querySelector('.notification-banner');
+notification.remove();  // gone!
+
+// Common pattern: remove after a delay
+setTimeout(() => {
+  const alert = document.querySelector('.alert');
+  if (alert) alert.remove();
+}, 3000); // disappears after 3 seconds
+
+// Remove all items matching a selector
+document.querySelectorAll('.temp-item').forEach(el => el.remove());</code></pre>
+      </div>
+
+      <h3 class="sub-heading">removeChild() — The Legacy Way</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const list = document.querySelector('ul');
+const firstItem = list.firstElementChild;
+
+// Remove first child — you need the parent
+const removed = list.removeChild(firstItem);
+console.log('Removed:', removed.textContent);
+
+// The removed node is returned — you can re-insert it elsewhere
+anotherList.appendChild(removed);</code></pre>
+      </div>
+
+      <h3 class="sub-heading">replaceWith() — Remove and Replace in One Step</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>const oldHeading = document.querySelector('h2');
+
+// Replace with a new element
+const newHeading = document.createElement('h2');
+newHeading.textContent = 'Updated Heading';
+newHeading.classList.add('updated');
+oldHeading.replaceWith(newHeading);
+
+// Replace with an HTML string (use insertAdjacentHTML for this instead)
+// replaceWith accepts multiple nodes or strings
+oldHeading.replaceWith('Plain text replacement');
+oldHeading.replaceWith(node1, node2, 'some text');</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Remove Elements Live</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — remove page elements</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Count nav links before
+const nav = document.querySelector(".toc-list");
+console.log("Nav items before:", nav.children.length);
+
+// Remove the last nav item
+const lastNavItem = nav.lastElementChild;
+console.log("Removing:", lastNavItem.textContent);
+lastNavItem.remove();
+console.log("Nav items after:", nav.children.length);
+
+// Remove the first hero pill
+const firstPill = document.querySelector(".pill");
+console.log("Removing pill:", firstPill.textContent);
+firstPill.remove();
+
+// Replace the footer text with a new element
+const footer = document.querySelector(".site-footer p");
+const newFooter = document.createElement("p");
+newFooter.textContent = "Footer replaced with replaceWith() ✓";
+newFooter.style.color = "var(--accent)";
+footer.replaceWith(newFooter);
+
+console.log("Done! Reload to restore the page.");'>// Count nav links before
+const nav = document.querySelector(".toc-list");
+console.log("Nav items before:", nav.children.length);
+
+// Remove the last nav item
+const lastNavItem = nav.lastElementChild;
+console.log("Removing:", lastNavItem.textContent);
+lastNavItem.remove();
+console.log("Nav items after:", nav.children.length);
+
+// Remove the first hero pill
+const firstPill = document.querySelector(".pill");
+console.log("Removing pill:", firstPill.textContent);
+firstPill.remove();
+
+// Replace the footer text with a new element
+const footer = document.querySelector(".site-footer p");
+const newFooter = document.createElement("p");
+newFooter.textContent = "Footer replaced with replaceWith() ✓";
+newFooter.style.color = "var(--accent)";
+footer.replaceWith(newFooter);
+
+console.log("Done! Reload to restore the page.");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Use .remove() in modern code.</strong> <code>removeChild()</code> requires you to have a reference to the parent, which is clunky. <code>element.remove()</code> is supported in all modern browsers and is far cleaner. Only use <code>removeChild()</code> when you need the returned reference to re-use the removed node.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/remove" target="_blank" rel="noopener">element.remove() — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild" target="_blank" rel="noopener">removeChild() — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/removing-elements-from-the-dom-in-javascript-8c7e9b5d1f2a" target="_blank" rel="noopener">Removing DOM Elements — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · EVENT LISTENERS
+    ══════════════════════════════ -->
+    <section id="event-listeners" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Event Listeners</h2>
+      <p class="ch-intro">Events are signals the browser fires when something happens — a click, a keypress, a page load. <code>addEventListener</code> is how you listen for them and run code in response.</p>
+
+      <h3 class="sub-heading">addEventListener Syntax</h3>
+      <div class="code-block">
+        <div class="code-header">Syntax: element.addEventListener(eventType, handler, options)</div>
+        <pre><code>// Basic pattern
+element.addEventListener('click', function(event) {
+  // runs when element is clicked
+  console.log('Clicked!', event);
+});
+
+// Arrow function (more common in modern code)
+element.addEventListener('click', (event) => {
+  console.log('Clicked!', event.target);
+});
+
+// Named function — reusable and removable
+function handleClick(event) {
+  console.log('Clicked!');
+}
+element.addEventListener('click', handleClick);
+
+// The third argument: options object
+element.addEventListener('click', handleClick, {
+  once: true,    // fires only once, then auto-removes
+  capture: true, // use capture phase (default is bubble phase)
+  passive: true  // signal that you won't call preventDefault (improves scroll perf)
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">removeEventListener</h3>
+      <div class="code-block">
+        <div class="code-header">app.js — removing listeners</div>
+        <pre><code>// To remove a listener, you MUST pass the same function reference
+function handleClick(event) {
+  console.log('clicked');
+}
+
+btn.addEventListener('click', handleClick);
+// ... later ...
+btn.removeEventListener('click', handleClick);  // ✓ works
+
+// This does NOT work — anonymous function creates a new reference each time
+btn.addEventListener('click', () => console.log('click'));
+btn.removeEventListener('click', () => console.log('click')); // ✗ no-op</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Common Event Types</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Event</th><th>Fires when…</th><th>Key event.* properties</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>click</code></td><td>Element is clicked</td><td><code>target</code>, <code>clientX/Y</code></td></tr>
+          <tr><td><code>dblclick</code></td><td>Element is double-clicked</td><td><code>target</code></td></tr>
+          <tr><td><code>input</code></td><td>Value of input changes (every keystroke)</td><td><code>target.value</code></td></tr>
+          <tr><td><code>change</code></td><td>Input loses focus after value changed</td><td><code>target.value</code></td></tr>
+          <tr><td><code>submit</code></td><td>Form is submitted</td><td>call <code>preventDefault()</code></td></tr>
+          <tr><td><code>keydown</code></td><td>Key pressed down</td><td><code>key</code>, <code>code</code>, <code>ctrlKey</code></td></tr>
+          <tr><td><code>keyup</code></td><td>Key released</td><td><code>key</code></td></tr>
+          <tr><td><code>mouseover</code></td><td>Mouse enters element (bubbles)</td><td><code>target</code>, <code>clientX/Y</code></td></tr>
+          <tr><td><code>mouseenter</code></td><td>Mouse enters element (does NOT bubble)</td><td><code>target</code></td></tr>
+          <tr><td><code>focus</code></td><td>Element receives focus</td><td><code>target</code></td></tr>
+          <tr><td><code>blur</code></td><td>Element loses focus</td><td><code>target</code></td></tr>
+          <tr><td><code>DOMContentLoaded</code></td><td>HTML fully parsed (before images)</td><td>—</td></tr>
+          <tr><td><code>load</code></td><td>Full page loaded including images</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Try It — Live Event Listeners on This Page</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — attach real event listeners</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Click listener on the hero title — try clicking it!
+const title = document.querySelector(".hero-title");
+title.style.cursor = "pointer";
+
+title.addEventListener("click", (e) => {
+  const colors = ["crimson", "royalblue", "seagreen", "darkorange", "purple"];
+  const current = title._colorIndex || 0;
+  title.style.color = colors[current % colors.length];
+  title._colorIndex = (current + 1);
+  console.log("Title clicked! Color:", colors[current % colors.length]);
+});
+console.log("Click the page title to cycle colors!");
+
+// Mouseover listener on chapter numbers
+const chNums = document.querySelectorAll(".ch-num");
+chNums.forEach(num => {
+  num.addEventListener("mouseenter", (e) => {
+    e.target.style.transform = "scale(1.2) rotate(-5deg)";
+    e.target.style.transition = "transform 0.2s ease";
+  });
+  num.addEventListener("mouseleave", (e) => {
+    e.target.style.transform = "";
+  });
+});
+console.log("Hover over any chapter number!");
+
+// Once-only listener
+const badge = document.querySelector(".header-badge");
+badge.style.cursor = "pointer";
+badge.addEventListener("click", () => {
+  badge.textContent = "You found the secret click!";
+  badge.style.background = "crimson";
+}, { once: true });
+console.log("Click the 'Student Handbook' badge — once only!");'>// Click listener on the hero title — try clicking it!
+const title = document.querySelector(".hero-title");
+title.style.cursor = "pointer";
+
+title.addEventListener("click", (e) => {
+  const colors = ["crimson", "royalblue", "seagreen", "darkorange", "purple"];
+  const current = title._colorIndex || 0;
+  title.style.color = colors[current % colors.length];
+  title._colorIndex = (current + 1);
+  console.log("Title clicked! Color:", colors[current % colors.length]);
+});
+console.log("Click the page title to cycle colors!");
+
+// Mouseover listener on chapter numbers
+const chNums = document.querySelectorAll(".ch-num");
+chNums.forEach(num => {
+  num.addEventListener("mouseenter", (e) => {
+    e.target.style.transform = "scale(1.2) rotate(-5deg)";
+    e.target.style.transition = "transform 0.2s ease";
+  });
+  num.addEventListener("mouseleave", (e) => {
+    e.target.style.transform = "";
+  });
+});
+console.log("Hover over any chapter number!");
+
+// Once-only listener
+const badge = document.querySelector(".header-badge");
+badge.style.cursor = "pointer";
+badge.addEventListener("click", () => {
+  badge.textContent = "You found the secret click!";
+  badge.style.background = "crimson";
+}, { once: true });
+console.log("Click the 'Student Handbook' badge — once only!");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>inline vs addEventListener:</strong> You may see <code>&lt;button onclick="fn()"&gt;</code> in older code. Avoid it — it mixes HTML and JS, allows only one handler, and is harder to remove. Always use <code>addEventListener</code>. It supports multiple handlers, is removable, and supports options like <code>once</code>.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank" rel="noopener">addEventListener — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-events-addeventlistener-complete-guide-9c8e4b2f7d1a" target="_blank" rel="noopener">addEventListener Guide — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · THE EVENT OBJECT
+    ══════════════════════════════ -->
+    <section id="event-object" class="chapter">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">The Event Object</h2>
+      <p class="ch-intro">Every event handler receives an <strong>event object</strong> as its first argument. It contains everything about the event — what was clicked, what key was pressed, where the mouse was, and more.</p>
+
+      <h3 class="sub-heading">Core Event Object Properties</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Property / Method</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>event.type</code></td><td>string</td><td>Event name: <code>"click"</code>, <code>"keydown"</code>, <code>"input"</code>, etc.</td></tr>
+          <tr><td><code>event.target</code></td><td>Element</td><td>The element that was directly interacted with</td></tr>
+          <tr><td><code>event.currentTarget</code></td><td>Element</td><td>The element the listener is attached to</td></tr>
+          <tr><td><code>event.preventDefault()</code></td><td>method</td><td>Stops the browser's default behaviour (form submit, link navigate)</td></tr>
+          <tr><td><code>event.stopPropagation()</code></td><td>method</td><td>Stops the event from bubbling up the DOM tree</td></tr>
+          <tr><td><code>event.key</code></td><td>string</td><td>Key that was pressed: <code>"Enter"</code>, <code>"a"</code>, <code>"ArrowUp"</code></td></tr>
+          <tr><td><code>event.code</code></td><td>string</td><td>Physical key code: <code>"KeyA"</code>, <code>"Space"</code></td></tr>
+          <tr><td><code>event.clientX / clientY</code></td><td>number</td><td>Mouse position relative to viewport</td></tr>
+          <tr><td><code>event.shiftKey / ctrlKey / altKey</code></td><td>boolean</td><td>Whether modifier keys were held</td></tr>
+          <tr><td><code>event.timeStamp</code></td><td>number</td><td>When the event occurred (milliseconds)</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">event.target vs event.currentTarget</h3>
+      <div class="insight-box">
+        <div class="insight-icon">🎯</div>
+        <div class="insight-content">
+          <p><strong>event.target</strong> — the element that was actually clicked/interacted with. This is where the event originated.</p>
+          <p style="margin-top:0.5rem;"><strong>event.currentTarget</strong> — the element the <code>addEventListener</code> is attached to. These are different when events bubble: if you click a <code>&lt;span&gt;</code> inside a <code>&lt;button&gt;</code>, and the listener is on the button, then <code>target</code> is the <code>&lt;span&gt;</code> and <code>currentTarget</code> is the <code>&lt;button&gt;</code>.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">preventDefault — Stop Default Browser Behaviour</h3>
+      <div class="code-block">
+        <div class="code-header">Common uses of preventDefault()</div>
+        <pre><code>// Stop a link from navigating
+document.querySelector('a').addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log('Link click intercepted — not navigating');
+});
+
+// Stop a form from reloading the page on submit
+document.querySelector('form').addEventListener('submit', (e) => {
+  e.preventDefault(); // ← always do this for SPA-style forms
+  const data = new FormData(e.target);
+  console.log('Form data:', Object.fromEntries(data));
+});
+
+// Stop right-click context menu
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  // show custom context menu
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Keyboard Events — event.key</h3>
+      <div class="code-block">
+        <div class="code-header">app.js — handling key events</div>
+        <pre><code>document.addEventListener('keydown', (e) => {
+  console.log('Key:', e.key, '| Code:', e.code);
+
+  // Check specific keys
+  if (e.key === 'Enter') {
+    console.log('Enter pressed!');
+  }
+  if (e.key === 'Escape') {
+    console.log('Escape — closing modal');
+  }
+  // Modifier combinations
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault(); // stop browser save dialog
+    console.log('Ctrl+S — saving...');
+  }
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Inspect the Event Object</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — event object in action</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Listen for any keydown on the page
+document.addEventListener("keydown", function keyLogger(e) {
+  console.log("--- Key Event ---");
+  console.log("type:", e.type);
+  console.log("key:", e.key);
+  console.log("code:", e.code);
+  console.log("shift:", e.shiftKey, "| ctrl:", e.ctrlKey, "| alt:", e.altKey);
+
+  // Listen for Escape to remove listener
+  if (e.key === "Escape") {
+    document.removeEventListener("keydown", keyLogger);
+    console.log("Escape pressed — listener removed!");
+  }
+}, { once: false });
+console.log("Press any key! Press Escape to stop listening.");
+
+// Mouse event — click anywhere on the main content
+const main = document.querySelector(".main-content");
+main.addEventListener("click", function mouseInfo(e) {
+  console.log("--- Mouse Click ---");
+  console.log("target tag:", e.target.tagName);
+  console.log("target class:", e.target.className.slice(0, 40));
+  console.log("clientX:", e.clientX, "| clientY:", e.clientY);
+  console.log("timeStamp:", Math.round(e.timeStamp) + "ms since page load");
+}, { once: true });
+console.log("Click anywhere in the main content area (once)!");'>// Listen for any keydown on the page
+document.addEventListener("keydown", function keyLogger(e) {
+  console.log("--- Key Event ---");
+  console.log("type:", e.type);
+  console.log("key:", e.key);
+  console.log("code:", e.code);
+  console.log("shift:", e.shiftKey, "| ctrl:", e.ctrlKey, "| alt:", e.altKey);
+
+  // Listen for Escape to remove listener
+  if (e.key === "Escape") {
+    document.removeEventListener("keydown", keyLogger);
+    console.log("Escape pressed — listener removed!");
+  }
+}, { once: false });
+console.log("Press any key! Press Escape to stop listening.");
+
+// Mouse event — click anywhere on the main content
+const main = document.querySelector(".main-content");
+main.addEventListener("click", function mouseInfo(e) {
+  console.log("--- Mouse Click ---");
+  console.log("target tag:", e.target.tagName);
+  console.log("target class:", e.target.className.slice(0, 40));
+  console.log("clientX:", e.clientX, "| clientY:", e.clientY);
+  console.log("timeStamp:", Math.round(e.timeStamp) + "ms since page load");
+}, { once: true });
+console.log("Click anywhere in the main content area (once)!");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Always name your event parameter:</strong> Convention is <code>e</code> or <code>event</code>. Inside the handler, <code>e.target</code> is almost always the first thing you'll access — it tells you exactly what the user interacted with.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank" rel="noopener">Event object — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault" target="_blank" rel="noopener">preventDefault() — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/understanding-the-javascript-event-object-5c9e7f8d3b2a" target="_blank" rel="noopener">Event Object Deep Dive — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         10 · EVENT BUBBLING & DELEGATION
+    ══════════════════════════════ -->
+    <section id="bubbling" class="chapter">
+      <div class="ch-num">10</div>
+      <h2 class="ch-title">Event Bubbling &amp; Delegation</h2>
+      <p class="ch-intro">Events don't just fire on the clicked element — they travel up the DOM tree. Understanding this is what unlocks the most powerful event handling pattern: <strong>event delegation</strong>.</p>
+
+      <h3 class="sub-heading">How Events Travel — Bubbling</h3>
+      <p style="margin-bottom:0.75rem;">When you click an element, the browser fires the click event on that element first, then on its parent, then its grandparent, all the way up to <code>document</code>. This is called <strong>bubbling</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-header">HTML — nested elements</div>
+        <pre><code>&lt;div id="grandparent"&gt;
+  &lt;div id="parent"&gt;
+    &lt;button id="child"&gt;Click Me&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+      <div class="code-block" style="margin-top:0.5rem;">
+        <div class="code-header">app.js — click the button, all three fire</div>
+        <pre><code>document.getElementById('grandparent').addEventListener('click', () => {
+  console.log('3. grandparent — bubbled up here last');
+});
+document.getElementById('parent').addEventListener('click', () => {
+  console.log('2. parent — bubbled up here second');
+});
+document.getElementById('child').addEventListener('click', () => {
+  console.log('1. child — fired first (the element clicked)');
+});
+
+// Click the button → output:
+// 1. child — fired first
+// 2. parent — bubbled up here second
+// 3. grandparent — bubbled up here last</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Capturing vs Bubbling Phase</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Bubbling (default)</div>
+          <p>Event travels <strong>up</strong> from target to root. This is the default phase and what you use 99% of the time. <code>addEventListener('click', fn)</code> or <code>addEventListener('click', fn, false)</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Capturing</div>
+          <p>Event travels <strong>down</strong> from root to target first. Use <code>addEventListener('click', fn, true)</code> or <code>{ capture: true }</code>. Rarely needed — mainly for framework internals.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">stopPropagation — Stop the Bubble</h3>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>document.getElementById('parent').addEventListener('click', () => {
+  console.log('parent listener');
+});
+
+document.getElementById('child').addEventListener('click', (e) => {
+  e.stopPropagation(); // ← stops here, parent never fires
+  console.log('child listener — bubble stopped');
+});
+
+// Click child → only "child listener" logs
+// The parent's handler never runs</code></pre>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <p><strong>Don't over-use stopPropagation.</strong> It can break other listeners (analytics, modals, etc.) that rely on events reaching <code>document</code>. Only stop propagation when you genuinely need to prevent a parent from reacting.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Event Delegation — The Best Pattern</h3>
+      <p style="margin-bottom:0.75rem;">Instead of adding a listener to every child element, add <strong>one listener to the parent</strong>. Check <code>event.target</code> to see which child was clicked. This is especially powerful for dynamic lists where items are added/removed.</p>
+
+      <div class="code-block">
+        <div class="code-header">Without delegation — adds N listeners</div>
+        <pre><code>// ✗ Inefficient: 50 items = 50 listeners
+document.querySelectorAll('.todo-item').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.toggle('done');
+  });
+});
+// Also breaks for items added AFTER this code runs!</code></pre>
+      </div>
+
+      <div class="code-block" style="margin-top:0.5rem;">
+        <div class="code-header">With delegation — one listener handles everything</div>
+        <pre><code>// ✓ Efficient: 1 listener for any number of items
+const todoList = document.querySelector('#todo-list');
+
+todoList.addEventListener('click', (e) => {
+  // event.target is the element that was actually clicked
+  const item = e.target.closest('.todo-item');
+  if (!item) return; // clicked outside an item — do nothing
+
+  item.classList.toggle('done');
+  console.log('Toggled:', item.textContent);
+});
+
+// Now dynamically added items ALSO respond to clicks — for free!
+function addItem(text) {
+  const li = document.createElement('li');
+  li.className = 'todo-item';
+  li.textContent = text;
+  todoList.appendChild(li);
+}
+addItem('New item — also clickable!'); // works without adding a listener</code></pre>
+      </div>
+
+      <h3 class="sub-heading">closest() — Navigate Up to Find a Matching Ancestor</h3>
+      <div class="code-block">
+        <div class="code-header">app.js — event.target.closest()</div>
+        <pre><code>// If a &lt;li&gt; contains: &lt;span&gt;Text&lt;/span&gt;&lt;button class="delete"&gt;✕&lt;/button&gt;
+// Clicking the button gives e.target = the button
+// But closest finds the parent li
+
+list.addEventListener('click', (e) => {
+  // Find the nearest ancestor (or self) matching the selector
+  const item = e.target.closest('li');
+  const deleteBtn = e.target.closest('.delete');
+
+  if (deleteBtn) {
+    item.remove();
+  } else if (item) {
+    item.classList.toggle('done');
+  }
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Bubbling &amp; Delegation Live</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — bubbling and delegation</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ── Demo 1: Bubbling ──
+// Click any chapter section to see bubbling from chapter → main → body
+const main = document.querySelector(".main-content");
+main.addEventListener("click", (e) => {
+  if (e.target.closest(".sandbox")) return; // ignore sandbox clicks
+  console.log("BUBBLE — main caught:", e.target.tagName,
+    e.target.className.slice(0, 30));
+}, { once: true });
+
+const firstChapter = document.querySelector(".chapter");
+firstChapter.addEventListener("click", (e) => {
+  if (e.target.closest(".sandbox")) return;
+  console.log("BUBBLE — chapter section caught:", e.target.tagName);
+}, { once: true });
+
+console.log("Click anywhere in Chapter 01 content to see bubbling!");
+
+// ── Demo 2: Event Delegation ──
+// Add a temporary nav item, then handle all nav clicks with one listener
+const nav = document.querySelector(".toc-list");
+const tempLi = document.createElement("li");
+tempLi.innerHTML = `<a href="#" data-demo="delegation">★ Delegation Demo (click me!)</a>`;
+nav.appendChild(tempLi);
+
+nav.addEventListener("click", (e) => {
+  e.preventDefault();
+  const link = e.target.closest("a");
+  if (!link) return;
+  console.log("NAV DELEGATION — clicked:", link.textContent.trim());
+  if (link.dataset.demo === "delegation") {
+    console.log("This dynamically added item was handled by the parent listener!");
+    link.style.color = "var(--accent)";
+  }
+});
+console.log("\\nDelegation demo: one listener on the nav handles all items.");
+console.log("Click any nav link (including the ★ demo one) — check output!");'>// ── Demo 1: Bubbling ──
+// Click any chapter section to see bubbling from chapter → main → body
+const main = document.querySelector(".main-content");
+main.addEventListener("click", (e) => {
+  if (e.target.closest(".sandbox")) return; // ignore sandbox clicks
+  console.log("BUBBLE — main caught:", e.target.tagName,
+    e.target.className.slice(0, 30));
+}, { once: true });
+
+const firstChapter = document.querySelector(".chapter");
+firstChapter.addEventListener("click", (e) => {
+  if (e.target.closest(".sandbox")) return;
+  console.log("BUBBLE — chapter section caught:", e.target.tagName);
+}, { once: true });
+
+console.log("Click anywhere in Chapter 01 content to see bubbling!");
+
+// ── Demo 2: Event Delegation ──
+// Add a temporary nav item, then handle all nav clicks with one listener
+const nav = document.querySelector(".toc-list");
+const tempLi = document.createElement("li");
+tempLi.innerHTML = `<a href="#" data-demo="delegation">★ Delegation Demo (click me!)</a>`;
+nav.appendChild(tempLi);
+
+nav.addEventListener("click", (e) => {
+  e.preventDefault();
+  const link = e.target.closest("a");
+  if (!link) return;
+  console.log("NAV DELEGATION — clicked:", link.textContent.trim());
+  if (link.dataset.demo === "delegation") {
+    console.log("This dynamically added item was handled by the parent listener!");
+    link.style.color = "var(--accent)";
+  }
+});
+console.log("\\nDelegation demo: one listener on the nav handles all items.");
+console.log("Click any nav link (including the ★ demo one) — check output!");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Event delegation is the standard pattern</strong> for lists and any UI where items are added dynamically. One listener on the parent handles all children — current and future. Always use <code>e.target.closest(selector)</code> to safely find the intended target even when clicking a child element inside it.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Event_bubbling" target="_blank" rel="noopener">Event Bubbling — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation" target="_blank" rel="noopener">stopPropagation() — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-event-delegation-bubbling-capturing-explained-8c5d2b7f1e9a" target="_blank" rel="noopener">Event Delegation Explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         11 · BUILD IT: TO-DO LIST
+    ══════════════════════════════ -->
+    <section id="todo-list" class="chapter chapter-exercise">
+      <div class="ch-num">11</div>
+      <h2 class="ch-title">Build It: Interactive To-Do List</h2>
+      <p class="ch-intro">Apply every DOM and event concept from chapters 02–10. Build a complete to-do list where you can create tasks, mark them complete, and delete them — all without a page reload.</p>
+
+      <div class="exercise-intro-box">
+        <div class="eib-title">What your app must do</div>
+        <div class="eib-steps">
+          <div class="eib-step"><div class="eib-num">1</div><span>Select the input and button using <code>querySelector</code> — Ch.02</span></div>
+          <div class="eib-step"><div class="eib-num">2</div><span>Read <code>input.value</code> and validate it's not empty — Ch.03</span></div>
+          <div class="eib-step"><div class="eib-num">3</div><span>Create a new <code>&lt;li&gt;</code> with <code>createElement</code>, set <code>textContent</code> — Ch.06</span></div>
+          <div class="eib-step"><div class="eib-num">4</div><span>Add a "Delete" button inside each item using <code>innerHTML</code> — Ch.06</span></div>
+          <div class="eib-step"><div class="eib-num">5</div><span>Append the item to the list — Ch.06</span></div>
+          <div class="eib-step"><div class="eib-num">6</div><span>Use event delegation on the list for toggle-complete and delete — Ch.10</span></div>
+          <div class="eib-step"><div class="eib-num">7</div><span>Call <code>event.preventDefault()</code> on Enter keydown — Ch.09</span></div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Ask Yourself Before Starting</h3>
+      <div class="question-card">
+        <div class="q-label">Q1</div>
+        <p>You need to handle both clicking an item (toggle done) and clicking a delete button. How do you use one listener for both?</p>
+        <div class="q-hint">Hint: Attach the listener to the parent <code>&lt;ul&gt;</code>. Inside, check <code>e.target.closest('.delete-btn')</code> — if truthy, delete the item; else toggle it. Use <code>e.target.closest('li')</code> to find the containing <code>&lt;li&gt;</code>.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q2</div>
+        <p>How do you allow pressing Enter in the input to also add a task (not just clicking the button)?</p>
+        <div class="q-hint">Hint: Listen for <code>keydown</code> on the input. Check <code>e.key === 'Enter'</code>. Call the same <code>addTask()</code> function or trigger the button's click.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q3</div>
+        <p>How do you show "No tasks yet" when the list is empty, and hide it when there are tasks?</p>
+        <div class="q-hint">Hint: Write a <code>updateEmpty()</code> function that checks <code>list.children.length === 0</code> and toggles a CSS class or sets <code>display</code> on an empty-state element. Call it after adding or deleting.</div>
+      </div>
+
+      <h3 class="sub-heading">HTML Structure Skeleton</h3>
+      <div class="code-block">
+        <div class="code-header">todo.html — structure to build around</div>
+        <pre><code>&lt;div class="todo-app"&gt;
+  &lt;h2&gt;My To-Do List&lt;/h2&gt;
+
+  &lt;div class="todo-input-row"&gt;
+    &lt;input type="text" id="todo-input" placeholder="Add a new task..." /&gt;
+    &lt;button id="add-btn"&gt;Add&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;p id="empty-msg"&gt;No tasks yet. Add one above!&lt;/p&gt;
+  &lt;ul id="todo-list"&gt;
+    &lt;!-- items inserted here by JS --&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+
+      <h3 class="sub-heading">JavaScript Skeleton — Fill in the ???s</h3>
+      <div class="code-block">
+        <div class="code-header">todo.js — complete this</div>
+        <pre><code>const input   = document.querySelector(???);
+const addBtn  = document.querySelector(???);
+const list    = document.querySelector(???);
+const emptyMsg = document.querySelector(???);
+
+function updateEmpty() {
+  emptyMsg.style.display = list.children.length === ??? ? 'block' : 'none';
+}
+
+function addTask() {
+  const text = input.value.???(); // trim whitespace
+  if (text === ???) return;       // don't add empty tasks
+
+  const li = document.???(???);
+  li.innerHTML = `
+    &lt;span class="task-text"&gt;${???}&lt;/span&gt;
+    &lt;button class="delete-btn"&gt;✕&lt;/button&gt;
+  `;
+
+  list.???( li );
+  input.value = ???;   // clear the input
+  input.???();         // focus back to input
+  ???();               // update empty state
+}
+
+// Event delegation — one listener handles toggle + delete
+list.addEventListener(???, (e) => {
+  const deleteBtn = e.target.closest(???);
+  const item = e.target.closest(???);
+
+  if (deleteBtn && item) {
+    item.???();          // remove the item
+    ???();               // update empty state
+  } else if (item) {
+    item.classList.???(???); // toggle done class
+  }
+});
+
+addBtn.addEventListener('click', addTask);
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === ???) {
+    ???();
+  }
+});
+
+updateEmpty(); // initial check</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Full Working Solution</h3>
+      <p style="margin-bottom:0.75rem;">Study this complete implementation, then try modifying it: add task counts, add a "Clear all" button, or add localStorage persistence.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">To-Do List — Full Implementation</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ─────────────────────────────────────────────
+// INTERACTIVE TO-DO LIST
+// Uses: DOM selection, textContent, innerHTML,
+// createElement, appendChild, remove, addEventListener,
+// event object, bubbling, event delegation
+// ─────────────────────────────────────────────
+
+// 1. BUILD THE HTML SHELL
+const appContainer = document.querySelector(".main-content");
+
+// Create the app div
+const app = document.createElement("div");
+app.style.cssText = `
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+`;
+app.id = "live-todo-app";
+
+app.innerHTML = `
+  <h3 style="margin:0 0 1rem;color:var(--accent);">Live To-Do App</h3>
+  <div style="display:flex;gap:0.5rem;margin-bottom:1rem;">
+    <input id="todo-input"
+      type="text"
+      placeholder="Add a new task..."
+      style="flex:1;padding:0.6rem 0.8rem;border:1px solid var(--border);
+             border-radius:8px;background:var(--surface);color:var(--text);
+             font-family:var(--font-body);font-size:0.9rem;"
+    />
+    <button id="add-btn"
+      style="padding:0.6rem 1rem;background:var(--accent);color:#000;
+             border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+      Add
+    </button>
+  </div>
+  <p id="empty-msg"
+     style="color:var(--muted);text-align:center;font-style:italic;margin:0.5rem 0;">
+    No tasks yet. Add one above!
+  </p>
+  <ul id="todo-list"
+      style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.4rem;">
+  </ul>
+  <div id="task-count"
+       style="text-align:right;font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
+  </div>
+`;
+
+// Insert before the footer
+const footer = document.querySelector(".site-footer");
+footer.parentNode.insertBefore(app, footer);
+
+// 2. SELECT ELEMENTS
+const todoInput = document.getElementById("todo-input");
+const addBtn    = document.getElementById("add-btn");
+const todoList  = document.getElementById("todo-list");
+const emptyMsg  = document.getElementById("empty-msg");
+const taskCount = document.getElementById("task-count");
+
+// 3. HELPER — update empty state and task count
+function updateState() {
+  const total = todoList.children.length;
+  const done  = todoList.querySelectorAll(".done").length;
+
+  emptyMsg.style.display = total === 0 ? "block" : "none";
+  taskCount.textContent  = total > 0
+    ? `${done} of ${total} done`
+    : "";
+}
+
+// 4. ADD TASK FUNCTION
+function addTask() {
+  const text = todoInput.value.trim();
+  if (text === "") {
+    todoInput.style.border = "1px solid crimson";
+    setTimeout(() => todoInput.style.border = "", 800);
+    return;
+  }
+
+  // Create list item — uses createElement + innerHTML
+  const li = document.createElement("li");
+  li.style.cssText = `
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  `;
+
+  // Use dataset to store original text
+  li.dataset.task = text;
+
+  li.innerHTML = `
+    <span class="task-text"
+          style="flex:1;font-family:var(--font-body);font-size:0.9rem;">
+      ${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+    </span>
+    <button class="delete-btn"
+            style="background:transparent;border:none;cursor:pointer;
+                   color:var(--muted);font-size:1rem;padding:0.1rem 0.3rem;
+                   border-radius:4px;"
+            title="Delete task">
+      ✕
+    </button>
+  `;
+
+  // Insert at top (newest first)
+  todoList.insertBefore(li, todoList.firstChild);
+
+  todoInput.value = "";
+  todoInput.focus();
+  updateState();
+  console.log("Added task:", text);
+}
+
+// 5. EVENT DELEGATION — one listener handles toggle + delete
+todoList.addEventListener("click", (e) => {
+  // Is this a delete button click?
+  const deleteBtn = e.target.closest(".delete-btn");
+  // Find the containing li
+  const item = e.target.closest("li");
+
+  if (!item) return;
+
+  if (deleteBtn) {
+    // Delete path — remove() + update state
+    const taskText = item.dataset.task;
+    item.style.opacity = "0";
+    setTimeout(() => {
+      item.remove();
+      updateState();
+      console.log("Deleted:", taskText);
+    }, 200);
+  } else {
+    // Toggle complete — classList.toggle
+    item.classList.toggle("done");
+    const taskText = item.querySelector(".task-text");
+    const isDone   = item.classList.contains("done");
+
+    taskText.style.textDecoration = isDone ? "line-through" : "none";
+    taskText.style.opacity        = isDone ? "0.5" : "1";
+    item.style.borderColor        = isDone ? "var(--accent)" : "var(--border)";
+
+    console.log((isDone ? "Completed:" : "Uncompleted:"), item.dataset.task);
+    updateState();
+  }
+});
+
+// 6. BUTTON CLICK → addTask
+addBtn.addEventListener("click", addTask);
+
+// 7. ENTER KEY in input → addTask (preventDefault stops form submit)
+todoInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addTask();
+  }
+});
+
+// 8. Add some starter tasks to demo the app
+["Learn event delegation", "Master the DOM", "Build real projects"].forEach(t => {
+  todoInput.value = t;
+  addTask();
+});
+
+updateState();
+console.log("To-Do App ready! Add tasks, click to toggle, ✕ to delete.");
+console.log("App inserted before the footer — scroll down to see it!");'>// ─────────────────────────────────────────────
+// INTERACTIVE TO-DO LIST
+// Uses: DOM selection, textContent, innerHTML,
+// createElement, appendChild, remove, addEventListener,
+// event object, bubbling, event delegation
+// ─────────────────────────────────────────────
+
+// 1. BUILD THE HTML SHELL
+const appContainer = document.querySelector(".main-content");
+
+// Create the app div
+const app = document.createElement("div");
+app.style.cssText = `
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+`;
+app.id = "live-todo-app";
+
+app.innerHTML = `
+  <h3 style="margin:0 0 1rem;color:var(--accent);">Live To-Do App</h3>
+  <div style="display:flex;gap:0.5rem;margin-bottom:1rem;">
+    <input id="todo-input"
+      type="text"
+      placeholder="Add a new task..."
+      style="flex:1;padding:0.6rem 0.8rem;border:1px solid var(--border);
+             border-radius:8px;background:var(--surface);color:var(--text);
+             font-family:var(--font-body);font-size:0.9rem;"
+    />
+    <button id="add-btn"
+      style="padding:0.6rem 1rem;background:var(--accent);color:#000;
+             border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+      Add
+    </button>
+  </div>
+  <p id="empty-msg"
+     style="color:var(--muted);text-align:center;font-style:italic;margin:0.5rem 0;">
+    No tasks yet. Add one above!
+  </p>
+  <ul id="todo-list"
+      style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.4rem;">
+  </ul>
+  <div id="task-count"
+       style="text-align:right;font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
+  </div>
+`;
+
+// Insert before the footer
+const footer = document.querySelector(".site-footer");
+footer.parentNode.insertBefore(app, footer);
+
+// 2. SELECT ELEMENTS
+const todoInput = document.getElementById("todo-input");
+const addBtn    = document.getElementById("add-btn");
+const todoList  = document.getElementById("todo-list");
+const emptyMsg  = document.getElementById("empty-msg");
+const taskCount = document.getElementById("task-count");
+
+// 3. HELPER — update empty state and task count
+function updateState() {
+  const total = todoList.children.length;
+  const done  = todoList.querySelectorAll(".done").length;
+
+  emptyMsg.style.display = total === 0 ? "block" : "none";
+  taskCount.textContent  = total > 0
+    ? `${done} of ${total} done`
+    : "";
+}
+
+// 4. ADD TASK FUNCTION
+function addTask() {
+  const text = todoInput.value.trim();
+  if (text === "") {
+    todoInput.style.border = "1px solid crimson";
+    setTimeout(() => todoInput.style.border = "", 800);
+    return;
+  }
+
+  // Create list item — uses createElement + innerHTML
+  const li = document.createElement("li");
+  li.style.cssText = `
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  `;
+
+  // Use dataset to store original text
+  li.dataset.task = text;
+
+  li.innerHTML = `
+    <span class="task-text"
+          style="flex:1;font-family:var(--font-body);font-size:0.9rem;">
+      ${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+    </span>
+    <button class="delete-btn"
+            style="background:transparent;border:none;cursor:pointer;
+                   color:var(--muted);font-size:1rem;padding:0.1rem 0.3rem;
+                   border-radius:4px;"
+            title="Delete task">
+      ✕
+    </button>
+  `;
+
+  // Insert at top (newest first)
+  todoList.insertBefore(li, todoList.firstChild);
+
+  todoInput.value = "";
+  todoInput.focus();
+  updateState();
+  console.log("Added task:", text);
+}
+
+// 5. EVENT DELEGATION — one listener handles toggle + delete
+todoList.addEventListener("click", (e) => {
+  // Is this a delete button click?
+  const deleteBtn = e.target.closest(".delete-btn");
+  // Find the containing li
+  const item = e.target.closest("li");
+
+  if (!item) return;
+
+  if (deleteBtn) {
+    // Delete path — remove() + update state
+    const taskText = item.dataset.task;
+    item.style.opacity = "0";
+    setTimeout(() => {
+      item.remove();
+      updateState();
+      console.log("Deleted:", taskText);
+    }, 200);
+  } else {
+    // Toggle complete — classList.toggle
+    item.classList.toggle("done");
+    const taskText = item.querySelector(".task-text");
+    const isDone   = item.classList.contains("done");
+
+    taskText.style.textDecoration = isDone ? "line-through" : "none";
+    taskText.style.opacity        = isDone ? "0.5" : "1";
+    item.style.borderColor        = isDone ? "var(--accent)" : "var(--border)";
+
+    console.log((isDone ? "Completed:" : "Uncompleted:"), item.dataset.task);
+    updateState();
+  }
+});
+
+// 6. BUTTON CLICK → addTask
+addBtn.addEventListener("click", addTask);
+
+// 7. ENTER KEY in input → addTask (preventDefault stops form submit)
+todoInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addTask();
+  }
+});
+
+// 8. Add some starter tasks to demo the app
+["Learn event delegation", "Master the DOM", "Build real projects"].forEach(t => {
+  todoInput.value = t;
+  addTask();
+});
+
+updateState();
+console.log("To-Do App ready! Add tasks, click to toggle, ✕ to delete.");
+console.log("App inserted before the footer — scroll down to see it!");</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <h3 class="sub-heading" style="margin-top:2rem;">Concept Checklist</h3>
+      <p style="margin-bottom:0.75rem;color:var(--muted);font-size:0.9rem;">Find each concept in the solution above and confirm you understand it.</p>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">DOM Selection (Ch.02)</div>
+          <p><code>getElementById</code> and <code>querySelector</code> used to grab input, button, list, and messages after they're created via innerHTML.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Content &amp; Attributes (Ch.03, 05)</div>
+          <p><code>textContent</code> for count display. <code>innerHTML</code> with escaping for task HTML. <code>dataset.task</code> to store original text on each <code>&lt;li&gt;</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Styles &amp; Classes (Ch.04)</div>
+          <p><code>classList.toggle('done')</code> to mark tasks complete. Inline style changes for strikethrough and opacity. <code>style.cssText</code> for bulk style setting.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Creating &amp; Removing (Ch.06, 07)</div>
+          <p><code>createElement('li')</code>, <code>insertBefore</code>, <code>innerHTML</code> for item structure. <code>item.remove()</code> for deletion.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Event Listeners (Ch.08)</div>
+          <p>Three listeners: <code>'click'</code> on button, <code>'keydown'</code> on input, <code>'click'</code> on list (delegation). <code>e.preventDefault()</code> on Enter.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Delegation (Ch.10)</div>
+          <p>One <code>'click'</code> listener on the <code>&lt;ul&gt;</code> handles both delete and toggle for all items — including ones added after the listener was set up. Uses <code>e.target.closest()</code>.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Extend the exercise:</strong> Try adding: (1) a "Clear completed" button that removes all <code>.done</code> items; (2) task persistence with <code>localStorage</code> so tasks survive a reload; (3) drag-to-reorder with the HTML Drag and Drop API.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <p>JavaScript DOM &amp; Events — Student Handbook &nbsp;·&nbsp; Open the console (F12) and experiment while you read.</p>
+  </footer>
+
+  <!-- ============================================================
+       SANDBOX ENGINE
+  ============================================================ -->
+  <script>
+    function formatValue(v) {
+      if (v === undefined) return 'undefined';
+      if (v === null)      return 'null';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+      }
+      return String(v);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    function runSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const code    = sandbox.querySelector('.sandbox-code').value;
+      const output  = sandbox.querySelector('.sandbox-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const orig = {
+        log:   console.log,
+        error: console.error,
+        warn:  console.warn
+      };
+
+      console.log   = (...a) => logs.push({ t: 'log',   text: a.map(formatValue).join(' ') });
+      console.error = (...a) => logs.push({ t: 'error', text: a.map(formatValue).join(' ') });
+      console.warn  = (...a) => logs.push({ t: 'warn',  text: a.map(formatValue).join(' ') });
+
+      try {
+        eval(code); // eslint-disable-line no-eval
+      } catch (e) {
+        logs.push({ t: 'error', text: e.message });
+      } finally {
+        console.log   = orig.log;
+        console.error = orig.error;
+        console.warn  = orig.warn;
+      }
+
+      if (!logs.length) {
+        output.innerHTML = '<div class="sb-empty">// No output — add console.log() to see results.</div>';
+        return;
+      }
+
+      output.innerHTML = logs
+        .map(l => `<div class="sb-line sb-${l.t}">${escapeHtml(l.text)}</div>`)
+        .join('');
+    }
+
+    function resetSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const ta      = sandbox.querySelector('.sandbox-code');
+      ta.value      = ta.dataset.default;
+      sandbox.querySelector('.sandbox-output').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>

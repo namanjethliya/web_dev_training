@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Master JavaScript functions — declarations, arrow functions, scope, closures, and callbacks. Interactive sandbox on every chapter." />
+  <title>JavaScript Functions — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">JavaScript<br><span class="hero-accent">Functions</span></h1>
+    <p class="hero-sub">Write once, reuse everywhere — the building block of every program.</p>
+    <p class="hero-desc">Master function declarations, arrow functions, scope, closures, and callbacks — the concepts that make JavaScript a truly powerful language.</p>
+    <div class="hero-pills">
+      <span class="pill">11 Chapters</span>
+      <span class="pill">Live Sandboxes</span>
+      <span class="pill">Build It Exercise</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#what-are-functions">01 What are Functions?</a></li>
+      <li><a href="#declaration-vs-expression">02 Declaration vs Expression</a></li>
+      <li><a href="#parameters-return">03 Parameters &amp; Return Values</a></li>
+      <li><a href="#arrow-functions">04 Arrow Functions</a></li>
+      <li><a href="#default-parameters">05 Default Parameters</a></li>
+      <li><a href="#rest-parameters">06 Rest Parameters</a></li>
+      <li><a href="#spread-syntax">07 Spread Syntax</a></li>
+      <li><a href="#scope">08 Scope</a></li>
+      <li><a href="#closures">09 Closures</a></li>
+      <li><a href="#callbacks">10 Callbacks</a></li>
+      <li><a href="#function-toolkit">11 Build It: Function Toolkit</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · WHAT ARE FUNCTIONS?
+    ══════════════════════════════ -->
+    <section id="what-are-functions" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title">What are Functions?</h2>
+      <p class="ch-intro">A function is a named, reusable block of code that performs a specific task. Instead of writing the same code multiple times, you write it once inside a function and call it whenever you need it.</p>
+
+      <h3 class="sub-heading">The Problem Functions Solve</h3>
+      <p style="margin-bottom:1rem;">Imagine you're building a quiz app and you need to calculate a grade from a score in five different places. Without functions, you'd copy the same if/else block every time. If the grading rule changes, you'd have to find and update all five copies — and probably miss one.</p>
+
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Without Functions (BAD)</div>
+          <p>Write the same logic in 5 places. Change the rule → find and update 5 spots. Miss one → bug. This violates the <strong>DRY principle</strong>.</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">With Functions (GOOD)</div>
+          <p>Write the logic once. Call it 5 times. Change the rule → update 1 place. Everything stays in sync automatically.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The DRY Principle</h3>
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <p><strong>DRY = Don't Repeat Yourself.</strong> If you find yourself writing the same code more than once, it belongs in a function. Functions are the primary tool for eliminating repetition and making code maintainable. Every time you call a function instead of duplicating code, you're being a better programmer.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">What Functions Give You</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Reusability</div>
+          <p>Write once, call anywhere. The same <code>calculateGrade()</code> function works for every student score, every time.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Readability</div>
+          <p>A function named <code>sendEmail()</code> tells you exactly what that line does — you don't need to read 20 lines of networking code to understand it.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Testability</div>
+          <p>You can test a function in isolation. If <code>add(2, 3)</code> returns <code>5</code>, that function works — no matter where in your app it's called.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Abstraction</div>
+          <p>Functions let you think at a higher level. <code>processOrder()</code> hides complexity. You call it without needing to know how it works internally.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The Anatomy of a Function</h3>
+      <div class="code-block">
+        <div class="code-header">The three parts of every function</div>
+        <pre><code>//  ┌── keyword   ┌── name      ┌── parameters (inputs)
+    function      greet        (name) {
+      return "Hello, " + name + "!";
+    //  ↑ return value (output)
+    }
+
+    // Calling (invoking) the function:
+    const message = greet("Naman");
+    console.log(message); // "Hello, Naman!"
+
+    // Call it again with different input:
+    console.log(greet("Priya")); // "Hello, Priya!"
+    console.log(greet("Rahul")); // "Hello, Rahul!"</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>Defining vs Calling:</strong> Writing <code>function greet(name) { ... }</code> defines the function — it doesn't run yet. Writing <code>greet("Naman")</code> calls it — that's when the code inside actually executes. A function can be defined once but called thousands of times.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · DECLARATION VS EXPRESSION
+    ══════════════════════════════ -->
+    <section id="declaration-vs-expression" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Function Declaration vs Expression</h2>
+      <p class="ch-intro">There are two primary ways to define a function in JavaScript. They look similar but behave differently in one crucial way: hoisting.</p>
+
+      <h3 class="sub-heading">Function Declaration</h3>
+      <p style="margin-bottom:0.75rem;">The classic syntax. Uses the <code>function</code> keyword followed by a name, then the function body.</p>
+      <div class="code-block">
+        <div class="code-header">Function Declaration syntax</div>
+        <pre><code>// Declaration
+function add(a, b) {
+  return a + b;
+}
+
+// Usage
+console.log(add(3, 4)); // 7
+console.log(add(10, 20)); // 30</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Function Expression</h3>
+      <p style="margin-bottom:0.75rem;">A function stored in a variable. The function itself has no name (it's anonymous) — the variable holds a reference to it.</p>
+      <div class="code-block">
+        <div class="code-header">Function Expression syntax</div>
+        <pre><code>// Expression — assigned to a variable
+const multiply = function(a, b) {
+  return a * b;
+};
+
+// Usage — same as a declaration
+console.log(multiply(3, 4)); // 12
+console.log(multiply(5, 5)); // 25</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The Key Difference: Hoisting</h3>
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p><strong>Hoisting</strong> means JavaScript moves declarations to the top of their scope before executing code. Function declarations are fully hoisted — you can call them before the line where they're written. Function expressions are NOT hoisted — you must define them before calling them.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Hoisting in action</div>
+        <pre><code>// ✓ Function Declaration — can call BEFORE the definition
+console.log(greet("World")); // "Hello, World!" — works!
+
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+// ✗ Function Expression — CANNOT call before the definition
+console.log(square(4)); // ReferenceError: Cannot access 'square' before initialization
+
+const square = function(n) {
+  return n * n;
+};</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Side by Side Comparison</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Feature</th><th>Function Declaration</th><th>Function Expression</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Syntax</td>
+            <td><code>function name() {}</code></td>
+            <td><code>const name = function() {}</code></td>
+          </tr>
+          <tr>
+            <td>Hoisted?</td>
+            <td>Yes — usable before the definition</td>
+            <td>No — must define before calling</td>
+          </tr>
+          <tr>
+            <td>Has a name?</td>
+            <td>Yes — always has a name</td>
+            <td>Usually anonymous (no name)</td>
+          </tr>
+          <tr>
+            <td>When to use</td>
+            <td>General-purpose named functions</td>
+            <td>When assigning to variables, passing as arguments</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">IIFE — Immediately Invoked Function Expression</h3>
+      <p style="margin-bottom:0.75rem;">An IIFE is a function expression that runs immediately after it's defined. Useful for creating a private scope and avoiding polluting the global namespace.</p>
+      <div class="code-block">
+        <div class="code-header">IIFE pattern</div>
+        <pre><code>// Syntax: wrap in () and immediately call with ()
+(function() {
+  const secret = "only accessible here";
+  console.log("IIFE ran!", secret);
+})();
+
+// With a parameter
+(function(name) {
+  console.log("Hello from IIFE,", name);
+})("Naman");
+
+// Arrow function IIFE
+(() => {
+  console.log("Arrow IIFE ran!");
+})();</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Declaration vs Expression</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Function Declaration
+function square(n) {
+  return n * n;
+}
+
+// Function Expression
+const cube = function(n) {
+  return n * n * n;
+};
+
+console.log("Square of 5:", square(5));  // 25
+console.log("Cube of 3:", cube(3));      // 27
+
+// IIFE — runs immediately
+(function() {
+  const pi = 3.14159;
+  console.log("Circle area (r=5):", pi * square(5));
+})();
+
+// Try: call square before the declaration (it works — hoisted!)
+// Try: call cube before the expression (it fails — not hoisted)'>// Function Declaration
+function square(n) {
+  return n * n;
+}
+
+// Function Expression
+const cube = function(n) {
+  return n * n * n;
+};
+
+console.log("Square of 5:", square(5));  // 25
+console.log("Cube of 3:", cube(3));      // 27
+
+// IIFE — runs immediately
+(function() {
+  const pi = 3.14159;
+  console.log("Circle area (r=5):", pi * square(5));
+})();
+
+// Try: call square before the declaration (it works — hoisted!)
+// Try: call cube before the expression (it fails — not hoisted)</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions" target="_blank" rel="noopener">Functions — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Glossary/IIFE" target="_blank" rel="noopener">IIFE — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-function-declaration-vs-expression-45e7e2be6c53" target="_blank" rel="noopener">Declaration vs Expression — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · PARAMETERS & RETURN VALUES
+    ══════════════════════════════ -->
+    <section id="parameters-return" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">Parameters &amp; Return Values</h2>
+      <p class="ch-intro">Parameters are the inputs a function accepts. Return values are the outputs it sends back. Together they define a function's contract: what it needs and what it produces.</p>
+
+      <h3 class="sub-heading">Parameters vs Arguments</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Parameters</div>
+          <p>The names listed in the function definition. They are placeholders — like variables that will receive values when the function is called.</p>
+          <code style="font-family:var(--font-mono);font-size:0.85rem;">function add(<strong>a, b</strong>) { }</code>
+        </div>
+        <div class="card">
+          <div class="card-tag">Arguments</div>
+          <p>The actual values passed when calling the function. They are assigned to the parameters in the same order.</p>
+          <code style="font-family:var(--font-mono);font-size:0.85rem;">add(<strong>3, 5</strong>); // a=3, b=5</code>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Multiple Parameters</h3>
+      <div class="code-block">
+        <div class="code-header">app.js — multiple parameters in action</div>
+        <pre><code>// Function with multiple parameters
+function describeTriangle(base, height, unit) {
+  const area = 0.5 * base * height;
+  return "Triangle: base=" + base + unit + ", height=" + height + unit + ", area=" + area + unit + "²";
+}
+
+console.log(describeTriangle(5, 8, "cm"));
+// "Triangle: base=5cm, height=8cm, area=20cm²"
+
+// Too few arguments — missing param becomes undefined
+function greet(firstName, lastName) {
+  return "Hello, " + firstName + " " + lastName;
+}
+console.log(greet("Naman"));
+// "Hello, Naman undefined" — lastName is undefined
+
+// Too many arguments — extras are silently ignored
+console.log(greet("Naman", "Jethliya", "extra", "ignored"));
+// "Hello, Naman Jethliya" — extra args are ignored</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Return Values</h3>
+      <p style="margin-bottom:0.75rem;">The <code>return</code> statement sends a value back to the caller and immediately stops the function. Without <code>return</code>, a function returns <code>undefined</code>.</p>
+      <div class="code-block">
+        <div class="code-header">return — sending a value back</div>
+        <pre><code>// Function with a return value
+function celsiusToFahrenheit(c) {
+  return (c * 9/5) + 32;
+}
+
+const boiling = celsiusToFahrenheit(100);
+console.log("100°C =", boiling, "°F"); // "100°C = 212 °F"
+
+// The returned value can be used in expressions
+console.log("Body temp:", celsiusToFahrenheit(37).toFixed(1), "°F"); // "98.6 °F"
+
+// Without return — returns undefined
+function sayHello(name) {
+  console.log("Hello, " + name + "!");
+  // No return statement
+}
+const result = sayHello("Naman"); // logs "Hello, Naman!"
+console.log("Return value:", result); // "Return value: undefined"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Early Return — Guard Clauses</h3>
+      <p style="margin-bottom:0.75rem;">You can return early from a function to handle invalid inputs or edge cases before the main logic runs. This keeps code flat and readable.</p>
+      <div class="code-block">
+        <div class="code-header">Early return pattern</div>
+        <pre><code>function divide(a, b) {
+  // Guard clause — handle edge case first
+  if (b === 0) {
+    return "Error: Cannot divide by zero";
+  }
+  // Main logic — only reached if b !== 0
+  return a / b;
+}
+
+console.log(divide(10, 2));  // 5
+console.log(divide(10, 0));  // "Error: Cannot divide by zero"
+
+// Without early return (harder to read)
+function divideHarder(a, b) {
+  let result;
+  if (b !== 0) {
+    result = a / b;
+  } else {
+    result = "Error: Cannot divide by zero";
+  }
+  return result;  // same outcome, more nesting
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Parameters &amp; Return</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Temperature converter
+function celsiusToFahrenheit(c) {
+  return (c * 9/5) + 32;
+}
+
+console.log("0°C  =", celsiusToFahrenheit(0),   "°F");   // 32
+console.log("100°C =", celsiusToFahrenheit(100), "°F");  // 212
+console.log("37°C =", celsiusToFahrenheit(37).toFixed(1), "°F"); // 98.6
+
+// Divide with guard clause
+function divide(a, b) {
+  if (b === 0) return "Cannot divide by zero";
+  return a / b;
+}
+
+console.log(divide(15, 3));  // 5
+console.log(divide(10, 0));  // "Cannot divide by zero"
+
+// Try: write a function that calculates BMI (weight / height^2)
+// function bmi(weight, height) { ... }'>// Temperature converter
+function celsiusToFahrenheit(c) {
+  return (c * 9/5) + 32;
+}
+
+console.log("0°C  =", celsiusToFahrenheit(0),   "°F");   // 32
+console.log("100°C =", celsiusToFahrenheit(100), "°F");  // 212
+console.log("37°C =", celsiusToFahrenheit(37).toFixed(1), "°F"); // 98.6
+
+// Divide with guard clause
+function divide(a, b) {
+  if (b === 0) return "Cannot divide by zero";
+  return a / b;
+}
+
+console.log(divide(15, 3));  // 5
+console.log(divide(10, 0));  // "Cannot divide by zero"
+
+// Try: write a function that calculates BMI (weight / height^2)
+// function bmi(weight, height) { ... }</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Return early, return often:</strong> Use early returns (guard clauses) to handle invalid inputs at the top of your function. This avoids deeply nested if/else and keeps the "happy path" code unindented and easy to read.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions" target="_blank" rel="noopener">Functions — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-function-parameters-and-arguments-f3b7a5c98b7d" target="_blank" rel="noopener">Parameters explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · ARROW FUNCTIONS
+    ══════════════════════════════ -->
+    <section id="arrow-functions" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Arrow Functions</h2>
+      <p class="ch-intro">Arrow functions are a shorter syntax for writing function expressions, introduced in ES6. They're everywhere in modern JavaScript and are especially convenient for short, single-purpose functions.</p>
+
+      <h3 class="sub-heading">The Syntax Progression</h3>
+      <p style="margin-bottom:0.75rem;">There are four forms of arrow function syntax, depending on how many parameters you have and whether you need a function body.</p>
+      <div class="code-block">
+        <div class="code-header">Arrow function syntax — from most to least verbose</div>
+        <pre><code>// 1. Full arrow function (multiple params, multi-line body)
+const add = (a, b) => {
+  const result = a + b;
+  return result;
+};
+
+// 2. Multiple params, single expression — omit braces & return
+const multiply = (a, b) => a * b;
+
+// 3. Single param — can omit the parentheses around it
+const double = n => n * 2;
+
+// 4. No params — must keep empty parentheses
+const greet = () => "Hello, World!";
+
+console.log(add(3, 4));       // 7
+console.log(multiply(3, 4));  // 12
+console.log(double(7));       // 14
+console.log(greet());         // "Hello, World!"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Implicit Return</h3>
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <p>When you omit the curly braces <code>{}</code> from an arrow function, the expression after <code>=&gt;</code> is <strong>automatically returned</strong>. This is called an implicit return. It only works for a single expression — if you need multiple lines, you must use curly braces and an explicit <code>return</code>.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Explicit vs implicit return</div>
+        <pre><code>// Explicit return (with braces)
+const squareExplicit = (n) => {
+  return n * n;
+};
+
+// Implicit return (without braces) — same result, shorter
+const squareImplicit = n => n * n;
+
+console.log(squareExplicit(5)); // 25
+console.log(squareImplicit(5)); // 25
+
+// Returning an object literal — must wrap in extra ()
+// Otherwise JS thinks the {} are the function body!
+const makeUser = (name, age) => ({ name: name, age: age });
+console.log(makeUser("Naman", 25)); // { name: "Naman", age: 25 }</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Arrow Functions vs Regular Functions</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Feature</th><th>Regular Function</th><th>Arrow Function</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Syntax</td>
+            <td><code>function(a) { return a; }</code></td>
+            <td><code>a => a</code></td>
+          </tr>
+          <tr>
+            <td>Implicit return</td>
+            <td>No — always need <code>return</code></td>
+            <td>Yes — when no <code>{}</code></td>
+          </tr>
+          <tr>
+            <td>Hoisted?</td>
+            <td>Yes (declarations only)</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><code>this</code> binding</td>
+            <td>Has its own <code>this</code></td>
+            <td>Inherits <code>this</code> from surrounding scope</td>
+          </tr>
+          <tr>
+            <td>Best used for</td>
+            <td>Methods, constructors, complex logic</td>
+            <td>Short callbacks, array methods, simple transforms</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Try It — Arrow Functions</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Various arrow function forms
+const add      = (a, b) => a + b;
+const square   = n => n * n;
+const greet    = () => "Hello!";
+const makeUser = (name, age) => ({ name, age }); // shorthand property names
+
+console.log(add(5, 3));              // 8
+console.log(square(7));             // 49
+console.log(greet());               // "Hello!"
+console.log(makeUser("Naman", 25)); // { name: "Naman", age: 25 }
+
+// Arrow functions work great with array methods
+const numbers = [1, 2, 3, 4, 5];
+const doubled  = numbers.map(n => n * 2);
+const evens    = numbers.filter(n => n % 2 === 0);
+
+console.log("Doubled:", doubled); // [2, 4, 6, 8, 10]
+console.log("Evens:",   evens);   // [2, 4]'>// Various arrow function forms
+const add      = (a, b) => a + b;
+const square   = n => n * n;
+const greet    = () => "Hello!";
+const makeUser = (name, age) => ({ name, age }); // shorthand property names
+
+console.log(add(5, 3));              // 8
+console.log(square(7));             // 49
+console.log(greet());               // "Hello!"
+console.log(makeUser("Naman", 25)); // { name: "Naman", age: 25 }
+
+// Arrow functions work great with array methods
+const numbers = [1, 2, 3, 4, 5];
+const doubled  = numbers.map(n => n * 2);
+const evens    = numbers.filter(n => n % 2 === 0);
+
+console.log("Doubled:", doubled); // [2, 4, 6, 8, 10]
+console.log("Evens:",   evens);   // [2, 4]</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Style guide:</strong> Use arrow functions for short callbacks and transformations. Use regular function declarations for top-level, named functions that you want to be self-documenting and hoistable. Both are equally valid — consistency matters most.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener">Arrow Functions — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-arrow-functions-vs-regular-functions-4f99c6c0f0e3" target="_blank" rel="noopener">Arrow vs Regular — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · DEFAULT PARAMETERS
+    ══════════════════════════════ -->
+    <section id="default-parameters" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Default Parameters</h2>
+      <p class="ch-intro">Default parameters let you specify a fallback value for a parameter that is not provided when the function is called. They eliminate manual <code>undefined</code> checks and make function calls more flexible.</p>
+
+      <h3 class="sub-heading">The Problem They Solve</h3>
+      <div class="code-block">
+        <div class="code-header">Before default parameters (ES5 way — verbose)</div>
+        <pre><code>// The old way — manual check inside the function
+function greet(name) {
+  name = name !== undefined ? name : "stranger";
+  return "Hello, " + name + "!";
+}
+
+// The even older way — using ||
+function greetOld(name) {
+  name = name || "stranger";  // works but has a bug: 0 or "" also trigger it
+  return "Hello, " + name + "!";
+}</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">With default parameters (ES6+ — clean)</div>
+        <pre><code>// Default parameter — assigned in the signature
+function greet(name = "stranger") {
+  return "Hello, " + name + "!";
+}
+
+console.log(greet("Naman"));  // "Hello, Naman!"
+console.log(greet());         // "Hello, stranger!"
+console.log(greet(undefined)); // "Hello, stranger!" — undefined triggers the default
+console.log(greet(null));     // "Hello, null!"     — null does NOT trigger the default</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Multiple Defaults and Expressions</h3>
+      <div class="code-block">
+        <div class="code-header">Defaults can be any expression</div>
+        <pre><code>// Multiple default parameters
+function createProfile(name = "Anonymous", age = 0, role = "viewer") {
+  return `${name} (${age}) — ${role}`;
+}
+
+console.log(createProfile("Naman", 25, "admin")); // "Naman (25) — admin"
+console.log(createProfile("Priya", 22));           // "Priya (22) — viewer"
+console.log(createProfile());                      // "Anonymous (0) — viewer"
+
+// Defaults can use previous parameters
+function range(start, end = start + 10) {
+  return `${start} to ${end}`;
+}
+
+console.log(range(5, 15)); // "5 to 15"
+console.log(range(5));     // "5 to 15" — end defaults to 5+10
+
+// Default can call a function
+function getDefaultDate() {
+  return new Date().getFullYear();
+}
+
+function event(title, year = getDefaultDate()) {
+  return `${title} (${year})`;
+}
+
+console.log(event("Tech Summit", 2023)); // "Tech Summit (2023)"
+console.log(event("Hackathon"));         // "Hackathon (current year)"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Default Parameters</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='function greet(name = "stranger", greeting = "Hello") {
+  return `${greeting}, ${name}!`;
+}
+
+console.log(greet("Naman", "Hi"));   // "Hi, Naman!"
+console.log(greet("Priya"));          // "Hello, Priya!"
+console.log(greet());                 // "Hello, stranger!"
+
+// Power function with default exponent
+function power(base, exponent = 2) {
+  return base ** exponent;
+}
+
+console.log(power(5));    // 25 (5²)
+console.log(power(5, 3)); // 125 (5³)
+console.log(power(2, 10)); // 1024 (2¹⁰)
+
+// Try: add a default currency to a formatPrice function
+// function formatPrice(amount, currency = "INR") { ... }'>function greet(name = "stranger", greeting = "Hello") {
+  return `${greeting}, ${name}!`;
+}
+
+console.log(greet("Naman", "Hi"));   // "Hi, Naman!"
+console.log(greet("Priya"));          // "Hello, Priya!"
+console.log(greet());                 // "Hello, stranger!"
+
+// Power function with default exponent
+function power(base, exponent = 2) {
+  return base ** exponent;
+}
+
+console.log(power(5));    // 25 (5²)
+console.log(power(5, 3)); // 125 (5³)
+console.log(power(2, 10)); // 1024 (2¹⁰)
+
+// Try: add a default currency to a formatPrice function
+// function formatPrice(amount, currency = "INR") { ... }</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>null vs undefined:</strong> Only <code>undefined</code> (or an omitted argument) triggers a default parameter. Passing <code>null</code> explicitly does NOT — the parameter will be <code>null</code>. This matters when you're explicitly signalling "no value" vs "caller didn't provide one".
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters" target="_blank" rel="noopener">Default Parameters — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-default-parameters-es6-guide-a5c7f79b3f97" target="_blank" rel="noopener">Default Params — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · REST PARAMETERS
+    ══════════════════════════════ -->
+    <section id="rest-parameters" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Rest Parameters</h2>
+      <p class="ch-intro">The rest parameter syntax (<code>...name</code>) lets a function accept any number of arguments and collects them into a real array. It's the modern replacement for the old <code>arguments</code> object.</p>
+
+      <h3 class="sub-heading">The Syntax</h3>
+      <div class="code-block">
+        <div class="code-header">Rest parameter — collects remaining args into an array</div>
+        <pre><code>// ...nums collects all arguments into an array
+function sum(...nums) {
+  console.log(nums); // [1, 2, 3, 4, 5] — a real Array
+  let total = 0;
+  for (const n of nums) {
+    total += n;
+  }
+  return total;
+}
+
+console.log(sum(1, 2, 3));          // 6
+console.log(sum(10, 20, 30, 40));   // 100
+console.log(sum(5));                 // 5
+console.log(sum());                  // 0 — empty array, loop doesn't run</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Rest with Named Parameters</h3>
+      <p style="margin-bottom:0.75rem;">The rest parameter must always be last. Named parameters before it capture specific arguments; the rest collect everything remaining.</p>
+      <div class="code-block">
+        <div class="code-header">Named params + rest — powerful combination</div>
+        <pre><code>// First arg is the operation label, rest are the numbers
+function calculate(operation, ...numbers) {
+  const total = numbers.reduce((acc, n) => acc + n, 0);
+  return `${operation}: ${numbers.join(" + ")} = ${total}`;
+}
+
+console.log(calculate("Sum", 1, 2, 3));        // "Sum: 1 + 2 + 3 = 6"
+console.log(calculate("Total", 10, 20, 30));   // "Total: 10 + 20 + 30 = 60"
+
+// Building a tag template
+function tag(label, ...items) {
+  return `[${label}] ${items.join(", ")}`;
+}
+
+console.log(tag("Fruits", "apple", "banana", "mango"));
+// "[Fruits] apple, banana, mango"
+
+// ✗ Rest must be the LAST parameter
+// function bad(...items, extra) { } // SyntaxError!</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Rest vs the Old arguments Object</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">arguments (old way)</div>
+          <p>Available in regular functions. Array-like but NOT a real array — you can't call <code>.map()</code> or <code>.filter()</code> on it. Doesn't work in arrow functions.</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">...rest (modern)</div>
+          <p>A real <code>Array</code>. Works with all array methods. Works in arrow functions. Clearly shows intent. Always prefer this.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Rest Parameters</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Basic rest parameter
+function sum(...nums) {
+  return nums.reduce((total, n) => total + n, 0);
+}
+
+console.log(sum(1, 2, 3));        // 6
+console.log(sum(10, 20, 30, 40)); // 100
+console.log(sum());               // 0
+
+// Mix of named and rest
+function introduce(greeting, ...names) {
+  return greeting + ", " + names.join(" and ") + "!";
+}
+
+console.log(introduce("Hello", "Naman", "Priya", "Rahul"));
+// "Hello, Naman and Priya and Rahul!"
+
+// Finding the max value
+function max(...nums) {
+  return Math.max(...nums); // spread to pass as individual args
+}
+
+console.log(max(3, 1, 7, 2, 9, 4)); // 9'>// Basic rest parameter
+function sum(...nums) {
+  return nums.reduce((total, n) => total + n, 0);
+}
+
+console.log(sum(1, 2, 3));        // 6
+console.log(sum(10, 20, 30, 40)); // 100
+console.log(sum());               // 0
+
+// Mix of named and rest
+function introduce(greeting, ...names) {
+  return greeting + ", " + names.join(" and ") + "!";
+}
+
+console.log(introduce("Hello", "Naman", "Priya", "Rahul"));
+// "Hello, Naman and Priya and Rahul!"
+
+// Finding the max value
+function max(...nums) {
+  return Math.max(...nums); // spread to pass as individual args
+}
+
+console.log(max(3, 1, 7, 2, 9, 4)); // 9</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>When to use rest:</strong> Reach for rest parameters when you want a function to accept a variable number of arguments — like a <code>sum()</code>, a logger, or a tag builder. It's especially useful in utility functions that operate on collections of values.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters" target="_blank" rel="noopener">Rest Parameters — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-rest-parameters-spread-syntax-explained-d78e5e3a3e01" target="_blank" rel="noopener">Rest &amp; Spread — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · SPREAD SYNTAX
+    ══════════════════════════════ -->
+    <section id="spread-syntax" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Spread Syntax</h2>
+      <p class="ch-intro">The spread operator (<code>...</code>) does the opposite of rest: it expands an iterable (array, string) into individual elements. Same three dots, completely different purpose depending on where you use them.</p>
+
+      <h3 class="sub-heading">Spreading into Function Calls</h3>
+      <div class="code-block">
+        <div class="code-header">Pass an array as individual arguments</div>
+        <pre><code>const numbers = [3, 1, 7, 2, 9, 4];
+
+// Without spread — Math.max can't take an array
+console.log(Math.max(numbers));   // NaN — wrong!
+
+// With spread — expands the array into individual args
+console.log(Math.max(...numbers));  // 9 — correct!
+console.log(Math.min(...numbers));  // 1
+
+// Same with a custom function
+function add(a, b, c) {
+  return a + b + c;
+}
+
+const vals = [5, 10, 15];
+console.log(add(...vals)); // 30 — equivalent to add(5, 10, 15)</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Spreading into Array Literals</h3>
+      <div class="code-block">
+        <div class="code-header">Combine, copy, and extend arrays</div>
+        <pre><code>const fruits  = ["apple", "banana"];
+const veggies = ["carrot", "spinach"];
+
+// Combine arrays
+const food = [...fruits, ...veggies];
+console.log(food); // ["apple", "banana", "carrot", "spinach"]
+
+// Copy an array (shallow copy)
+const fruitsCopy = [...fruits];
+fruitsCopy.push("mango");
+console.log(fruits);     // ["apple", "banana"] — original unchanged
+console.log(fruitsCopy); // ["apple", "banana", "mango"]
+
+// Insert elements in the middle
+const nums = [1, 2, 5, 6];
+const full = [1, 2, 3, 4, ...nums.slice(2)]; // creative, but just an example
+const withMiddle = [...nums.slice(0, 2), 3, 4, ...nums.slice(2)];
+console.log(withMiddle); // [1, 2, 3, 4, 5, 6]</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Spread with Objects</h3>
+      <div class="code-block">
+        <div class="code-header">Copy and merge objects with spread</div>
+        <pre><code>const base = { theme: "dark", lang: "en" };
+const extra = { fontSize: 16, lang: "hi" }; // note: lang will be overwritten
+
+// Merge objects — later properties override earlier ones
+const settings = { ...base, ...extra };
+console.log(settings);
+// { theme: "dark", lang: "hi", fontSize: 16 }
+
+// Create an updated copy (immutable update pattern)
+const user = { name: "Naman", age: 25, city: "Mumbai" };
+const updatedUser = { ...user, age: 26 }; // only age changes
+console.log(updatedUser);
+// { name: "Naman", age: 26, city: "Mumbai" }
+console.log(user); // { name: "Naman", age: 25, city: "Mumbai" } — unchanged</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Rest vs Spread — Same Symbol, Opposite Direction</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Rest (...) — collects into an array</div>
+          <p>Used in function parameters. Gathers individual arguments into one array.</p>
+          <code style="font-size:0.8rem;font-family:var(--font-mono);">function fn(<strong>...args</strong>) { }</code>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">Spread (...) — expands out of an array</div>
+          <p>Used in function calls or array/object literals. Expands one array into individual values.</p>
+          <code style="font-size:0.8rem;font-family:var(--font-mono);">fn(<strong>...arr</strong>)</code>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Spread Syntax</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Spread into function call
+const scores = [88, 95, 72, 100, 65];
+console.log("Max:", Math.max(...scores)); // 100
+console.log("Min:", Math.min(...scores)); // 65
+
+// Combine arrays
+const a = [1, 2, 3];
+const b = [4, 5, 6];
+const combined = [...a, ...b];
+console.log("Combined:", combined); // [1, 2, 3, 4, 5, 6]
+
+// Shallow copy
+const original = [10, 20, 30];
+const copy = [...original];
+copy.push(40);
+console.log("Original:", original); // [10, 20, 30] — unchanged
+console.log("Copy:", copy);         // [10, 20, 30, 40]
+
+// Object spread
+const defaults = { color: "blue", size: "medium" };
+const custom   = { ...defaults, color: "red" };
+console.log(custom); // { color: "red", size: "medium" }'>// Spread into function call
+const scores = [88, 95, 72, 100, 65];
+console.log("Max:", Math.max(...scores)); // 100
+console.log("Min:", Math.min(...scores)); // 65
+
+// Combine arrays
+const a = [1, 2, 3];
+const b = [4, 5, 6];
+const combined = [...a, ...b];
+console.log("Combined:", combined); // [1, 2, 3, 4, 5, 6]
+
+// Shallow copy
+const original = [10, 20, 30];
+const copy = [...original];
+copy.push(40);
+console.log("Original:", original); // [10, 20, 30] — unchanged
+console.log("Copy:", copy);         // [10, 20, 30, 40]
+
+// Object spread
+const defaults = { color: "blue", size: "medium" };
+const custom   = { ...defaults, color: "red" };
+console.log(custom); // { color: "red", size: "medium" }</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Immutable updates:</strong> The object spread pattern (<code>{ ...original, field: newValue }</code>) is one of the most important patterns in React and modern JS. It creates a new object with one field changed, without mutating the original — a cornerstone of predictable state management.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">Spread Syntax — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/the-spread-operator-in-javascript-a-complete-guide-7f5e4f6a4d5a" target="_blank" rel="noopener">Spread Operator — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · SCOPE
+    ══════════════════════════════ -->
+    <section id="scope" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">Scope</h2>
+      <p class="ch-intro">Scope determines where in your code a variable is accessible. Understanding scope prevents "variable not defined" errors and helps you write code where variables exist only as long as they're needed.</p>
+
+      <h3 class="sub-heading">The Three Levels of Scope</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Global Scope</div>
+          <p>Variables declared outside any function or block. Accessible everywhere in your script. Avoid polluting global scope — it leads to naming conflicts.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Function Scope</div>
+          <p>Variables declared inside a function with <code>var</code>, <code>let</code>, or <code>const</code>. Only accessible inside that function.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Block Scope</div>
+          <p>Variables declared with <code>let</code> or <code>const</code> inside <code>{}</code> (if, for, while). Only accessible within that block.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Global, function, and block scope in action</div>
+        <pre><code>// Global scope — accessible everywhere
+const appName = "MyApp";
+
+function showInfo() {
+  // Function scope — only accessible inside showInfo
+  const version = "1.0";
+  console.log(appName + " v" + version); // can access global
+
+  if (true) {
+    // Block scope — only accessible inside this if block
+    const message = "Feature enabled";
+    let counter = 0;
+    console.log(message); // works here
+  }
+
+  // console.log(message); // ✗ ReferenceError — block scope!
+  // console.log(counter); // ✗ ReferenceError — block scope!
+}
+
+showInfo();
+console.log(appName); // ✓ — global
+// console.log(version); // ✗ ReferenceError — function scope!</code></pre>
+      </div>
+
+      <h3 class="sub-heading">var vs let — The Critical Scope Difference</h3>
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p><code>var</code> is function-scoped — it leaks out of blocks like <code>if</code> and <code>for</code>. <code>let</code> and <code>const</code> are block-scoped — they stay contained within <code>{}</code>. This is one of the main reasons modern JavaScript uses <code>let</code>/<code>const</code> over <code>var</code>.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">var leaks out of blocks — let does not</div>
+        <pre><code>// var leaks out of the for block
+for (var i = 0; i < 3; i++) {
+  // i is accessible here
+}
+console.log(i); // 3 — ✗ var leaked out of the for block!
+
+// let stays inside the block
+for (let j = 0; j < 3; j++) {
+  // j is accessible here
+}
+// console.log(j); // ✗ ReferenceError — let did NOT leak
+
+// Classic bug with var in loops
+for (var k = 0; k < 3; k++) {
+  setTimeout(() => console.log("var k:", k), 0);
+}
+// Logs: "var k: 3" three times — k was shared!
+
+for (let m = 0; m < 3; m++) {
+  setTimeout(() => console.log("let m:", m), 0);
+}
+// Logs: "let m: 0", "let m: 1", "let m: 2" — each iteration gets its own m</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Lexical Scoping</h3>
+      <p style="margin-bottom:0.75rem;">JavaScript uses lexical scoping — a function can access variables from the scope where it was <em>defined</em>, not where it is called. Inner functions can always see outer variables.</p>
+      <div class="code-block">
+        <div class="code-header">Lexical scope — inner can see outer</div>
+        <pre><code>const language = "JavaScript";  // outer scope
+
+function showLanguage() {
+  const version = "ES2024";       // middle scope
+
+  function displayFull() {        // inner function
+    // Can see both outer and middle scope variables
+    console.log(language + " " + version); // "JavaScript ES2024"
+  }
+
+  displayFull();
+}
+
+showLanguage();</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The window Object</h3>
+      <p style="margin-bottom:0.75rem;">In a browser, global variables become properties of the <code>window</code> object — the global scope. This is why naming conflicts are dangerous.</p>
+      <div class="code-block">
+        <div class="code-header">Global scope and the window object</div>
+        <pre><code>var globalVar = "I am global";
+console.log(window.globalVar); // "I am global" — attached to window
+
+// This is why top-level var declarations can conflict:
+// if two scripts both declare var name = "..." — they overwrite each other
+
+// const and let at the top level are NOT on window
+const myConst = "not on window";
+console.log(window.myConst); // undefined</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Scope</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Global scope
+const appName = "ScopeDemo";
+
+function outer() {
+  const outerVar = "I am in outer()";
+
+  function inner() {
+    const innerVar = "I am in inner()";
+    // inner can see outer AND global
+    console.log(appName);    // "ScopeDemo"
+    console.log(outerVar);   // "I am in outer()"
+    console.log(innerVar);   // "I am in inner()"
+  }
+
+  inner();
+  // outer cannot see inner's variables
+  // console.log(innerVar); // would throw ReferenceError
+}
+
+outer();
+
+// var vs let in a block
+if (true) {
+  var leaked = "I leaked with var";
+  let blocked = "I am blocked with let";
+}
+
+console.log(leaked);   // "I leaked with var" — accessible outside!
+// console.log(blocked); // ReferenceError — let stayed in block'>// Global scope
+const appName = "ScopeDemo";
+
+function outer() {
+  const outerVar = "I am in outer()";
+
+  function inner() {
+    const innerVar = "I am in inner()";
+    // inner can see outer AND global
+    console.log(appName);    // "ScopeDemo"
+    console.log(outerVar);   // "I am in outer()"
+    console.log(innerVar);   // "I am in inner()"
+  }
+
+  inner();
+  // outer cannot see inner's variables
+  // console.log(innerVar); // would throw ReferenceError
+}
+
+outer();
+
+// var vs let in a block
+if (true) {
+  var leaked = "I leaked with var";
+  let blocked = "I am blocked with let";
+}
+
+console.log(leaked);   // "I leaked with var" — accessible outside!
+// console.log(blocked); // ReferenceError — let stayed in block</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Scope hierarchy:</strong> Always use the tightest scope possible. Declare variables inside the block or function that needs them. Variables with smaller scope are easier to reason about — you know exactly where they exist and where they can be changed.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Glossary/Scope" target="_blank" rel="noopener">Scope — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-scope-explained-simply-4da5f33d3e9e" target="_blank" rel="noopener">Scope explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · CLOSURES
+    ══════════════════════════════ -->
+    <section id="closures" class="chapter">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">Closures</h2>
+      <p class="ch-intro">A closure is a function that remembers the variables from the scope where it was created — even after that outer scope has finished executing. Closures are one of JavaScript's most powerful and frequently used features.</p>
+
+      <h3 class="sub-heading">The Concept</h3>
+      <div class="insight-box">
+        <div class="insight-icon">🔒</div>
+        <div class="insight-content">
+          <p>When a function is defined inside another function, the inner function <strong>"closes over"</strong> the outer function's variables. Those variables are captured and kept alive in memory as long as the inner function exists — even after the outer function returns. The inner function plus its captured environment is called a closure.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">The Classic Counter Example</h3>
+      <div class="code-block">
+        <div class="code-header">Counter closure — private state</div>
+        <pre><code>function makeCounter() {
+  let count = 0; // this variable is "closed over"
+
+  return function() {
+    count++;        // accesses count from outer scope
+    return count;
+  };
+}
+
+const counter = makeCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+console.log(counter()); // 3
+
+// Each call to makeCounter creates a NEW, independent closure
+const counter2 = makeCounter();
+console.log(counter2()); // 1 — starts fresh!
+console.log(counter());  // 4 — counter1 continues where it left off</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Why is count not reset each time?</h3>
+      <p style="margin-bottom:0.75rem;">Normally, when a function finishes, its local variables are garbage-collected. But when an inner function holds a reference to <code>count</code>, JavaScript keeps <code>count</code> alive. The inner function has a private, persistent variable that only it can access.</p>
+
+      <div class="code-block">
+        <div class="code-header">Closure for data privacy — encapsulation</div>
+        <pre><code>function makeBankAccount(initialBalance) {
+  let balance = initialBalance; // private — cannot be accessed directly
+
+  return {
+    deposit:  amount  => { balance += amount; return balance; },
+    withdraw: amount  => {
+      if (amount > balance) return "Insufficient funds";
+      balance -= amount;
+      return balance;
+    },
+    getBalance: () => balance
+  };
+}
+
+const account = makeBankAccount(1000);
+console.log(account.getBalance());   // 1000
+console.log(account.deposit(500));   // 1500
+console.log(account.withdraw(200));  // 1300
+console.log(account.withdraw(5000)); // "Insufficient funds"
+// account.balance — undefined! The variable is private via closure.</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Closure for Function Factories</h3>
+      <div class="code-block">
+        <div class="code-header">Creating customized functions with closures</div>
+        <pre><code>// A factory that creates multiplier functions
+function makeMultiplier(factor) {
+  return n => n * factor; // factor is closed over
+}
+
+const double = makeMultiplier(2);
+const triple = makeMultiplier(3);
+const tenX   = makeMultiplier(10);
+
+console.log(double(5));  // 10
+console.log(triple(5));  // 15
+console.log(tenX(7));    // 70
+
+// Each function remembers its own factor
+console.log(double(100)); // 200
+console.log(triple(100)); // 300</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Closures</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Counter closure
+function makeCounter(start = 0) {
+  let count = start;
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    reset:     () => { count = start; return count; },
+    value:     () => count
+  };
+}
+
+const c = makeCounter(10);
+console.log(c.increment()); // 11
+console.log(c.increment()); // 12
+console.log(c.decrement()); // 11
+console.log(c.reset());     // 10
+
+// Function factory with closure
+function makeAdder(x) {
+  return y => x + y;
+}
+
+const add5  = makeAdder(5);
+const add10 = makeAdder(10);
+
+console.log(add5(3));  // 8
+console.log(add10(3)); // 13
+console.log(add5(add10(2))); // add10(2)=12, add5(12)=17'>// Counter closure
+function makeCounter(start = 0) {
+  let count = start;
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    reset:     () => { count = start; return count; },
+    value:     () => count
+  };
+}
+
+const c = makeCounter(10);
+console.log(c.increment()); // 11
+console.log(c.increment()); // 12
+console.log(c.decrement()); // 11
+console.log(c.reset());     // 10
+
+// Function factory with closure
+function makeAdder(x) {
+  return y => x + y;
+}
+
+const add5  = makeAdder(5);
+const add10 = makeAdder(10);
+
+console.log(add5(3));  // 8
+console.log(add10(3)); // 13
+console.log(add5(add10(2))); // add10(2)=12, add5(12)=17</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Closures everywhere:</strong> Every time you write an inner function that uses a variable from the outer function, you're using a closure. Array callbacks (<code>.map(n => n * factor)</code>), event handlers, and setTimeout callbacks are all closures in practice.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures" target="_blank" rel="noopener">Closures — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-closures-explained-in-simple-terms-7dfe2be08e72" target="_blank" rel="noopener">Closures explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         10 · CALLBACKS
+    ══════════════════════════════ -->
+    <section id="callbacks" class="chapter">
+      <div class="ch-num">10</div>
+      <h2 class="ch-title">Callbacks</h2>
+      <p class="ch-intro">A callback is a function passed as an argument to another function, to be called later. In JavaScript, functions are values — you can pass them around just like numbers or strings. Callbacks are the foundation of asynchronous JavaScript.</p>
+
+      <h3 class="sub-heading">Functions are First-Class Values</h3>
+      <div class="insight-box">
+        <div class="insight-icon">💡</div>
+        <div class="insight-content">
+          <p>In JavaScript, functions are "first-class citizens" — they can be stored in variables, passed as arguments to other functions, and returned from functions. This is what makes callbacks possible, and it's one of the things that makes JavaScript so flexible.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">Passing a function as an argument</div>
+        <pre><code>// A function that accepts a callback
+function doTwice(action) {
+  action(); // call the passed-in function
+  action();
+}
+
+// Define a function
+function sayHello() {
+  console.log("Hello!");
+}
+
+// Pass it as a callback (notice: no parentheses — we pass the function itself)
+doTwice(sayHello); // "Hello!" "Hello!"
+
+// Inline arrow function callback — same result, shorter
+doTwice(() => console.log("World!")); // "World!" "World!"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Callbacks with Data</h3>
+      <div class="code-block">
+        <div class="code-header">Passing data to and from callbacks</div>
+        <pre><code>// A function that processes each item and calls a callback with the result
+function processEach(items, callback) {
+  for (const item of items) {
+    const result = callback(item);
+    console.log(result);
+  }
+}
+
+// Named function callback
+function formatUpper(word) {
+  return word.toUpperCase();
+}
+
+const words = ["apple", "banana", "mango"];
+processEach(words, formatUpper);
+// "APPLE"
+// "BANANA"
+// "MANGO"
+
+// Arrow function callback — inline
+processEach(words, word => "Fruit: " + word);
+// "Fruit: apple" etc.</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Built-in Callbacks: Array Methods</h3>
+      <p style="margin-bottom:0.75rem;">The most common use of callbacks in everyday JavaScript is with array methods. Every call to <code>.map()</code>, <code>.filter()</code>, <code>.forEach()</code>, and <code>.reduce()</code> takes a callback.</p>
+      <div class="code-block">
+        <div class="code-header">Callbacks with array methods</div>
+        <pre><code>const students = [
+  { name: "Naman",  score: 88 },
+  { name: "Priya",  score: 95 },
+  { name: "Rahul",  score: 72 },
+  { name: "Anjali", score: 60 },
+];
+
+// .map() — transform each element
+const names = students.map(s => s.name);
+console.log(names); // ["Naman", "Priya", "Rahul", "Anjali"]
+
+// .filter() — keep only matching elements
+const topStudents = students.filter(s => s.score >= 85);
+console.log(topStudents.map(s => s.name)); // ["Naman", "Priya"]
+
+// .forEach() — run a callback for each element
+students.forEach(s => {
+  const grade = s.score >= 90 ? "A" : s.score >= 80 ? "B" : "C";
+  console.log(`${s.name}: ${grade}`);
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Practical Uses of Callbacks</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Event handling</div>
+          <p>When a button is clicked, your callback runs. The browser calls it when the event happens.</p>
+          <code style="font-size:0.78rem;font-family:var(--font-mono);">btn.addEventListener("click", () => alert("clicked!"))</code>
+        </div>
+        <div class="card">
+          <div class="card-tag">Timers</div>
+          <p>Schedule code to run after a delay. The timer calls your callback when the time is up.</p>
+          <code style="font-size:0.78rem;font-family:var(--font-mono);">setTimeout(() => console.log("done"), 1000)</code>
+        </div>
+        <div class="card">
+          <div class="card-tag">Array methods</div>
+          <p>Transform, filter, and reduce arrays. The method calls your callback for each element.</p>
+          <code style="font-size:0.78rem;font-family:var(--font-mono);">[1,2,3].map(n => n * 2)</code>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Callbacks</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// Custom function that takes a callback
+function applyOperation(a, b, operation) {
+  return operation(a, b);
+}
+
+const add = (x, y) => x + y;
+const sub = (x, y) => x - y;
+const mul = (x, y) => x * y;
+
+console.log(applyOperation(10, 5, add)); // 15
+console.log(applyOperation(10, 5, sub)); // 5
+console.log(applyOperation(10, 5, mul)); // 50
+
+// Inline arrow callback
+console.log(applyOperation(10, 5, (x, y) => x ** y)); // 100000
+
+// Array callbacks
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const evens   = numbers.filter(n => n % 2 === 0);
+const squared = evens.map(n => n * n);
+const total   = squared.reduce((sum, n) => sum + n, 0);
+
+console.log("Even squares sum:", total); // 4+16+36+64+100 = 220'>// Custom function that takes a callback
+function applyOperation(a, b, operation) {
+  return operation(a, b);
+}
+
+const add = (x, y) => x + y;
+const sub = (x, y) => x - y;
+const mul = (x, y) => x * y;
+
+console.log(applyOperation(10, 5, add)); // 15
+console.log(applyOperation(10, 5, sub)); // 5
+console.log(applyOperation(10, 5, mul)); // 50
+
+// Inline arrow callback
+console.log(applyOperation(10, 5, (x, y) => x ** y)); // 100000
+
+// Array callbacks
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const evens   = numbers.filter(n => n % 2 === 0);
+const squared = evens.map(n => n * n);
+const total   = squared.reduce((sum, n) => sum + n, 0);
+
+console.log("Even squares sum:", total); // 4+16+36+64+100 = 220</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Named vs anonymous callbacks:</strong> For simple one-liners, inline arrow callbacks (<code>n => n * 2</code>) are fine. For longer callbacks or ones you reuse, name them — it makes stack traces readable and the code self-documenting.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Glossary/Callback_function" target="_blank" rel="noopener">Callbacks — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-callbacks-explained-simply-5c3f0f3ac8c4" target="_blank" rel="noopener">Callbacks explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         11 · BUILD IT: FUNCTION TOOLKIT
+    ══════════════════════════════ -->
+    <section id="function-toolkit" class="chapter chapter-exercise">
+      <div class="ch-num">11</div>
+      <h2 class="ch-title">Build It: Function Toolkit</h2>
+      <p class="ch-intro">Apply everything from chapters 1–10. Build a small math toolkit: five utility functions and a dispatcher that routes between them using callbacks. Use closures, defaults, arrow functions, and rest parameters.</p>
+
+      <div class="exercise-intro-box">
+        <div class="eib-title">What your toolkit must do</div>
+        <div class="eib-steps">
+          <div class="eib-step"><div class="eib-num">1</div><span>Write <code>add(a, b)</code>, <code>subtract(a, b)</code>, <code>multiply(a, b)</code>, <code>divide(a, b)</code> as arrow functions — Ch.04</span></div>
+          <div class="eib-step"><div class="eib-num">2</div><span>Write <code>divide</code> with a guard clause that returns an error string for division by zero — Ch.03</span></div>
+          <div class="eib-step"><div class="eib-num">3</div><span>Write <code>calculate(a, op, b)</code> that accepts two numbers and one of your arrow functions as <code>op</code> — Ch.10</span></div>
+          <div class="eib-step"><div class="eib-num">4</div><span>Write <code>sumAll(...nums)</code> using rest parameters to add any number of values — Ch.06</span></div>
+          <div class="eib-step"><div class="eib-num">5</div><span>Write <code>makeLogger(prefix)</code> using a closure that returns a logging function — Ch.09</span></div>
+          <div class="eib-step"><div class="eib-num">6</div><span>Write <code>greet(name, greeting)</code> with default parameters — Ch.05</span></div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Ask Yourself Before Starting</h3>
+      <div class="question-card">
+        <div class="q-label">Q1</div>
+        <p>How does <code>calculate(a, op, b)</code> know which math operation to run? It accepts <code>op</code> as a parameter — but what type is <code>op</code>?</p>
+        <div class="q-hint">Hint: <code>op</code> is a function. You pass <code>add</code>, <code>subtract</code>, etc. as the argument. Inside <code>calculate</code>, you call <code>op(a, b)</code>. This is the callback pattern from Ch.10.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q2</div>
+        <p>In <code>makeLogger(prefix)</code>, the returned function uses <code>prefix</code>. But <code>makeLogger</code> has already returned by then. Why does <code>prefix</code> still exist?</p>
+        <div class="q-hint">Hint: The inner function closes over <code>prefix</code>. Closures (Ch.09) keep outer variables alive as long as the inner function exists.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q3</div>
+        <p>How does <code>sumAll(1, 2, 3, 4, 5)</code> work when the number of arguments isn't fixed?</p>
+        <div class="q-hint">Hint: Use rest parameters (<code>...nums</code>). Inside the function, <code>nums</code> is an array. Use <code>.reduce()</code> to add all elements.</div>
+      </div>
+
+      <h3 class="sub-heading">Skeleton — Fill in the ???s</h3>
+      <div class="code-block">
+        <div class="code-header">function-toolkit.js — complete this</div>
+        <pre><code>// 1. Basic math — arrow functions
+const add      = (a, b) => ???;
+const subtract = (a, b) => ???;
+const multiply = (a, b) => ???;
+const divide   = (a, b) => {
+  if (??? === 0) return "Error: division by zero";
+  return a / b;
+};
+
+// 2. Dispatcher — accepts op as a callback
+function calculate(a, op, b) {
+  return ???(a, b);  // call the callback with a and b
+}
+
+// 3. Rest parameter — sum any number of args
+function sumAll(???nums) {
+  return nums.???(???, n => ??? + n, 0);
+}
+
+// 4. Closure — log with a prefix
+function makeLogger(prefix) {
+  return function(message) {
+    console.log(`[${???}] ${message}`);
+  };
+}
+
+// 5. Default parameters
+function greet(name = "???" , greeting = "Hello") {
+  return `${greeting}, ${name}!`;
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Write Your Solution Here</h3>
+      <p style="margin-bottom:0.75rem;">Build the complete toolkit from scratch. Verify that the test calls at the bottom all produce the correct output.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Function Toolkit</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ── Function Toolkit ──
+// Write your solution here
+
+// 1. Arrow math functions
+// const add      = ...
+// const subtract = ...
+// const multiply = ...
+// const divide   = ...
+
+// 2. Dispatcher with callback
+// function calculate(a, op, b) { ... }
+
+// 3. Rest parameters
+// function sumAll(...nums) { ... }
+
+// 4. Closure logger
+// function makeLogger(prefix) { ... }
+
+// 5. Default parameters
+// function greet(name = "stranger", greeting = "Hello") { ... }
+
+// ─── Test your solution ───
+// console.log(calculate(10, add, 5));       // 15
+// console.log(calculate(10, subtract, 3));  // 7
+// console.log(calculate(4, multiply, 6));   // 24
+// console.log(calculate(10, divide, 2));    // 5
+// console.log(calculate(10, divide, 0));    // Error
+// console.log(sumAll(1, 2, 3, 4, 5));       // 15
+// const log = makeLogger("APP");
+// log("Started");                           // "[APP] Started"
+// log("Done");                              // "[APP] Done"
+// console.log(greet("Naman", "Hey"));       // "Hey, Naman!"
+// console.log(greet());                     // "Hello, stranger!"'>// ── Function Toolkit ──
+// Write your solution here
+
+// 1. Arrow math functions
+// const add      = ...
+// const subtract = ...
+// const multiply = ...
+// const divide   = ...
+
+// 2. Dispatcher with callback
+// function calculate(a, op, b) { ... }
+
+// 3. Rest parameters
+// function sumAll(...nums) { ... }
+
+// 4. Closure logger
+// function makeLogger(prefix) { ... }
+
+// 5. Default parameters
+// function greet(name = "stranger", greeting = "Hello") { ... }
+
+// ─── Test your solution ───
+// console.log(calculate(10, add, 5));       // 15
+// console.log(calculate(10, subtract, 3));  // 7
+// console.log(calculate(4, multiply, 6));   // 24
+// console.log(calculate(10, divide, 2));    // 5
+// console.log(calculate(10, divide, 0));    // Error
+// console.log(sumAll(1, 2, 3, 4, 5));       // 15
+// const log = makeLogger("APP");
+// log("Started");                           // "[APP] Started"
+// log("Done");                              // "[APP] Done"
+// console.log(greet("Naman", "Hey"));       // "Hey, Naman!"
+// console.log(greet());                     // "Hello, stranger!"</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <h3 class="sub-heading" style="margin-top:2rem;">Reference Solution</h3>
+      <p style="margin-bottom:0.75rem;color:var(--muted);font-size:0.9rem;">Only look at this after making a genuine attempt.</p>
+      <div class="code-block">
+        <div class="code-header">function-toolkit.js — full solution</div>
+        <pre><code>// 1. Arrow math functions
+const add      = (a, b) => a + b;
+const subtract = (a, b) => a - b;
+const multiply = (a, b) => a * b;
+const divide   = (a, b) => {
+  if (b === 0) return "Error: division by zero";
+  return a / b;
+};
+
+// 2. Dispatcher — callback pattern
+function calculate(a, op, b) {
+  return op(a, b);
+}
+
+console.log(calculate(10, add, 5));       // 15
+console.log(calculate(10, subtract, 3));  // 7
+console.log(calculate(4, multiply, 6));   // 24
+console.log(calculate(10, divide, 2));    // 5
+console.log(calculate(10, divide, 0));    // "Error: division by zero"
+
+// 3. Rest parameters
+function sumAll(...nums) {
+  return nums.reduce((total, n) => total + n, 0);
+}
+
+console.log(sumAll(1, 2, 3, 4, 5));     // 15
+console.log(sumAll(10, 20, 30));         // 60
+console.log(sumAll(...[1, 2, 3, 4, 5])); // 15 — spread + rest working together!
+
+// 4. Closure logger
+function makeLogger(prefix) {
+  return function(message) {
+    console.log(`[${prefix}] ${message}`);
+  };
+}
+
+const appLog  = makeLogger("APP");
+const errLog  = makeLogger("ERROR");
+
+appLog("Server started");    // "[APP] Server started"
+errLog("Connection failed"); // "[ERROR] Connection failed"
+appLog("Request received");  // "[APP] Request received"
+
+// 5. Default parameters
+function greet(name = "stranger", greeting = "Hello") {
+  return `${greeting}, ${name}!`;
+}
+
+console.log(greet("Naman", "Hey")); // "Hey, Naman!"
+console.log(greet("Priya"));        // "Hello, Priya!"
+console.log(greet());               // "Hello, stranger!"</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>Verification checklist:</strong> After you write your solution, uncomment the test calls and run them. You should see: calculate returns correct numbers; division by zero returns the error string; sumAll handles any number of args; makeLogger creates independent loggers that remember their prefix; greet uses defaults when args are omitted.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <p>JavaScript Functions — Student Handbook &nbsp;·&nbsp; Open the console (F12) and experiment while you read.</p>
+  </footer>
+
+  <!-- ============================================================
+       SANDBOX ENGINE
+  ============================================================ -->
+  <script>
+    function formatValue(v) {
+      if (v === undefined) return 'undefined';
+      if (v === null)      return 'null';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+      }
+      return String(v);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    function runSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const code    = sandbox.querySelector('.sandbox-code').value;
+      const output  = sandbox.querySelector('.sandbox-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const orig = {
+        log:   console.log,
+        error: console.error,
+        warn:  console.warn
+      };
+
+      console.log   = (...a) => logs.push({ t: 'log',   text: a.map(formatValue).join(' ') });
+      console.error = (...a) => logs.push({ t: 'error', text: a.map(formatValue).join(' ') });
+      console.warn  = (...a) => logs.push({ t: 'warn',  text: a.map(formatValue).join(' ') });
+
+      try {
+        eval(code); // eslint-disable-line no-eval
+      } catch (e) {
+        logs.push({ t: 'error', text: e.message });
+      } finally {
+        console.log   = orig.log;
+        console.error = orig.error;
+        console.warn  = orig.warn;
+      }
+
+      if (!logs.length) {
+        output.innerHTML = '<div class="sb-empty">// No output — add console.log() to see results.</div>';
+        return;
+      }
+
+      output.innerHTML = logs
+        .map(l => `<div class="sb-line sb-${l.t}">${escapeHtml(l.text)}</div>`)
+        .join('');
+    }
+
+    function resetSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const ta      = sandbox.querySelector('.sandbox-code');
+      ta.value      = ta.dataset.default;
+      sandbox.querySelector('.sandbox-output').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>

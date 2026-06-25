@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Understand how JavaScript's this keyword works, build real class hierarchies with inheritance, and organise your code into reusable modules." />
+  <title>JavaScript OOP &amp; Modules — Student Handbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="site-header">
+    <div class="header-badge">Student Handbook</div>
+    <h1 class="hero-title">JavaScript<br><span class="hero-accent">OOP &amp; Modules</span></h1>
+    <p class="hero-sub">Write reusable, organised code with classes and modules.</p>
+    <p class="hero-desc">Understand how JavaScript's <code>this</code> keyword works, build real class hierarchies with inheritance, and organise your code into reusable modules.</p>
+    <div class="hero-pills">
+      <span class="pill">10 Chapters</span>
+      <span class="pill">Live Sandboxes</span>
+      <span class="pill">OOP Exercise</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+  ============================================================ -->
+  <nav class="toc" aria-label="Table of Contents">
+    <span class="toc-label">Jump to →</span>
+    <ul class="toc-list">
+      <li><a href="#this-contexts">01 this in Different Contexts</a></li>
+      <li><a href="#arrow-this">02 Arrow Functions &amp; this</a></li>
+      <li><a href="#bind-call-apply">03 bind, call, apply</a></li>
+      <li><a href="#classes-basics">04 Classes — Basics</a></li>
+      <li><a href="#inheritance">05 Inheritance</a></li>
+      <li><a href="#getters-setters-static">06 Getters, Setters &amp; Static Methods</a></li>
+      <li><a href="#higher-order">07 Higher-Order Functions</a></li>
+      <li><a href="#es6-modules">08 ES6 Modules</a></li>
+      <li><a href="#prototype-chain">09 Prototype &amp; Prototype Chain</a></li>
+      <li><a href="#shape-calculator">10 Build It: Shape Calculator</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════
+         01 · THIS IN DIFFERENT CONTEXTS
+    ══════════════════════════════ -->
+    <section id="this-contexts" class="chapter">
+      <div class="ch-num">01</div>
+      <h2 class="ch-title"><code>this</code> in Different Contexts</h2>
+      <p class="ch-intro"><code>this</code> is one of JavaScript's most misunderstood keywords. Its value is not fixed — it changes depending on <em>how</em> a function is called, not where it is defined.</p>
+
+      <h3 class="sub-heading">The Golden Rule</h3>
+      <div class="insight-box">
+        <div class="insight-icon">🔑</div>
+        <div class="insight-content">
+          <p><strong><code>this</code> refers to the object that is currently calling the function.</strong> If no object is calling it, <code>this</code> falls back to the global object (<code>window</code> in browsers) or <code>undefined</code> in strict mode.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Context 1: Global Scope</h3>
+      <p style="margin-bottom:0.75rem;">At the top level of a script (outside any function or object), <code>this</code> is the global object — <code>window</code> in the browser.</p>
+      <div class="code-block">
+        <div class="code-header">global scope</div>
+        <pre><code>console.log(this);          // Window { ... }
+console.log(this === window); // true (in browser)</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Context 2: Regular Functions</h3>
+      <p style="margin-bottom:0.75rem;">Inside a regular function called without an object, <code>this</code> is <code>window</code> (or <code>undefined</code> in strict mode).</p>
+      <div class="code-block">
+        <div class="code-header">regular function</div>
+        <pre><code>function greet() {
+  console.log(this); // Window — no object called this function
+}
+greet();
+
+// In strict mode:
+"use strict";
+function strictGreet() {
+  console.log(this); // undefined — strict mode prevents global fallback
+}
+strictGreet();</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Context 3: Object Methods</h3>
+      <p style="margin-bottom:0.75rem;">When a function is called as a method of an object, <code>this</code> is that object.</p>
+      <div class="code-block">
+        <div class="code-header">object method</div>
+        <pre><code>const user = {
+  name: "Naman",
+  greet() {
+    console.log("Hello, I am", this.name); // 'this' is the user object
+  }
+};
+
+user.greet(); // Hello, I am Naman
+
+// DANGER: if you detach the method, 'this' is lost
+const fn = user.greet;
+fn(); // Hello, I am undefined — 'this' is now window, not user!</code></pre>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-content">
+          <p>The most common <code>this</code> bug: passing an object method as a callback. When the callback is eventually called, the original object context is lost. This is why <code>.bind()</code> exists — covered in Chapter 03.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Context 4: Event Handlers</h3>
+      <p style="margin-bottom:0.75rem;">In a DOM event handler, <code>this</code> refers to the element that received the event.</p>
+      <div class="code-block">
+        <div class="code-header">event handler</div>
+        <pre><code>// HTML: &lt;button id="btn"&gt;Click me&lt;/button&gt;
+const btn = document.getElementById("btn");
+
+btn.addEventListener("click", function() {
+  console.log(this);       // &lt;button id="btn"&gt; — the element
+  console.log(this.id);    // "btn"
+});
+
+// Arrow function version — 'this' is NOT the element (see Ch. 02)
+btn.addEventListener("click", () => {
+  console.log(this); // Window — arrow functions don't bind 'this'
+});</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — this in Object Methods</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const car = {
+  brand: "Toyota",
+  model: "Camry",
+  year: 2023,
+  describe() {
+    // "this" refers to the car object
+    console.log(`${this.year} ${this.brand} ${this.model}`);
+  },
+  getAge() {
+    const currentYear = 2026;
+    return currentYear - this.year;
+  }
+};
+
+car.describe();
+console.log("Age:", car.getAge(), "years");
+
+// Watch what happens when we detach the method
+const fn = car.describe;
+try {
+  fn(); // "this" is now window — this.year is undefined
+} catch (e) {
+  console.log("Error:", e.message);
+}'>const car = {
+  brand: "Toyota",
+  model: "Camry",
+  year: 2023,
+  describe() {
+    // "this" refers to the car object
+    console.log(`${this.year} ${this.brand} ${this.model}`);
+  },
+  getAge() {
+    const currentYear = 2026;
+    return currentYear - this.year;
+  }
+};
+
+car.describe();
+console.log("Age:", car.getAge(), "years");
+
+// Watch what happens when we detach the method
+const fn = car.describe;
+try {
+  fn(); // "this" is now window — this.year is undefined
+} catch (e) {
+  console.log("Error:", e.message);
+}</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Rule of thumb:</strong> Ask yourself "what is to the left of the dot when this function is called?" That object is <code>this</code>. If there is nothing to the left of the dot, <code>this</code> is either <code>window</code> or <code>undefined</code> (strict mode).
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">this — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/understanding-the-this-keyword-in-javascript-cb76d4c7c5e8" target="_blank" rel="noopener">Understanding this — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         02 · ARROW FUNCTIONS & THIS
+    ══════════════════════════════ -->
+    <section id="arrow-this" class="chapter">
+      <div class="ch-num">02</div>
+      <h2 class="ch-title">Arrow Functions &amp; <code>this</code></h2>
+      <p class="ch-intro">Arrow functions do not have their own <code>this</code>. Instead, they capture <code>this</code> from the surrounding scope at the time they are defined — this is called <strong>lexical <code>this</code></strong>.</p>
+
+      <h3 class="sub-heading">The Difference: Regular vs Arrow</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Regular function — own this</div>
+          <p>Creates its own <code>this</code> each time it is called. The value depends on how the function is called.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">const obj = {
+  name: "Naman",
+  greet: function() {
+    console.log(this.name); // "Naman"
+  }
+};
+obj.greet(); // works</code></pre>
+        </div>
+        <div class="card">
+          <div class="card-tag">Arrow function — lexical this</div>
+          <p>Inherits <code>this</code> from the enclosing scope. Does not create its own <code>this</code>.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">const obj = {
+  name: "Naman",
+  greet: () => {
+    console.log(this.name); // undefined
+    // 'this' is window here, not obj
+  }
+};
+obj.greet(); // broken</code></pre>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Where Arrow Functions Shine: Nested Callbacks</h3>
+      <p style="margin-bottom:0.75rem;">Before arrow functions, developers had to save <code>this</code> to a variable (often called <code>self</code> or <code>that</code>) to use it inside nested functions. Arrow functions solve this elegantly.</p>
+      <div class="code-block">
+        <div class="code-header">The problem arrow functions solved</div>
+        <pre><code>// OLD WAY — saving 'this' as a workaround
+function Timer() {
+  const self = this; // save 'this' before losing it
+  self.seconds = 0;
+  setInterval(function() {
+    self.seconds++; // use 'self' instead of 'this'
+    console.log(self.seconds);
+  }, 1000);
+}
+
+// MODERN WAY — arrow function inherits 'this' from Timer
+function Timer() {
+  this.seconds = 0;
+  setInterval(() => {
+    this.seconds++; // 'this' is still the Timer instance — lexical!
+    console.log(this.seconds);
+  }, 1000);
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Practical Rule: When to Use Each</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Situation</th><th>Use</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Object method that needs to access <code>this</code></td>
+            <td><code>function</code> or method shorthand</td>
+            <td>Needs its own <code>this</code> bound to the object</td>
+          </tr>
+          <tr>
+            <td>Class method</td>
+            <td>Method shorthand (no keyword)</td>
+            <td>Same — needs to bind to the instance</td>
+          </tr>
+          <tr>
+            <td>Callback inside a method (<code>.map</code>, <code>setTimeout</code>)</td>
+            <td>Arrow function</td>
+            <td>Inherits <code>this</code> from the outer method — no binding needed</td>
+          </tr>
+          <tr>
+            <td>Standalone utility function</td>
+            <td>Either</td>
+            <td>No <code>this</code> needed — use arrow for brevity</td>
+          </tr>
+          <tr>
+            <td>Event handler where <code>this</code> = element</td>
+            <td><code>function</code></td>
+            <td>Arrow would capture outer <code>this</code>, losing the element reference</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Try It — Lexical this</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='const team = {
+  name: "G2C Batch",
+  members: ["Alice", "Bob", "Carol"],
+
+  // Regular method — has its own "this" (the team object)
+  printRoster() {
+    console.log("Team:", this.name);
+
+    // Arrow function inside the method — inherits "this" from printRoster
+    this.members.forEach((member) => {
+      // "this" is still the team object here — lexical this!
+      console.log(`  ${member} (${this.name})`);
+    });
+  },
+
+  // What would happen with a regular function inside forEach?
+  printRosterBroken() {
+    this.members.forEach(function(member) {
+      // "this" is now undefined (or window) — NOT the team
+      console.log(`  ${member} (${this ? this.name : "LOST this!"})`);
+    });
+  }
+};
+
+team.printRoster();
+console.log("---");
+team.printRosterBroken();'>const team = {
+  name: "G2C Batch",
+  members: ["Alice", "Bob", "Carol"],
+
+  // Regular method — has its own "this" (the team object)
+  printRoster() {
+    console.log("Team:", this.name);
+
+    // Arrow function inside the method — inherits "this" from printRoster
+    this.members.forEach((member) => {
+      // "this" is still the team object here — lexical this!
+      console.log(`  ${member} (${this.name})`);
+    });
+  },
+
+  // What would happen with a regular function inside forEach?
+  printRosterBroken() {
+    this.members.forEach(function(member) {
+      // "this" is now undefined (or window) — NOT the team
+      console.log(`  ${member} (${this ? this.name : "LOST this!"})`);
+    });
+  }
+};
+
+team.printRoster();
+console.log("---");
+team.printRosterBroken();</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Memory trick:</strong> Arrow functions are arrows — they point back to where they were born. Their <code>this</code> is always the <code>this</code> of the place they were defined, not the place they are called.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">this — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/arrow-functions-vs-regular-functions-in-javascript-3781d72a3791" target="_blank" rel="noopener">Arrow vs Regular — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         03 · BIND, CALL, APPLY
+    ══════════════════════════════ -->
+    <section id="bind-call-apply" class="chapter">
+      <div class="ch-num">03</div>
+      <h2 class="ch-title">bind, call, apply</h2>
+      <p class="ch-intro">These three methods let you explicitly control what <code>this</code> is inside a function — instead of letting JavaScript decide based on how the function is called.</p>
+
+      <h3 class="sub-heading">The Problem They Solve</h3>
+      <div class="code-block">
+        <div class="code-header">losing this</div>
+        <pre><code>const user = {
+  name: "Naman",
+  greet() {
+    console.log("Hello, I am", this.name);
+  }
+};
+
+// Works fine
+user.greet(); // "Hello, I am Naman"
+
+// Breaks — 'this' is lost when the method is assigned to a variable
+const sayHello = user.greet;
+sayHello(); // "Hello, I am undefined"
+
+// Fix with bind:
+const boundHello = user.greet.bind(user);
+boundHello(); // "Hello, I am Naman" ✓</code></pre>
+      </div>
+
+      <h3 class="sub-heading">call() — Call immediately with a specific this</h3>
+      <div class="code-block">
+        <div class="code-header">Function.prototype.call(thisArg, arg1, arg2, ...)</div>
+        <pre><code>function introduce(greeting, punctuation) {
+  console.log(`${greeting}, I am ${this.name}${punctuation}`);
+}
+
+const person1 = { name: "Naman" };
+const person2 = { name: "Raj" };
+
+introduce.call(person1, "Hello", "!");   // "Hello, I am Naman!"
+introduce.call(person2, "Hi", ".");      // "Hi, I am Raj."
+
+// call() invokes the function immediately
+// Arguments are passed individually after thisArg</code></pre>
+      </div>
+
+      <h3 class="sub-heading">apply() — Like call(), but args are an array</h3>
+      <div class="code-block">
+        <div class="code-header">Function.prototype.apply(thisArg, [arg1, arg2, ...])</div>
+        <pre><code>function introduce(greeting, punctuation) {
+  console.log(`${greeting}, I am ${this.name}${punctuation}`);
+}
+
+const person1 = { name: "Naman" };
+const args = ["Hello", "!"];
+
+introduce.apply(person1, args); // "Hello, I am Naman!"
+// apply() is useful when args are already in an array
+
+// Classic use: Math.max with an array
+const numbers = [3, 1, 4, 1, 5, 9, 2, 6];
+console.log(Math.max.apply(null, numbers)); // 9
+// Modern equivalent: Math.max(...numbers)</code></pre>
+      </div>
+
+      <h3 class="sub-heading">bind() — Returns a new function with this fixed</h3>
+      <div class="code-block">
+        <div class="code-header">Function.prototype.bind(thisArg, arg1, arg2, ...)</div>
+        <pre><code>function introduce(greeting, punctuation) {
+  console.log(`${greeting}, I am ${this.name}${punctuation}`);
+}
+
+const person1 = { name: "Naman" };
+
+// bind returns a NEW function — does not call it immediately
+const boundIntroduce = introduce.bind(person1, "Hello");
+boundIntroduce("!");  // "Hello, I am Naman!"
+boundIntroduce("?");  // "Hello, I am Naman?"
+
+// Common use: preserve 'this' in event listeners / callbacks
+const timer = {
+  count: 0,
+  start() {
+    // Without .bind(this), 'this' would be lost inside setInterval
+    const tick = function() {
+      this.count++;
+      console.log("Count:", this.count);
+    }.bind(this); // fixes 'this' to the timer object
+
+    // In practice — just use an arrow function instead (Ch. 02)
+    const interval = setInterval(tick, 100);
+    setTimeout(() => clearInterval(interval), 400);
+  }
+};
+timer.start();</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Quick Comparison</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Method</th><th>Calls the function?</th><th>Args format</th><th>Returns</th><th>Use when</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>call()</code></td>
+            <td>Yes — immediately</td>
+            <td>Comma-separated</td>
+            <td>Function's return value</td>
+            <td>You know the args and want to run now</td>
+          </tr>
+          <tr>
+            <td><code>apply()</code></td>
+            <td>Yes — immediately</td>
+            <td>Array</td>
+            <td>Function's return value</td>
+            <td>Args are in an array (spread operator is modern replacement)</td>
+          </tr>
+          <tr>
+            <td><code>bind()</code></td>
+            <td>No — returns new fn</td>
+            <td>Comma-separated (partial)</td>
+            <td>New bound function</td>
+            <td>You want to save a function for later with <code>this</code> fixed</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Try It — bind, call, apply</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='function getFullInfo(department, level) {
+  return `${this.name} | ${department} | Level ${level}`;
+}
+
+const employee1 = { name: "Naman Jethliya" };
+const employee2 = { name: "Priya Sharma" };
+
+// call — invoke immediately, args separated by comma
+console.log(getFullInfo.call(employee1, "Engineering", 3));
+
+// apply — invoke immediately, args in an array
+const args = ["Design", 2];
+console.log(getFullInfo.apply(employee2, args));
+
+// bind — does NOT call immediately, returns a new function
+const getNamanInfo = getFullInfo.bind(employee1, "Engineering");
+console.log(getNamanInfo(3)); // supply remaining args later
+console.log(getNamanInfo(4)); // reusable!
+
+// Practical: fixing 'this' for a callback
+const counter = {
+  value: 10,
+  increment() { this.value++; },
+  getDisplay() { return "Value: " + this.value; }
+};
+
+// Broken — 'this' lost
+const badIncrement = counter.increment;
+// badIncrement(); // would crash or not update counter
+
+// Fixed with bind
+const goodIncrement = counter.increment.bind(counter);
+goodIncrement();
+goodIncrement();
+console.log(counter.getDisplay()); // Value: 12'>function getFullInfo(department, level) {
+  return `${this.name} | ${department} | Level ${level}`;
+}
+
+const employee1 = { name: "Naman Jethliya" };
+const employee2 = { name: "Priya Sharma" };
+
+// call — invoke immediately, args separated by comma
+console.log(getFullInfo.call(employee1, "Engineering", 3));
+
+// apply — invoke immediately, args in an array
+const args = ["Design", 2];
+console.log(getFullInfo.apply(employee2, args));
+
+// bind — does NOT call immediately, returns a new function
+const getNamanInfo = getFullInfo.bind(employee1, "Engineering");
+console.log(getNamanInfo(3)); // supply remaining args later
+console.log(getNamanInfo(4)); // reusable!
+
+// Practical: fixing 'this' for a callback
+const counter = {
+  value: 10,
+  increment() { this.value++; },
+  getDisplay() { return "Value: " + this.value; }
+};
+
+// Broken — 'this' lost
+const badIncrement = counter.increment;
+// badIncrement(); // would crash or not update counter
+
+// Fixed with bind
+const goodIncrement = counter.increment.bind(counter);
+goodIncrement();
+goodIncrement();
+console.log(counter.getDisplay()); // Value: 12</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Modern practice:</strong> In class-based code, use arrow functions for callbacks to avoid <code>this</code> loss — it's cleaner than <code>.bind(this)</code>. Use <code>call()</code>/<code>apply()</code> when borrowing methods from one object to use on another.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="noopener">bind — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="noopener">call — MDN ↗</a>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="noopener">apply — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/javascript-bind-call-and-apply-explained-1a0e8f2ebb7e" target="_blank" rel="noopener">bind, call, apply — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         04 · CLASSES — BASICS
+    ══════════════════════════════ -->
+    <section id="classes-basics" class="chapter">
+      <div class="ch-num">04</div>
+      <h2 class="ch-title">Classes — Basics</h2>
+      <p class="ch-intro">Classes are blueprints for creating objects. They group related data (properties) and behaviour (methods) together, making code easier to organise, reuse, and maintain.</p>
+
+      <h3 class="sub-heading">Defining a Class</h3>
+      <div class="code-block">
+        <div class="code-header">Syntax</div>
+        <pre><code>class Person {
+  // constructor runs once when you create a new instance
+  constructor(name, age) {
+    this.name = name; // instance property
+    this.age  = age;
+  }
+
+  // Method — shared by all instances (not copied per object)
+  greet() {
+    console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);
+  }
+
+  isAdult() {
+    return this.age >= 18;
+  }
+}
+
+// Creating instances with 'new'
+const person1 = new Person("Naman", 25);
+const person2 = new Person("Priya", 17);
+
+person1.greet();               // Hi, I'm Naman and I'm 25 years old.
+person2.greet();               // Hi, I'm Priya and I'm 17 years old.
+console.log(person1.isAdult()); // true
+console.log(person2.isAdult()); // false</code></pre>
+      </div>
+
+      <h3 class="sub-heading">What 'new' Does — Step by Step</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Step 1</div>
+          <p>Creates a new empty object: <code>{}</code></p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Step 2</div>
+          <p>Sets the object's prototype to the class's <code>prototype</code> (so methods are shared)</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Step 3</div>
+          <p>Runs the <code>constructor</code> with <code>this</code> pointing to the new object</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Step 4</div>
+          <p>Returns the new object (unless you explicitly return another object)</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Adding More Methods</h3>
+      <div class="code-block">
+        <div class="code-header">BankAccount class</div>
+        <pre><code>class BankAccount {
+  constructor(owner, initialBalance = 0) {
+    this.owner   = owner;
+    this.balance = initialBalance;
+  }
+
+  deposit(amount) {
+    if (amount <= 0) throw new Error("Deposit must be positive");
+    this.balance += amount;
+    console.log(`Deposited ₹${amount}. New balance: ₹${this.balance}`);
+  }
+
+  withdraw(amount) {
+    if (amount > this.balance) throw new Error("Insufficient funds");
+    this.balance -= amount;
+    console.log(`Withdrew ₹${amount}. New balance: ₹${this.balance}`);
+  }
+
+  getStatement() {
+    return `Account: ${this.owner} | Balance: ₹${this.balance}`;
+  }
+}
+
+const acc = new BankAccount("Naman", 1000);
+acc.deposit(500);   // Deposited ₹500. New balance: ₹1500
+acc.withdraw(200);  // Withdrew ₹200. New balance: ₹1300
+console.log(acc.getStatement()); // Account: Naman | Balance: ₹1300</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Classes</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='class Book {
+  constructor(title, author, pages) {
+    this.title  = title;
+    this.author = author;
+    this.pages  = pages;
+    this.currentPage = 0;
+  }
+
+  readPages(n) {
+    this.currentPage = Math.min(this.currentPage + n, this.pages);
+    console.log(`Read ${n} pages. Now on page ${this.currentPage}/${this.pages}`);
+  }
+
+  getProgress() {
+    const pct = Math.round((this.currentPage / this.pages) * 100);
+    return `"${this.title}" — ${pct}% complete`;
+  }
+
+  isFinished() {
+    return this.currentPage === this.pages;
+  }
+}
+
+const book = new Book("Clean Code", "Robert Martin", 431);
+book.readPages(50);
+book.readPages(100);
+console.log(book.getProgress());
+console.log("Finished?", book.isFinished());
+
+// Create another instance — completely independent
+const book2 = new Book("You Don\'t Know JS", "Kyle Simpson", 278);
+book2.readPages(278);
+console.log(book2.getProgress());
+console.log("Finished?", book2.isFinished());'>class Book {
+  constructor(title, author, pages) {
+    this.title  = title;
+    this.author = author;
+    this.pages  = pages;
+    this.currentPage = 0;
+  }
+
+  readPages(n) {
+    this.currentPage = Math.min(this.currentPage + n, this.pages);
+    console.log(`Read ${n} pages. Now on page ${this.currentPage}/${this.pages}`);
+  }
+
+  getProgress() {
+    const pct = Math.round((this.currentPage / this.pages) * 100);
+    return `"${this.title}" — ${pct}% complete`;
+  }
+
+  isFinished() {
+    return this.currentPage === this.pages;
+  }
+}
+
+const book = new Book("Clean Code", "Robert Martin", 431);
+book.readPages(50);
+book.readPages(100);
+console.log(book.getProgress());
+console.log("Finished?", book.isFinished());
+
+// Create another instance — completely independent
+const book2 = new Book("You Don\'t Know JS", "Kyle Simpson", 278);
+book2.readPages(278);
+console.log(book2.getProgress());
+console.log("Finished?", book2.isFinished());</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Class vs Object Literal:</strong> Use an object literal (<code>{ }</code>) for a single, one-off thing. Use a class when you need to create multiple similar objects — classes are reusable blueprints. If you need 50 User objects, define a <code>User</code> class, not 50 object literals.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noopener">Classes — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-classes-explained-simply-b1e0df2e4ad4" target="_blank" rel="noopener">Classes Explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         05 · INHERITANCE
+    ══════════════════════════════ -->
+    <section id="inheritance" class="chapter">
+      <div class="ch-num">05</div>
+      <h2 class="ch-title">Inheritance</h2>
+      <p class="ch-intro">Inheritance lets a class build on another class — sharing its properties and methods while adding or changing behaviour. In JavaScript, use the <code>extends</code> keyword.</p>
+
+      <h3 class="sub-heading">extends and super()</h3>
+      <div class="code-block">
+        <div class="code-header">Base class + subclass</div>
+        <pre><code>// Base class (parent / superclass)
+class Animal {
+  constructor(name, sound) {
+    this.name  = name;
+    this.sound = sound;
+  }
+
+  speak() {
+    console.log(`${this.name} says: ${this.sound}!`);
+  }
+
+  describe() {
+    return `I am ${this.name}, an animal.`;
+  }
+}
+
+// Subclass (child) — extends inherits everything from Animal
+class Dog extends Animal {
+  constructor(name, breed) {
+    // super() calls the parent constructor — MUST be called first
+    super(name, "Woof");
+    this.breed = breed; // add a new property specific to Dog
+  }
+
+  // Add a new method that only Dog has
+  fetch(item) {
+    console.log(`${this.name} fetches the ${item}!`);
+  }
+
+  // Override the inherited describe() method
+  describe() {
+    return `I am ${this.name}, a ${this.breed} dog.`;
+  }
+}
+
+const dog = new Dog("Bruno", "Labrador");
+dog.speak();           // Bruno says: Woof!  — inherited from Animal
+dog.fetch("ball");     // Bruno fetches the ball! — Dog-specific
+console.log(dog.describe()); // I am Bruno, a Labrador dog. — overridden</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The super Keyword</h3>
+      <div class="card-row">
+        <div class="card accent-card">
+          <div class="card-tag">super() in constructor</div>
+          <p>Calls the parent class's constructor. <strong>Must be the first line in a subclass constructor</strong> — calling <code>this</code> before <code>super()</code> throws a ReferenceError.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">super.method() in methods</div>
+          <p>Calls a method from the parent class. Use it when you want to extend a parent method rather than completely replace it.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">describe() {
+  // call parent version first, then add to it
+  const base = super.describe();
+  return base + ` (${this.breed})`;
+}</code></pre>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">instanceof — Checking the Type</h3>
+      <div class="code-block">
+        <div class="code-header">instanceof</div>
+        <pre><code>class Animal { }
+class Dog extends Animal { }
+class Cat extends Animal { }
+
+const dog = new Dog();
+
+console.log(dog instanceof Dog);    // true
+console.log(dog instanceof Animal); // true — Dog IS an Animal
+console.log(dog instanceof Cat);    // false
+
+// instanceof checks up the prototype chain
+console.log(dog instanceof Object); // true — everything is an Object</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Multi-level Inheritance</h3>
+      <div class="code-block">
+        <div class="code-header">Chaining classes</div>
+        <pre><code>class Vehicle {
+  constructor(make, speed) {
+    this.make  = make;
+    this.speed = speed;
+  }
+  move() { console.log(`${this.make} moving at ${this.speed} km/h`); }
+}
+
+class Car extends Vehicle {
+  constructor(make, speed, doors) {
+    super(make, speed);
+    this.doors = doors;
+  }
+  honk() { console.log(`${this.make}: Beep beep!`); }
+}
+
+class ElectricCar extends Car {
+  constructor(make, speed, doors, range) {
+    super(make, speed, doors);
+    this.range = range;
+  }
+  charge() { console.log(`${this.make} charging... range: ${this.range} km`); }
+}
+
+const tesla = new ElectricCar("Tesla", 250, 4, 500);
+tesla.move();   // inherited from Vehicle
+tesla.honk();   // inherited from Car
+tesla.charge(); // ElectricCar-specific</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Inheritance</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='class Employee {
+  constructor(name, salary) {
+    this.name   = name;
+    this.salary = salary;
+  }
+
+  getDetails() {
+    return `${this.name} — Base salary: ₹${this.salary}`;
+  }
+
+  getAnnualCTC() {
+    return this.salary * 12;
+  }
+}
+
+class Manager extends Employee {
+  constructor(name, salary, teamSize) {
+    super(name, salary);
+    this.teamSize = teamSize;
+  }
+
+  // Override getDetails to include team size
+  getDetails() {
+    const base = super.getDetails(); // reuse parent version
+    return `${base} | Team: ${this.teamSize} people`;
+  }
+
+  // Manager-specific method
+  getBonus() {
+    return this.salary * 0.2 * this.teamSize;
+  }
+}
+
+const emp = new Employee("Alice", 50000);
+const mgr = new Manager("Bob", 80000, 5);
+
+console.log(emp.getDetails());
+console.log("Annual CTC:", emp.getAnnualCTC());
+console.log("---");
+console.log(mgr.getDetails());
+console.log("Annual CTC:", mgr.getAnnualCTC()); // inherited
+console.log("Bonus: ₹" + mgr.getBonus());
+
+console.log("mgr instanceof Manager:", mgr instanceof Manager);
+console.log("mgr instanceof Employee:", mgr instanceof Employee);'>class Employee {
+  constructor(name, salary) {
+    this.name   = name;
+    this.salary = salary;
+  }
+
+  getDetails() {
+    return `${this.name} — Base salary: ₹${this.salary}`;
+  }
+
+  getAnnualCTC() {
+    return this.salary * 12;
+  }
+}
+
+class Manager extends Employee {
+  constructor(name, salary, teamSize) {
+    super(name, salary);
+    this.teamSize = teamSize;
+  }
+
+  // Override getDetails to include team size
+  getDetails() {
+    const base = super.getDetails(); // reuse parent version
+    return `${base} | Team: ${this.teamSize} people`;
+  }
+
+  // Manager-specific method
+  getBonus() {
+    return this.salary * 0.2 * this.teamSize;
+  }
+}
+
+const emp = new Employee("Alice", 50000);
+const mgr = new Manager("Bob", 80000, 5);
+
+console.log(emp.getDetails());
+console.log("Annual CTC:", emp.getAnnualCTC());
+console.log("---");
+console.log(mgr.getDetails());
+console.log("Annual CTC:", mgr.getAnnualCTC()); // inherited
+console.log("Bonus: ₹" + mgr.getBonus());
+
+console.log("mgr instanceof Manager:", mgr instanceof Manager);
+console.log("mgr instanceof Employee:", mgr instanceof Employee);</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>When to inherit:</strong> Use inheritance for an "is-a" relationship — a <code>Dog</code> IS an <code>Animal</code>, a <code>Manager</code> IS an <code>Employee</code>. For "has-a" relationships (a <code>Car</code> HAS an <code>Engine</code>), use composition instead — store the object as a property.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends" target="_blank" rel="noopener">extends — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-class-inheritance-explained-simply-9a6a7d0c2d17" target="_blank" rel="noopener">Inheritance Explained — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         06 · GETTERS, SETTERS & STATIC
+    ══════════════════════════════ -->
+    <section id="getters-setters-static" class="chapter">
+      <div class="ch-num">06</div>
+      <h2 class="ch-title">Getters, Setters &amp; Static Methods</h2>
+      <p class="ch-intro">Getters and setters let you compute or validate values when properties are accessed or assigned. Static methods belong to the class itself, not to instances.</p>
+
+      <h3 class="sub-heading">Getters — Computed Properties</h3>
+      <p style="margin-bottom:0.75rem;">A getter looks like a property when accessed but runs a function. Use <code>get</code> before the method name.</p>
+      <div class="code-block">
+        <div class="code-header">get keyword</div>
+        <pre><code>class Temperature {
+  constructor(celsius) {
+    this._celsius = celsius; // convention: _ prefix = "private-ish"
+  }
+
+  // Getter — accessed like a property, not a function call
+  get fahrenheit() {
+    return (this._celsius * 9) / 5 + 32;
+  }
+
+  get description() {
+    if (this._celsius < 0)  return "Freezing";
+    if (this._celsius < 15) return "Cold";
+    if (this._celsius < 25) return "Mild";
+    return "Warm";
+  }
+}
+
+const temp = new Temperature(30);
+console.log(temp.fahrenheit);   // 86 — no () needed!
+console.log(temp.description);  // "Warm"
+console.log(temp._celsius);     // 30 (accessible but _ signals "private")</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Setters — Validated Assignment</h3>
+      <p style="margin-bottom:0.75rem;">A setter runs when a property is assigned. Use it to validate or transform values before storing them.</p>
+      <div class="code-block">
+        <div class="code-header">set keyword</div>
+        <pre><code>class Circle {
+  constructor(radius) {
+    this.radius = radius; // uses the setter!
+  }
+
+  get radius() {
+    return this._radius;
+  }
+
+  set radius(value) {
+    if (value < 0) throw new Error("Radius cannot be negative");
+    this._radius = value;
+  }
+
+  get area() {
+    return Math.PI * this._radius ** 2;
+  }
+
+  get circumference() {
+    return 2 * Math.PI * this._radius;
+  }
+}
+
+const c = new Circle(5);
+console.log(c.radius);            // 5
+console.log(c.area.toFixed(2));   // 78.54
+
+c.radius = 10;                    // uses the setter
+console.log(c.area.toFixed(2));   // 314.16
+
+try {
+  c.radius = -1;                  // setter throws
+} catch (e) {
+  console.log("Error:", e.message);
+}</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Static Methods — Class-Level Utilities</h3>
+      <p style="margin-bottom:0.75rem;">Static methods are called on the <em>class itself</em>, not on instances. They don't have access to <code>this</code> (the instance) — they're utilities related to the class.</p>
+      <div class="code-block">
+        <div class="code-header">static keyword</div>
+        <pre><code>class MathUtils {
+  // static — called on the class, not an instance
+  static square(n) { return n * n; }
+  static cube(n)   { return n * n * n; }
+  static clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+}
+
+// Call on the CLASS — no 'new' needed
+console.log(MathUtils.square(5));       // 25
+console.log(MathUtils.cube(3));         // 27
+console.log(MathUtils.clamp(15, 0, 10)); // 10
+
+// Real example: factory method pattern
+class User {
+  constructor(name, role) {
+    this.name = name;
+    this.role = role;
+  }
+
+  static createAdmin(name) {
+    return new User(name, "admin"); // static factory
+  }
+
+  static createGuest() {
+    return new User("Guest", "guest");
+  }
+}
+
+const admin = User.createAdmin("Naman");  // cleaner than new User("Naman", "admin")
+const guest = User.createGuest();
+console.log(admin.name, admin.role); // Naman admin
+console.log(guest.name, guest.role); // Guest guest</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Getters, Setters, Static</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='class Product {
+  constructor(name, priceInPaisa) {
+    this.name = name;
+    this._priceInPaisa = priceInPaisa;
+  }
+
+  // Getter — computed from internal storage
+  get price() {
+    return this._priceInPaisa / 100;
+  }
+
+  // Setter — validate and store internally
+  set price(rupees) {
+    if (rupees < 0) throw new Error("Price cannot be negative");
+    this._priceInPaisa = rupees * 100;
+  }
+
+  get priceWithGST() {
+    return (this.price * 1.18).toFixed(2);
+  }
+
+  get label() {
+    return `${this.name}: ₹${this.price} (₹${this.priceWithGST} with GST)`;
+  }
+
+  // Static utility — doesn\'t need an instance
+  static formatCurrency(amount) {
+    return "₹" + Number(amount).toLocaleString("en-IN");
+  }
+
+  static compareByPrice(a, b) {
+    return a.price - b.price;
+  }
+}
+
+const p1 = new Product("Laptop", 8999900); // ₹89,999
+const p2 = new Product("Mouse", 149900);    // ₹1,499
+
+console.log(p1.label);
+console.log(p2.label);
+
+// Static method — called on class, not instance
+console.log(Product.formatCurrency(89999));
+
+// Change price through setter
+p2.price = 1299;
+console.log("Updated:", p2.label);
+
+// Sort using static method
+const products = [p1, p2];
+products.sort(Product.compareByPrice);
+console.log("Cheapest first:", products.map(p => p.name).join(", "));'>class Product {
+  constructor(name, priceInPaisa) {
+    this.name = name;
+    this._priceInPaisa = priceInPaisa;
+  }
+
+  // Getter — computed from internal storage
+  get price() {
+    return this._priceInPaisa / 100;
+  }
+
+  // Setter — validate and store internally
+  set price(rupees) {
+    if (rupees < 0) throw new Error("Price cannot be negative");
+    this._priceInPaisa = rupees * 100;
+  }
+
+  get priceWithGST() {
+    return (this.price * 1.18).toFixed(2);
+  }
+
+  get label() {
+    return `${this.name}: ₹${this.price} (₹${this.priceWithGST} with GST)`;
+  }
+
+  // Static utility — doesn\'t need an instance
+  static formatCurrency(amount) {
+    return "₹" + Number(amount).toLocaleString("en-IN");
+  }
+
+  static compareByPrice(a, b) {
+    return a.price - b.price;
+  }
+}
+
+const p1 = new Product("Laptop", 8999900); // ₹89,999
+const p2 = new Product("Mouse", 149900);    // ₹1,499
+
+console.log(p1.label);
+console.log(p2.label);
+
+// Static method — called on class, not instance
+console.log(Product.formatCurrency(89999));
+
+// Change price through setter
+p2.price = 1299;
+console.log("Updated:", p2.label);
+
+// Sort using static method
+const products = [p1, p2];
+products.sort(Product.compareByPrice);
+console.log("Cheapest first:", products.map(p => p.name).join(", "));</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>When to use each:</strong> Use <strong>getters</strong> for derived/computed values (area, fullName, totalPrice). Use <strong>setters</strong> for validation before storing a value. Use <strong>static methods</strong> for factory methods, utility functions, and things that don't depend on instance state.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static" target="_blank" rel="noopener">static — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-getters-and-setters-explained-simply-df3a39faa9e" target="_blank" rel="noopener">Getters &amp; Setters — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         07 · HIGHER-ORDER FUNCTIONS
+    ══════════════════════════════ -->
+    <section id="higher-order" class="chapter">
+      <div class="ch-num">07</div>
+      <h2 class="ch-title">Higher-Order Functions</h2>
+      <p class="ch-intro">A higher-order function either <strong>accepts a function as an argument</strong> or <strong>returns a function</strong> (or both). They are the foundation of functional programming patterns in JavaScript.</p>
+
+      <h3 class="sub-heading">Functions as Arguments (Callbacks)</h3>
+      <p style="margin-bottom:0.75rem;">You have already used higher-order functions without knowing — <code>forEach</code>, <code>map</code>, <code>filter</code>, and <code>sort</code> all accept functions as arguments.</p>
+      <div class="code-block">
+        <div class="code-header">Functions as arguments</div>
+        <pre><code>// A simple higher-order function
+function doTwice(fn) {
+  fn();
+  fn();
+}
+
+function sayHi() { console.log("Hi!"); }
+
+doTwice(sayHi);    // Hi!
+                   // Hi!
+
+// The real power: the caller decides the behaviour
+function transform(array, fn) {
+  const result = [];
+  for (const item of array) {
+    result.push(fn(item));
+  }
+  return result;
+}
+
+const numbers = [1, 2, 3, 4, 5];
+
+const doubled  = transform(numbers, n => n * 2);   // [2, 4, 6, 8, 10]
+const squared  = transform(numbers, n => n ** 2);   // [1, 4, 9, 16, 25]
+const asString = transform(numbers, n => `#${n}`);  // ["#1","#2","#3","#4","#5"]
+
+console.log(doubled);
+console.log(squared);
+console.log(asString);
+// Note: this is exactly what Array.prototype.map does!</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Functions Returning Functions — Closures</h3>
+      <p style="margin-bottom:0.75rem;">A function that returns another function creates a <strong>closure</strong> — the returned function remembers the variables of its outer function even after it has returned.</p>
+      <div class="code-block">
+        <div class="code-header">Function factories</div>
+        <pre><code>// A function that creates specialised functions
+function multiplier(factor) {
+  return function(number) {
+    return number * factor; // 'factor' is remembered via closure
+  };
+}
+
+const double = multiplier(2);
+const triple = multiplier(3);
+const tenX   = multiplier(10);
+
+console.log(double(5));  // 10
+console.log(triple(5)); // 15
+console.log(tenX(5));   // 50
+
+// Real-world use: creating validators
+function makeMinLength(min) {
+  return function(str) {
+    return str.length >= min;
+  };
+}
+
+const isValidPassword = makeMinLength(8);
+const isValidUsername = makeMinLength(3);
+
+console.log(isValidPassword("abc"));      // false
+console.log(isValidPassword("secret123")); // true
+console.log(isValidUsername("Jo"));       // false
+console.log(isValidUsername("Naman"));    // true</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Function Composition</h3>
+      <p style="margin-bottom:0.75rem;">Composition means combining small, focused functions to build more complex behaviour. The output of one function becomes the input of the next.</p>
+      <div class="code-block">
+        <div class="code-header">compose and pipe</div>
+        <pre><code>// Small, focused functions
+const trim     = str => str.trim();
+const toLower  = str => str.toLowerCase();
+const removeSpaces = str => str.replace(/\s+/g, "-");
+
+// Manual composition (right-to-left like math: g(f(x)))
+const toSlug = str => removeSpaces(toLower(trim(str)));
+console.log(toSlug("  Hello World  ")); // "hello-world"
+
+// pipe — compose left-to-right (easier to read)
+function pipe(...fns) {
+  return function(value) {
+    return fns.reduce((v, fn) => fn(v), value);
+  };
+}
+
+const makeSlug = pipe(trim, toLower, removeSpaces);
+console.log(makeSlug("  Hello World  ")); // "hello-world"
+console.log(makeSlug("  JavaScript OOP  ")); // "javascript-oop"
+
+// Compose multiple transforms with pipe
+const processName = pipe(
+  str => str.trim(),
+  str => str.replace(/\s+/g, " "),         // collapse spaces
+  str => str.split(" ").map(w =>           // title-case
+    w[0].toUpperCase() + w.slice(1).toLowerCase()
+  ).join(" ")
+);
+
+console.log(processName("  john   doe  ")); // "John Doe"</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Practical Patterns</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Memoisation</div>
+          <p>Cache expensive computation results.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">function memoize(fn) {
+  const cache = {};
+  return function(n) {
+    if (cache[n] !== undefined) return cache[n];
+    cache[n] = fn(n);
+    return cache[n];
+  };
+}</code></pre>
+        </div>
+        <div class="card">
+          <div class="card-tag">Currying</div>
+          <p>Transform a multi-arg function into a chain of single-arg functions.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">const add = a => b => a + b;
+const add5 = add(5);
+console.log(add5(3)); // 8
+console.log(add5(7)); // 12</code></pre>
+        </div>
+        <div class="card">
+          <div class="card-tag">Once</div>
+          <p>Run a function only once, no matter how many times called.</p>
+          <pre><code style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text);">function once(fn) {
+  let called = false;
+  return function(...args) {
+    if (!called) {
+      called = true;
+      return fn(...args);
+    }
+  };
+}</code></pre>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Try It — Higher-Order Functions</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// 1. Higher-order: function as argument
+function applyDiscount(price, discountFn) {
+  return discountFn(price);
+}
+
+const tenPercent  = price => price * 0.90;
+const halfPrice   = price => price * 0.50;
+const flatTwenty  = price => price - 20;
+
+console.log(applyDiscount(100, tenPercent));  // 90
+console.log(applyDiscount(100, halfPrice));   // 50
+console.log(applyDiscount(100, flatTwenty));  // 80
+
+// 2. Function returning function (closure)
+function makeGreeter(greeting) {
+  return function(name) {
+    return `${greeting}, ${name}!`;
+  };
+}
+
+const sayHello = makeGreeter("Hello");
+const sayNamaste = makeGreeter("Namaste");
+
+console.log(sayHello("Naman"));    // Hello, Naman!
+console.log(sayNamaste("Priya"));  // Namaste, Priya!
+
+// 3. Pipe / composition
+function pipe(...fns) {
+  return value => fns.reduce((v, fn) => fn(v), value);
+}
+
+const processScore = pipe(
+  score => Math.max(0, Math.min(100, score)), // clamp 0-100
+  score => Math.round(score),                  // round
+  score => score >= 90 ? `${score} — A`
+         : score >= 80 ? `${score} — B`
+         : score >= 70 ? `${score} — C`
+         : `${score} — F`
+);
+
+console.log(processScore(95.7));  // 96 — A
+console.log(processScore(84.2));  // 84 — B
+console.log(processScore(105));   // 100 — A (clamped)'>// 1. Higher-order: function as argument
+function applyDiscount(price, discountFn) {
+  return discountFn(price);
+}
+
+const tenPercent  = price => price * 0.90;
+const halfPrice   = price => price * 0.50;
+const flatTwenty  = price => price - 20;
+
+console.log(applyDiscount(100, tenPercent));  // 90
+console.log(applyDiscount(100, halfPrice));   // 50
+console.log(applyDiscount(100, flatTwenty));  // 80
+
+// 2. Function returning function (closure)
+function makeGreeter(greeting) {
+  return function(name) {
+    return `${greeting}, ${name}!`;
+  };
+}
+
+const sayHello = makeGreeter("Hello");
+const sayNamaste = makeGreeter("Namaste");
+
+console.log(sayHello("Naman"));    // Hello, Naman!
+console.log(sayNamaste("Priya"));  // Namaste, Priya!
+
+// 3. Pipe / composition
+function pipe(...fns) {
+  return value => fns.reduce((v, fn) => fn(v), value);
+}
+
+const processScore = pipe(
+  score => Math.max(0, Math.min(100, score)), // clamp 0-100
+  score => Math.round(score),                  // round
+  score => score >= 90 ? `${score} — A`
+         : score >= 80 ? `${score} — B`
+         : score >= 70 ? `${score} — C`
+         : `${score} — F`
+);
+
+console.log(processScore(95.7));  // 96 — A
+console.log(processScore(84.2));  // 84 — B
+console.log(processScore(105));   // 100 — A (clamped)</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Why higher-order functions matter:</strong> They let you write flexible, reusable code. Instead of hard-coding behaviour, you pass it in as a function. <code>Array.map</code>, <code>Array.filter</code>, <code>Array.reduce</code> — every one of them is a higher-order function you use every day.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function" target="_blank" rel="noopener">First-class Functions — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-scene/higher-order-functions-composing-software-5365cf2cbe99" target="_blank" rel="noopener">Higher-Order Functions — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         08 · ES6 MODULES
+    ══════════════════════════════ -->
+    <section id="es6-modules" class="chapter">
+      <div class="ch-num">08</div>
+      <h2 class="ch-title">ES6 Modules</h2>
+      <p class="ch-intro">Modules let you split your code across multiple files and control what each file exposes to the rest of the application. They make large codebases maintainable.</p>
+
+      <div class="insight-box">
+        <div class="insight-icon">ℹ️</div>
+        <div class="insight-content">
+          <p><strong>Note on this chapter:</strong> ES6 modules require a server or bundler to run — they can't be executed in this sandbox with <code>eval()</code>. This chapter shows you the syntax and explains each piece. The sandbox at the end simulates module concepts using plain functions so you can see the ideas in action.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Why Modules?</h3>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-tag">Without modules</div>
+          <p>All code in one giant file. Variables from one part accidentally overwrite another. Impossible to maintain beyond a few hundred lines.</p>
+        </div>
+        <div class="card accent-card">
+          <div class="card-tag">With modules</div>
+          <p>Each file is its own scope. You explicitly choose what to share (<code>export</code>) and what to import. Dependencies are clear. Files are focused and testable.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Named Exports</h3>
+      <p style="margin-bottom:0.75rem;">Export multiple named things from one file. The consumer imports them by name.</p>
+      <div class="code-block">
+        <div class="code-header">mathUtils.js — exporting</div>
+        <pre><code>// Named exports — export individual items
+export function add(a, b)      { return a + b; }
+export function subtract(a, b) { return a - b; }
+export function multiply(a, b) { return a * b; }
+
+export const PI = 3.14159265;
+
+// Or export at the bottom (same result)
+function divide(a, b) { return a / b; }
+export { divide };</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header">app.js — importing named exports</div>
+        <pre><code>// Import by name — must match the exported name exactly
+import { add, multiply, PI } from './mathUtils.js';
+
+console.log(add(2, 3));         // 5
+console.log(multiply(4, 5));    // 20
+console.log(PI);                // 3.14159265
+
+// Rename on import with 'as'
+import { subtract as minus } from './mathUtils.js';
+console.log(minus(10, 3));      // 7
+
+// Import everything into a namespace object
+import * as MathUtils from './mathUtils.js';
+console.log(MathUtils.add(1, 2)); // 3
+console.log(MathUtils.PI);        // 3.14159265</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Default Export</h3>
+      <p style="margin-bottom:0.75rem;">Each module can have one default export. It can be imported with any name.</p>
+      <div class="code-block">
+        <div class="code-header">User.js — default export</div>
+        <pre><code>// Default export — only one per file
+export default class User {
+  constructor(name, email) {
+    this.name  = name;
+    this.email = email;
+  }
+  greet() {
+    return `Hello, I am ${this.name}`;
+  }
+}</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header">app.js — importing the default export</div>
+        <pre><code>// No curly braces for default export — choose any name
+import User from './User.js';
+import MyUser from './User.js'; // also valid — same export, different local name
+
+const u = new User("Naman", "naman@example.com");
+console.log(u.greet()); // Hello, I am Naman</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Mixing Named and Default</h3>
+      <div class="code-block">
+        <div class="code-header">api.js</div>
+        <pre><code>// One default + multiple named exports in the same file
+export default class ApiClient { /* ... */ }
+
+export const BASE_URL = "https://api.example.com";
+export function formatResponse(data) { return JSON.stringify(data); }</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header">app.js</div>
+        <pre><code>// Default first, then named in braces
+import ApiClient, { BASE_URL, formatResponse } from './api.js';</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Re-exporting — Barrel Files</h3>
+      <p style="margin-bottom:0.75rem;">A common pattern is to create an <code>index.js</code> that re-exports from many files, giving consumers a single import point.</p>
+      <div class="code-block">
+        <div class="code-header">utils/index.js — barrel file</div>
+        <pre><code>// Re-export from child files
+export { add, subtract }  from './mathUtils.js';
+export { formatDate }     from './dateUtils.js';
+export { default as User } from './User.js';</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header">app.js — clean single import</div>
+        <pre><code>// One import covers everything
+import { add, formatDate, User } from './utils/index.js';</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Using Modules in the Browser</h3>
+      <div class="code-block">
+        <div class="code-header">index.html</div>
+        <pre><code>&lt;!-- type="module" enables ES6 module support --&gt;
+&lt;!-- Modules are automatically deferred (load after HTML) --&gt;
+&lt;script type="module" src="app.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Simulated Modules — Run This in the Sandbox</h3>
+      <p style="margin-bottom:0.75rem;">Since we can't run real modules here, this sandbox demonstrates the core concept: encapsulation — exposing only what you choose to expose.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it — module concepts</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ── SIMULATING MODULES WITH IIFE (Immediately Invoked Function Expression) ──
+// In real modules, each file is its own scope.
+// Here we simulate that with functions that return only what they "export".
+
+// ─── Simulated mathUtils.js ───
+const mathUtils = (() => {
+  // Private — not exported
+  const _history = [];
+
+  // Public — exported
+  function add(a, b) {
+    const result = a + b;
+    _history.push(`${a} + ${b} = ${result}`);
+    return result;
+  }
+
+  function multiply(a, b) {
+    const result = a * b;
+    _history.push(`${a} * ${b} = ${result}`);
+    return result;
+  }
+
+  function getHistory() {
+    return [..._history]; // return a copy
+  }
+
+  // "export" — only these are accessible from outside
+  return { add, multiply, getHistory };
+})();
+
+// ─── Simulated User.js (default export) ───
+const UserModule = (() => {
+  class User {
+    constructor(name, role = "member") {
+      this.name = name;
+      this.role = role;
+    }
+    greet() { return `Hi, I\'m ${this.name} (${this.role})`; }
+  }
+
+  // Static-style factory
+  User.createAdmin = (name) => new User(name, "admin");
+
+  return User; // default export
+})();
+
+// ─── app.js — using the "imported" modules ───
+const { add, multiply, getHistory } = mathUtils; // named import
+const User = UserModule;                          // default import
+
+console.log(add(3, 4));         // 7
+console.log(multiply(5, 6));    // 30
+console.log(add(10, 20));       // 30
+console.log("History:", getHistory());
+
+const u = new User("Naman");
+const admin = User.createAdmin("Priya");
+console.log(u.greet());
+console.log(admin.greet());
+
+// Private state is NOT accessible outside
+// console.log(mathUtils._history); // undefined — encapsulated!'>// ── SIMULATING MODULES WITH IIFE (Immediately Invoked Function Expression) ──
+// In real modules, each file is its own scope.
+// Here we simulate that with functions that return only what they "export".
+
+// ─── Simulated mathUtils.js ───
+const mathUtils = (() => {
+  // Private — not exported
+  const _history = [];
+
+  // Public — exported
+  function add(a, b) {
+    const result = a + b;
+    _history.push(`${a} + ${b} = ${result}`);
+    return result;
+  }
+
+  function multiply(a, b) {
+    const result = a * b;
+    _history.push(`${a} * ${b} = ${result}`);
+    return result;
+  }
+
+  function getHistory() {
+    return [..._history]; // return a copy
+  }
+
+  // "export" — only these are accessible from outside
+  return { add, multiply, getHistory };
+})();
+
+// ─── Simulated User.js (default export) ───
+const UserModule = (() => {
+  class User {
+    constructor(name, role = "member") {
+      this.name = name;
+      this.role = role;
+    }
+    greet() { return `Hi, I\'m ${this.name} (${this.role})`; }
+  }
+
+  // Static-style factory
+  User.createAdmin = (name) => new User(name, "admin");
+
+  return User; // default export
+})();
+
+// ─── app.js — using the "imported" modules ───
+const { add, multiply, getHistory } = mathUtils; // named import
+const User = UserModule;                          // default import
+
+console.log(add(3, 4));         // 7
+console.log(multiply(5, 6));    // 30
+console.log(add(10, 20));       // 30
+console.log("History:", getHistory());
+
+const u = new User("Naman");
+const admin = User.createAdmin("Priya");
+console.log(u.greet());
+console.log(admin.greet());
+
+// Private state is NOT accessible outside
+// console.log(mathUtils._history); // undefined — encapsulated!</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Rule of thumb:</strong> Use <strong>named exports</strong> when a module exports multiple things (utility files, component libraries). Use a <strong>default export</strong> when a module's main purpose is to export one thing (a class, a React component, a config object). Never mix more than one default export per file.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules" target="_blank" rel="noopener">Modules — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/javascript-in-plain-english/javascript-modules-import-and-export-explained-simply-5b5c2e5b0d3c" target="_blank" rel="noopener">Import &amp; Export — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         09 · PROTOTYPE & PROTOTYPE CHAIN
+    ══════════════════════════════ -->
+    <section id="prototype-chain" class="chapter">
+      <div class="ch-num">09</div>
+      <h2 class="ch-title">Prototype &amp; Prototype Chain</h2>
+      <p class="ch-intro">JavaScript's class system is built on <em>prototypes</em> under the hood. Understanding this explains why <code>instanceof</code> works, how methods are shared efficiently, and what the prototype chain lookup actually does.</p>
+
+      <h3 class="sub-heading">Every Object Has a Prototype</h3>
+      <div class="code-block">
+        <div class="code-header">Prototype basics</div>
+        <pre><code>const dog = { name: "Bruno", breed: "Labrador" };
+
+// Every object has a hidden [[Prototype]] link
+// Access it with Object.getPrototypeOf()
+const proto = Object.getPrototypeOf(dog);
+console.log(proto === Object.prototype); // true
+
+// dog itself doesn't have 'toString', but the prototype chain does
+console.log(dog.toString()); // "[object Object]" — found on Object.prototype
+
+// Checking own properties vs inherited
+console.log(dog.hasOwnProperty("name"));     // true — dog's own property
+console.log(dog.hasOwnProperty("toString")); // false — inherited</code></pre>
+      </div>
+
+      <h3 class="sub-heading">How Classes Use Prototypes</h3>
+      <p style="margin-bottom:0.75rem;"><code>class</code> is syntactic sugar over prototype-based inheritance. Methods defined in a class are stored on the class's <code>prototype</code> object — not copied into each instance. This saves memory.</p>
+      <div class="code-block">
+        <div class="code-header">Under the hood</div>
+        <pre><code>class Animal {
+  constructor(name) { this.name = name; }
+  speak() { console.log(`${this.name} speaks`); }
+}
+
+const a = new Animal("Leo");
+
+// 'name' lives on the instance (a.name)
+// 'speak' lives on Animal.prototype — shared!
+console.log(a.hasOwnProperty("name"));  // true  — own property
+console.log(a.hasOwnProperty("speak")); // false — on prototype
+
+// Proof: both instances share the same speak function
+const b = new Animal("Rex");
+console.log(a.speak === b.speak); // true — same function reference!</code></pre>
+      </div>
+
+      <h3 class="sub-heading">The Prototype Chain</h3>
+      <p style="margin-bottom:0.75rem;">When you access a property, JavaScript searches the object first, then its prototype, then that prototype's prototype, and so on — until it finds it or reaches <code>null</code>.</p>
+      <div class="code-block">
+        <div class="code-header">Chain lookup</div>
+        <pre><code>class Animal {
+  constructor(name) { this.name = name; }
+  breathe() { return `${this.name} breathes`; }
+}
+
+class Dog extends Animal {
+  bark() { return `${this.name} barks`; }
+}
+
+const dog = new Dog("Bruno");
+
+// Property lookup order:
+// 1. dog (own properties) — name? YES → "Bruno"
+// 2. Dog.prototype        — bark? YES → function
+// 3. Animal.prototype     — breathe? YES → function
+// 4. Object.prototype     — toString? YES → function
+// 5. null                 — (end of chain)
+
+console.log(dog.name);     // "Bruno" — own property
+console.log(dog.bark());   // "Bruno barks" — Dog.prototype
+console.log(dog.breathe()); // "Bruno breathes" — Animal.prototype
+console.log(dog.toString()); // "[object Object]" — Object.prototype
+
+// Visualising the chain
+console.log(Object.getPrototypeOf(dog) === Dog.prototype);    // true
+console.log(Object.getPrototypeOf(Dog.prototype) === Animal.prototype); // true
+console.log(Object.getPrototypeOf(Animal.prototype) === Object.prototype); // true
+console.log(Object.getPrototypeOf(Object.prototype)); // null — end of chain</code></pre>
+      </div>
+
+      <h3 class="sub-heading">prototype vs __proto__</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Property</th><th>Belongs to</th><th>Points to</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Constructor.prototype</code></td>
+            <td>Functions/classes</td>
+            <td>The prototype object for instances</td>
+            <td>Where methods live. <code>Dog.prototype.bark</code></td>
+          </tr>
+          <tr>
+            <td><code>Object.getPrototypeOf(obj)</code></td>
+            <td>All objects</td>
+            <td>The object's prototype</td>
+            <td>Standard, safe way to access prototype</td>
+          </tr>
+          <tr>
+            <td><code>obj.__proto__</code></td>
+            <td>All objects</td>
+            <td>Same as getPrototypeOf</td>
+            <td>Legacy/non-standard — avoid, use getPrototypeOf instead</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-heading">Adding to Prototypes</h3>
+      <div class="code-block">
+        <div class="code-header">Extending built-in prototypes — with caution</div>
+        <pre><code>// You can add methods to any prototype (including built-ins)
+// — but modifying built-ins is generally BAD practice
+// — it can conflict with library code or future JS features
+
+// OK: adding to your own class's prototype after definition
+class Greeter {
+  constructor(name) { this.name = name; }
+}
+Greeter.prototype.sayHi = function() {
+  return `Hi from ${this.name}`;
+};
+const g = new Greeter("Naman");
+console.log(g.sayHi()); // "Hi from Naman"
+
+// BAD practice — don't do this in real code:
+// String.prototype.shout = function() { return this.toUpperCase() + "!!!"; };
+// "hello".shout(); // "HELLO!!!" — works but pollutes built-ins</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Try It — Prototype Chain</h3>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Try it</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='class Vehicle {
+  constructor(make) { this.make = make; }
+  move() { return `${this.make} is moving`; }
+}
+
+class Car extends Vehicle {
+  constructor(make, model) {
+    super(make);
+    this.model = model;
+  }
+  honk() { return `${this.make} ${this.model}: Beep!`; }
+}
+
+class ElectricCar extends Car {
+  constructor(make, model, range) {
+    super(make, model);
+    this.range = range;
+  }
+  charge() { return `${this.make} charging — range: ${this.range}km`; }
+}
+
+const tesla = new ElectricCar("Tesla", "Model 3", 500);
+
+// Chain: tesla → ElectricCar.prototype → Car.prototype → Vehicle.prototype → Object.prototype → null
+console.log(tesla.charge());   // ElectricCar.prototype
+console.log(tesla.honk());     // Car.prototype
+console.log(tesla.move());     // Vehicle.prototype
+console.log(tesla.toString()); // Object.prototype
+
+// Own properties vs inherited
+console.log("Own - make:", tesla.hasOwnProperty("make"));     // true
+console.log("Own - honk:", tesla.hasOwnProperty("honk"));     // false — prototype
+console.log("Own - move:", tesla.hasOwnProperty("move"));     // false — prototype
+
+// Shared methods — same reference across instances
+const tesla2 = new ElectricCar("Tesla", "Model S", 600);
+console.log("Shared method?", tesla.move === tesla2.move); // true — memory efficient!
+
+// instanceof checks the chain
+console.log(tesla instanceof ElectricCar); // true
+console.log(tesla instanceof Car);         // true
+console.log(tesla instanceof Vehicle);     // true
+console.log(tesla instanceof Object);      // true'>class Vehicle {
+  constructor(make) { this.make = make; }
+  move() { return `${this.make} is moving`; }
+}
+
+class Car extends Vehicle {
+  constructor(make, model) {
+    super(make);
+    this.model = model;
+  }
+  honk() { return `${this.make} ${this.model}: Beep!`; }
+}
+
+class ElectricCar extends Car {
+  constructor(make, model, range) {
+    super(make, model);
+    this.range = range;
+  }
+  charge() { return `${this.make} charging — range: ${this.range}km`; }
+}
+
+const tesla = new ElectricCar("Tesla", "Model 3", 500);
+
+// Chain: tesla → ElectricCar.prototype → Car.prototype → Vehicle.prototype → Object.prototype → null
+console.log(tesla.charge());   // ElectricCar.prototype
+console.log(tesla.honk());     // Car.prototype
+console.log(tesla.move());     // Vehicle.prototype
+console.log(tesla.toString()); // Object.prototype
+
+// Own properties vs inherited
+console.log("Own - make:", tesla.hasOwnProperty("make"));     // true
+console.log("Own - honk:", tesla.hasOwnProperty("honk"));     // false — prototype
+console.log("Own - move:", tesla.hasOwnProperty("move"));     // false — prototype
+
+// Shared methods — same reference across instances
+const tesla2 = new ElectricCar("Tesla", "Model S", 600);
+console.log("Shared method?", tesla.move === tesla2.move); // true — memory efficient!
+
+// instanceof checks the chain
+console.log(tesla instanceof ElectricCar); // true
+console.log(tesla instanceof Car);         // true
+console.log(tesla instanceof Vehicle);     // true
+console.log(tesla instanceof Object);      // true</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Why this matters:</strong> Understanding the prototype chain explains why <code>instanceof</code> works, why methods are memory-efficient (shared, not copied), and what really happens when JS can't find a property on an object. It also helps you understand error messages like "X is not a function" — the chain was walked and nothing was found.
+      </div>
+
+      <div class="ref-links">
+        <span class="ref-links-label">Learn more:</span>
+        <a class="ref-link ref-link-mdn" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Advanced_JavaScript_objects/Object_prototypes" target="_blank" rel="noopener">Object Prototypes — MDN ↗</a>
+        <a class="ref-link ref-link-medium" href="https://medium.com/better-programming/understanding-the-prototype-chain-in-javascript-d9b46deeaef2" target="_blank" rel="noopener">Prototype Chain — Medium ↗</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         10 · BUILD IT: SHAPE CALCULATOR
+    ══════════════════════════════ -->
+    <section id="shape-calculator" class="chapter chapter-exercise">
+      <div class="ch-num">10</div>
+      <h2 class="ch-title">Build It: Shape Calculator</h2>
+      <p class="ch-intro">Apply OOP principles from chapters 4–6. Create a <code>Shape</code> base class, then <code>Circle</code> and <code>Rectangle</code> subclasses. Use class, extends, super, getters, and static methods.</p>
+
+      <div class="exercise-intro-box">
+        <div class="eib-title">What your program must do</div>
+        <div class="eib-steps">
+          <div class="eib-step"><div class="eib-num">1</div><span>Define a <code>Shape</code> base class with a <code>name</code> property and a <code>describe()</code> method — Ch.04</span></div>
+          <div class="eib-step"><div class="eib-num">2</div><span>Create a <code>Circle</code> subclass using <code>extends</code> and <code>super()</code>, with a <code>radius</code> getter/setter that validates non-negative values — Ch.05 &amp; Ch.06</span></div>
+          <div class="eib-step"><div class="eib-num">3</div><span>Create a <code>Rectangle</code> subclass with <code>width</code> and <code>height</code> properties — Ch.05</span></div>
+          <div class="eib-step"><div class="eib-num">4</div><span>Both subclasses must implement <code>area()</code> and <code>perimeter()</code> getter properties — Ch.06</span></div>
+          <div class="eib-step"><div class="eib-num">5</div><span>Override <code>describe()</code> in each subclass to show name, area, and perimeter — Ch.05</span></div>
+          <div class="eib-step"><div class="eib-num">6</div><span>Add a <code>static Shape.compare(s1, s2)</code> method that returns which shape has the bigger area — Ch.06</span></div>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Ask Yourself Before Starting</h3>
+      <div class="question-card">
+        <div class="q-label">Q1</div>
+        <p>The <code>area</code> formula for a circle is π×r². You can't know this at construction time for a mutable radius. Should <code>area</code> be a method or a getter?</p>
+        <div class="q-hint">Hint: A getter is the right choice — it computes the value on demand, always reflecting the current radius. Access it as <code>circle.area</code>, not <code>circle.area()</code>.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q2</div>
+        <p>The base class <code>Shape</code> can't compute an area — only subclasses can. What should <code>Shape.area</code> do?</p>
+        <div class="q-hint">Hint: Throw an error: <code>throw new Error("area() must be implemented by subclass")</code>. This is called an abstract method pattern — it forces subclasses to implement it.</div>
+      </div>
+      <div class="question-card">
+        <div class="q-label">Q3</div>
+        <p>The <code>static compare(s1, s2)</code> method compares two shapes. Why does it need to be <code>static</code>?</p>
+        <div class="q-hint">Hint: It doesn't belong to one specific shape — it takes two shapes as input and compares them. It's a utility that belongs to the Shape concept, not to any instance. Call it as <code>Shape.compare(circle, rect)</code>.</div>
+      </div>
+
+      <h3 class="sub-heading">Skeleton — Fill in the ???s</h3>
+      <div class="code-block">
+        <div class="code-header">shape-calculator.js — complete this</div>
+        <pre><code>class Shape {
+  constructor(name) {
+    this.name = ???;
+  }
+
+  get area() {
+    throw new ???("area must be implemented by subclass");
+  }
+
+  get perimeter() {
+    throw new Error("??? must be implemented by subclass");
+  }
+
+  describe() {
+    return `${this.name}: area=${this.area.toFixed(2)}, perimeter=${???}`;
+  }
+
+  static compare(s1, s2) {
+    if (s1.area > s2.area) return `${s1.name} is larger`;
+    if (s2.??? > s1.area)  return `${s2.name} is larger`;
+    return "Both shapes have equal area";
+  }
+}
+
+class Circle extends ??? {
+  constructor(radius) {
+    ???("Circle"); // call parent constructor
+    this.radius = ???; // uses setter
+  }
+
+  get radius() { return this._radius; }
+
+  set radius(value) {
+    if (value < 0) throw new Error("???");
+    this._radius = value;
+  }
+
+  get area() {
+    return ??? * this._radius ** 2;
+  }
+
+  get perimeter() {
+    return 2 * Math.PI * ???;
+  }
+
+  describe() {
+    return `Circle (r=${this._radius}): area=${this.area.toFixed(2)}, perimeter=${this.???.toFixed(2)}`;
+  }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    ???("Rectangle");
+    this.width  = ???;
+    this.height = height;
+  }
+
+  get area() {
+    return this.width * ???;
+  }
+
+  get perimeter() {
+    return 2 * (this.??? + this.height);
+  }
+
+  describe() {
+    return `Rectangle (${this.width}×${this.height}): area=${???}, perimeter=${???}`;
+  }
+}
+
+// Test
+const circle = new Circle(7);
+const rect   = new Rectangle(10, 5);
+
+console.log(circle.describe());
+console.log(rect.describe());
+console.log(Shape.compare(circle, rect));</code></pre>
+      </div>
+
+      <h3 class="sub-heading">Write Your Solution Here</h3>
+      <p style="margin-bottom:0.75rem;">Build the complete Shape class hierarchy from scratch. Test it with different sizes and verify the calculations.</p>
+      <div class="sandbox">
+        <div class="sandbox-header">
+          <span class="sandbox-label">Shape Calculator</span>
+          <button class="sandbox-run" onclick="runSandbox(this)">▶ Run</button>
+          <button class="sandbox-reset" onclick="resetSandbox(this)">↺ Reset</button>
+        </div>
+        <textarea class="sandbox-code" data-default='// ── Shape Calculator ──
+// Build Shape, Circle, and Rectangle classes
+
+class Shape {
+  constructor(name) {
+    // TODO: store name
+  }
+
+  get area() {
+    // TODO: throw Error — must be overridden by subclass
+  }
+
+  get perimeter() {
+    // TODO: throw Error — must be overridden by subclass
+  }
+
+  describe() {
+    // TODO: return name, area, perimeter
+  }
+
+  static compare(s1, s2) {
+    // TODO: compare s1.area and s2.area, return which is larger
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    // TODO: call super, store radius via setter
+  }
+
+  get radius() { /* TODO */ }
+  set radius(value) { /* TODO: validate >= 0 */ }
+
+  get area() { /* TODO: Math.PI * r^2 */ }
+  get perimeter() { /* TODO: 2 * Math.PI * r */ }
+  describe() { /* TODO */ }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    // TODO
+  }
+
+  get area() { /* TODO: width * height */ }
+  get perimeter() { /* TODO: 2 * (w + h) */ }
+  describe() { /* TODO */ }
+}
+
+// Test your classes
+const c = new Circle(7);
+const r = new Rectangle(10, 5);
+const sq = new Rectangle(6, 6);
+
+console.log(c.describe());
+console.log(r.describe());
+console.log(sq.describe());
+console.log(Shape.compare(c, r));
+console.log(Shape.compare(r, sq));
+
+// Change radius and re-check
+c.radius = 3;
+console.log("After resize:", c.describe());'>// ── Shape Calculator ──
+// Build Shape, Circle, and Rectangle classes
+
+class Shape {
+  constructor(name) {
+    // TODO: store name
+  }
+
+  get area() {
+    // TODO: throw Error — must be overridden by subclass
+  }
+
+  get perimeter() {
+    // TODO: throw Error — must be overridden by subclass
+  }
+
+  describe() {
+    // TODO: return name, area, perimeter
+  }
+
+  static compare(s1, s2) {
+    // TODO: compare s1.area and s2.area, return which is larger
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    // TODO: call super, store radius via setter
+  }
+
+  get radius() { /* TODO */ }
+  set radius(value) { /* TODO: validate >= 0 */ }
+
+  get area() { /* TODO: Math.PI * r^2 */ }
+  get perimeter() { /* TODO: 2 * Math.PI * r */ }
+  describe() { /* TODO */ }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    // TODO
+  }
+
+  get area() { /* TODO: width * height */ }
+  get perimeter() { /* TODO: 2 * (w + h) */ }
+  describe() { /* TODO */ }
+}
+
+// Test your classes
+const c = new Circle(7);
+const r = new Rectangle(10, 5);
+const sq = new Rectangle(6, 6);
+
+console.log(c.describe());
+console.log(r.describe());
+console.log(sq.describe());
+console.log(Shape.compare(c, r));
+console.log(Shape.compare(r, sq));
+
+// Change radius and re-check
+c.radius = 3;
+console.log("After resize:", c.describe());</textarea>
+        <div class="sandbox-divider"></div>
+        <div class="sandbox-output"></div>
+      </div>
+
+      <h3 class="sub-heading" style="margin-top:2rem;">Reference Solution</h3>
+      <p style="margin-bottom:0.75rem;color:var(--muted);font-size:0.9rem;">Only look at this after making a genuine attempt.</p>
+      <div class="code-block">
+        <div class="code-header">shape-calculator.js — full solution</div>
+        <pre><code>class Shape {
+  constructor(name) {
+    this.name = name;
+  }
+
+  get area() {
+    throw new Error("area must be implemented by subclass");
+  }
+
+  get perimeter() {
+    throw new Error("perimeter must be implemented by subclass");
+  }
+
+  describe() {
+    return `${this.name}: area=${this.area.toFixed(2)}, perimeter=${this.perimeter.toFixed(2)}`;
+  }
+
+  static compare(s1, s2) {
+    if (s1.area > s2.area) return `${s1.name} is larger (${s1.area.toFixed(2)} vs ${s2.area.toFixed(2)})`;
+    if (s2.area > s1.area) return `${s2.name} is larger (${s2.area.toFixed(2)} vs ${s1.area.toFixed(2)})`;
+    return "Both shapes have equal area";
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    super("Circle");
+    this.radius = radius; // uses setter
+  }
+
+  get radius()      { return this._radius; }
+  set radius(value) {
+    if (value < 0) throw new Error("Radius cannot be negative");
+    this._radius = value;
+  }
+
+  get area()      { return Math.PI * this._radius ** 2; }
+  get perimeter() { return 2 * Math.PI * this._radius; }
+
+  describe() {
+    return `Circle (r=${this._radius}): area=${this.area.toFixed(2)}, perimeter=${this.perimeter.toFixed(2)}`;
+  }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    super("Rectangle");
+    if (width < 0 || height < 0) throw new Error("Dimensions cannot be negative");
+    this.width  = width;
+    this.height = height;
+  }
+
+  get area()      { return this.width * this.height; }
+  get perimeter() { return 2 * (this.width + this.height); }
+
+  describe() {
+    return `Rectangle (${this.width}×${this.height}): area=${this.area.toFixed(2)}, perimeter=${this.perimeter.toFixed(2)}`;
+  }
+}
+
+// Test
+const c  = new Circle(7);
+const r  = new Rectangle(10, 5);
+const sq = new Rectangle(6, 6);
+
+console.log(c.describe());   // Circle (r=7): area=153.94, perimeter=43.98
+console.log(r.describe());   // Rectangle (10×5): area=50.00, perimeter=30.00
+console.log(sq.describe());  // Rectangle (6×6): area=36.00, perimeter=24.00
+
+console.log(Shape.compare(c, r));  // Circle is larger
+console.log(Shape.compare(r, sq)); // Rectangle is larger
+
+c.radius = 3;
+console.log("After resize:", c.describe()); // area=28.27
+
+// instanceof checks
+console.log(c instanceof Circle);  // true
+console.log(c instanceof Shape);   // true
+console.log(r instanceof Circle);  // false</code></pre>
+      </div>
+
+      <div class="tip-box">
+        <strong>When you're done:</strong> Try creating a <code>Triangle</code> subclass (area = 0.5 × base × height). Can you add it to the <code>Shape.compare</code> logic without changing the static method? That's the power of a well-designed base class — new shapes plug in without breaking existing code.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <p>JavaScript OOP &amp; Modules — Student Handbook &nbsp;·&nbsp; Open the console (F12) and experiment while you read.</p>
+  </footer>
+
+  <!-- ============================================================
+       SANDBOX ENGINE
+  ============================================================ -->
+  <script>
+    function formatValue(v) {
+      if (v === undefined) return 'undefined';
+      if (v === null)      return 'null';
+      if (typeof v === 'object') {
+        try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+      }
+      return String(v);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+
+    function runSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const code    = sandbox.querySelector('.sandbox-code').value;
+      const output  = sandbox.querySelector('.sandbox-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const orig = {
+        log:   console.log,
+        error: console.error,
+        warn:  console.warn
+      };
+
+      console.log   = (...a) => logs.push({ t: 'log',   text: a.map(formatValue).join(' ') });
+      console.error = (...a) => logs.push({ t: 'error', text: a.map(formatValue).join(' ') });
+      console.warn  = (...a) => logs.push({ t: 'warn',  text: a.map(formatValue).join(' ') });
+
+      try {
+        eval(code); // eslint-disable-line no-eval
+      } catch (e) {
+        logs.push({ t: 'error', text: e.message });
+      } finally {
+        console.log   = orig.log;
+        console.error = orig.error;
+        console.warn  = orig.warn;
+      }
+
+      if (!logs.length) {
+        output.innerHTML = '<div class="sb-empty">// No output — add console.log() to see results.</div>';
+        return;
+      }
+
+      output.innerHTML = logs
+        .map(l => `<div class="sb-line sb-${l.t}">${escapeHtml(l.text)}</div>`)
+        .join('');
+    }
+
+    function resetSandbox(btn) {
+      const sandbox = btn.closest('.sandbox');
+      const ta      = sandbox.querySelector('.sandbox-code');
+      ta.value      = ta.dataset.default;
+      sandbox.querySelector('.sandbox-output').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>
